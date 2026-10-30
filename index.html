@@ -81,6 +81,13 @@ h1{font-size:clamp(32px,6.4vw,50px);line-height:1.08;margin:0 0 22px;text-wrap:b
 .carga label:active{transform:scale(.96)}
 .carga label svg{width:18px;height:18px}
 .carga .fecha{font-size:13px;color:var(--gris)}
+.carga #b-pegar{font:700 14px var(--sans);padding:9px 14px;border:2px solid var(--tinta);border-radius:10px;background:transparent;color:var(--tinta);cursor:pointer}
+.pegar{border:2px solid var(--tinta);border-radius:10px;padding:12px 14px;margin:0 0 14px;font-size:14px;animation:sube .35s var(--suave)}
+.pegar p{margin:0 0 8px;color:var(--gris)}
+.pegar textarea{width:100%;box-sizing:border-box;font:13px var(--mono);padding:10px;border:2px solid var(--rojo);border-radius:8px;background:var(--blanco);color:var(--tinta);resize:vertical}
+.pegar .acc{display:flex;gap:8px;margin-top:10px}
+.pegar button{font:700 14px var(--sans);padding:9px 14px;border:2px solid var(--rojo);border-radius:10px;cursor:pointer;background:var(--rojo);color:#fff}
+.pegar button.sec{background:transparent;color:var(--rojo-texto)}
 .resumen{border:2px solid var(--rojo);border-radius:10px;padding:12px 14px;margin:0 0 14px;font-size:14px;line-height:1.5;animation:sube .35s var(--suave)}
 .resumen b{font-variant-numeric:tabular-nums}
 .resumen .lista{max-height:180px;overflow:auto;margin:8px 0;padding:8px;background:var(--sku-bg);border-radius:8px;font:13px var(--mono);line-height:1.6}
@@ -175,7 +182,13 @@ tr.hecho td.d .t{background-size:100% 2px}
   <div class="carga">
     <label for="xls" title="Cargar Existencias Desde Excel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13l2 2 4-4"/></svg>Cargar Excel</label>
     <input type="file" id="xls" class="oculto" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
+    <button type="button" id="b-pegar">Pegar Desde Excel</button>
     <span class="fecha" id="fecha"></span>
+  </div>
+  <div class="pegar" id="pegar" hidden>
+    <p>En Excel, Selecciona Las Columnas De SKU Y Existencia (Con Sus Títulos), Cópialas Y Pégalas Aquí.</p>
+    <textarea id="pegado" rows="5" placeholder="Pega Aquí…" aria-label="Datos Pegados Desde Excel"></textarea>
+    <div class="acc"><button type="button" id="p-leer">Revisar</button><button type="button" class="sec" id="p-cerrar">Cerrar</button></div>
   </div>
   <div class="resumen" id="resumen" aria-live="polite" hidden></div>
   <div class="tools" role="group" aria-label="Filtro">
@@ -613,6 +626,15 @@ document.getElementById("xls").addEventListener("change",async function(e){
     if(!p||!Object.keys(p.cant).length){el.textContent="No Encontré Columnas De SKU Y Existencia En Ese Archivo. Mándaselo A Claude Para Ajustarlo.";return}
     mostrarResumen(p,f.name)}
   catch(err){el.textContent=err&&err.message==="xls"?"No Se Pudo Cargar El Lector De Excel. Revisa Tu Conexión.":"No Se Pudo Leer El Archivo."}});
+document.getElementById("b-pegar").onclick=function(){var p=document.getElementById("pegar");p.hidden=!p.hidden;if(!p.hidden)document.getElementById("pegado").focus()};
+document.getElementById("p-cerrar").onclick=function(){document.getElementById("pegar").hidden=true};
+function leerPegado(){var t=document.getElementById("pegado").value,el=document.getElementById("resumen");if(!t.trim())return;
+  var filas=t.replace(/\r/g,"").split("\n").map(function(l){return l.split(/\t|;|,(?=\s*\d)/).map(function(c){c=c.trim();return c===""?null:c})});
+  var p=analizar(filas);el.hidden=false;
+  if(!p||!Object.keys(p.cant).length){el.textContent="No Encontré SKU Y Existencia En Lo Que Pegaste. Copia Las Columnas Con Sus Títulos.";return}
+  document.getElementById("pegar").hidden=true;document.getElementById("pegado").value="";mostrarResumen(p,"Datos Pegados")}
+document.getElementById("p-leer").onclick=leerPegado;
+document.getElementById("pegado").addEventListener("paste",function(){setTimeout(leerPegado,60)});
 (function(){try{var g=JSON.parse(localStorage.getItem("toma1-cant")||"null");if(g&&g.cant)aplicarCant(g.cant,{fecha:g.fecha,local:true})}catch(e){}})();
 (async function(){if(!window.claude||!claude.use)return;
   try{var db=await claude.use("db");if(!db)return;var us=await claude.use("user");
