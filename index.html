@@ -195,6 +195,8 @@ tr.hecho td.d .t{background-size:100% 2px}
     <button type="button" id="f-todos" aria-pressed="true">Todos</button>
     <button type="button" id="f-ult" aria-pressed="false">Solo Última Pieza</button>
     <button type="button" id="f-upc" aria-pressed="false">Sin UPC</button>
+    <button type="button" id="m-todo">Marcar Todo</button>
+    <button type="button" id="m-nada">Desmarcar Todo</button>
   </div>
   <p class="nota">Cantidad Es El Valor «Disponible» Del Lector, Es Decir, Las Etiquetas Amarillas Que Faltan. Cuando Marca 0, Solo Queda La Última Pieza.</p>
   <div class="scroll">
@@ -454,6 +456,11 @@ function filtro(v){solo=v;
 document.getElementById("f-todos").onclick=function(){filtro(false)};
 document.getElementById("f-ult").onclick=function(){filtro(true)};
 var sinUpc=false;document.getElementById("f-upc").onclick=function(){sinUpc=!sinUpc;this.setAttribute("aria-pressed",sinUpc);pintar(true)};
+function visibles(){return [].map.call(document.querySelectorAll("#filas tr.fila"),function(t){return t.getAttribute("data-s")})}
+function confirmar(btn,txt,accion){if(btn.dataset.ok){clearTimeout(btn._t);delete btn.dataset.ok;btn.textContent=txt;accion();return}
+  btn.dataset.ok=1;var n=visibles().length;btn.textContent="¿"+txt+" ("+n+")? Toca Otra Vez";btn._t=setTimeout(function(){delete btn.dataset.ok;btn.textContent=txt},3500)}
+document.getElementById("m-todo").onclick=function(){confirmar(this,"Marcar Todo",function(){visibles().forEach(function(s){hechos[s]=1});guardar();pintar(false)})};
+document.getElementById("m-nada").onclick=function(){confirmar(this,"Desmarcar Todo",function(){visibles().forEach(function(s){delete hechos[s]});guardar();pintar(false)})};
 function buscar(){var n=document.getElementById("q").value.trim();document.getElementById("b-limpiar").hidden=!n;if(n===q)return;q=n;pintar(true);}
 function alEscribir(){var n=document.getElementById("q").value.trim();document.getElementById("b-limpiar").hidden=!n;if(!n&&q)buscar();}
 function foto(img){var w0=img.getBoundingClientRect().width,h0=img.getBoundingClientRect().height;img.classList.toggle("grande");
