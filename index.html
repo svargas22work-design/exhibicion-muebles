@@ -30,6 +30,14 @@ body{background:var(--blanco);color:var(--tinta);font-family:var(--sans)}
 .sub{color:var(--rojo-texto);font-weight:700;font-size:18px;margin:0 0 6px;animation:sube .6s .55s var(--suave) both}
 h1{font-size:clamp(32px,6.4vw,50px);line-height:1.08;margin:0 0 22px;text-wrap:balance;animation:sube .7s .65s var(--suave) both}
 .datos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
+body.sin-rev .datos{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:22px}
+body.sin-rev .solo-rev,body.sin-rev .col-hecho{display:none}
+.modo{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 10px;animation:aparece .5s 1.25s both}
+.modo .et-modo{font-size:13px;font-weight:700;color:var(--gris);letter-spacing:.04em;text-transform:uppercase}
+.modo button{font:700 14px var(--sans);padding:9px 14px;border:2px dashed var(--tinta);border-radius:10px;background:transparent;color:var(--tinta);cursor:pointer;transition:transform .15s var(--suave),background .2s,color .2s}
+.modo button[aria-pressed="true"]{border-style:solid;background:var(--tinta);color:var(--blanco)}
+.modo button:active{transform:scale(.96)}
+.modo button:focus-visible{outline:3px solid var(--rojo);outline-offset:2px}
 .caja{border:2px solid var(--rojo);border-radius:10px;padding:16px;animation:aparece .55s var(--suave) both;transition:transform .2s var(--suave),box-shadow .2s}
 .caja:nth-child(1){animation-delay:.8s}.caja:nth-child(2){animation-delay:.9s}.caja:nth-child(3){animation-delay:1s}
 .caja:hover{transform:translateY(-3px);box-shadow:0 8px 18px -10px var(--rojo)}
@@ -165,10 +173,10 @@ tr.hecho td.d .t{background-size:100% 2px}
   <div class="datos">
     <div class="caja"><div class="et">Artículos</div><div class="cif" id="tot">0</div></div>
     <div class="caja ult"><div class="et">Última Pieza</div><div class="cif" id="ult">0</div></div>
-    <div class="caja"><div class="et">Revisados</div><div class="cif"><span id="rev">0</span><span class="de" id="rev-de"></span></div></div>
+    <div class="caja solo-rev"><div class="et" id="rev-et">Revisados</div><div class="cif"><span id="rev">0</span><span class="de" id="rev-de"></span></div></div>
   </div>
-  <div class="progreso" role="progressbar" aria-label="Avance De Revisión" aria-valuemin="0" aria-valuemax="100" id="prog-b"><i id="prog"></i></div>
-  <p class="pct" id="pct">0 % Revisado</p>
+  <div class="progreso solo-rev" role="progressbar" aria-label="Avance De Revisión" aria-valuemin="0" aria-valuemax="100" id="prog-b"><i id="prog"></i></div>
+  <p class="pct solo-rev" id="pct">0 % Revisado</p>
   <form class="busca" id="busca" role="search" autocomplete="off">
     <input id="q" type="search" enterkeyhint="search" inputmode="search" placeholder="Buscar SKU O Artículo" aria-label="Buscar SKU O Artículo">
     <label for="foto-cam" id="b-cam" role="button" tabindex="0" aria-label="Escanear Código Con La Cámara" title="Escanear Código"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M7 9v6M10 9v6M13 9v6M17 9v6"/></svg></label>
@@ -189,17 +197,21 @@ tr.hecho td.d .t{background-size:100% 2px}
     <div class="acc"><button type="button" id="p-leer">Revisar</button><button type="button" class="sec" id="p-cerrar">Cerrar</button></div>
   </div>
   <div class="resumen" id="resumen" aria-live="polite" hidden></div>
+  <div class="modo" role="group" aria-label="Revisión">
+    <span class="et-modo">Revisión:</span>
+    <button type="button" id="r-toma" aria-pressed="false">Toma Uno</button>
+    <button type="button" id="r-precio" aria-pressed="false">Precios</button>
+  </div>
   <div class="tools" role="group" aria-label="Filtro">
     <button type="button" id="f-todos" aria-pressed="true">Todos</button>
     <button type="button" id="f-ult" aria-pressed="false">Solo Última Pieza</button>
     <button type="button" id="f-upc" aria-pressed="false">Sin UPC</button>
-    <button type="button" id="m-todo">Marcar Todo</button>
-    <button type="button" id="m-nada">Desmarcar Todo</button>
+    <button type="button" id="m-todo" class="solo-rev">Marcar Todo</button>
+    <button type="button" id="m-nada" class="solo-rev">Desmarcar Todo</button>
   </div>
-  <p class="nota">Cantidad Es El Valor «Disponible» Del Lector, Es Decir, Las Etiquetas Amarillas Que Faltan. Cuando Marca 0, Solo Queda La Última Pieza.</p>
   <div class="scroll">
     <table>
-      <thead><tr><th></th><th>SKU</th><th>Descripción</th><th class="n">Cantidad</th><th class="n">Hecho</th></tr></thead>
+      <thead><tr><th></th><th>SKU</th><th>Descripción</th><th class="n">Cantidad</th><th class="n col-hecho">Hecho</th></tr></thead>
       <tbody id="filas"></tbody>
     </table>
   </div>
@@ -413,12 +425,12 @@ function pintar(cascada){
    its.forEach(function(p){var r=p[0],i=p[1];
     var z=r[2]===0;
     if(solo&&!z)return; if(sinUpc&&UPC[r[0]])return; if(!coincide(r))return; shown++;
-    h+='<tr data-s="'+r[0]+'" class="fila '+(z?"ult ":"")+(hechos[r[0]]?"hecho":"")+anim()+'>'
+    h+='<tr data-s="'+r[0]+'" class="fila '+(z?"ult ":"")+(MODO&&hechos[r[0]]?"hecho":"")+anim()+'>'
      +'<td class="num-fila">'+(i+1)+'</td>'
      +'<td>'+(IMG[r[0]]?'<img class="th" data-g="1" alt="Foto '+r[0]+'" src="'+IMG[r[0]]+'">':'')+'<span class="sku">'+r[0]+'</span>'+'</td>'
      +'<td class="d"><span class="t">'+r[1]+'</span>'+(z?'<br><span class="badge">Última Pieza</span>':'')+(r[4]?'<br><span class="disc">Descontinuado</span>':'')+(REP.indexOf(r[0])>-1?(r[4]?'':'<br>')+'<span class="rep">Exhibido 2 Veces</span>':'')+'</td>'
      +'<td class="q"><span class="num">'+r[2]+'</span><span class="lbl">Disponible</span></td>'
-     +'<td class="q"><input class="chk" type="checkbox" data-s="'+r[0]+'" aria-label="Marcar '+r[0]+'"'+(hechos[r[0]]?" checked":"")+'></td></tr>';
+     +'<td class="q col-hecho"><input class="chk" type="checkbox" data-s="'+r[0]+'" aria-label="Marcar '+r[0]+'"'+(hechos[r[0]]?" checked":"")+'></td></tr>';
    });
    if(!shown)h+='<tr class="vacia'+anim()+'><td colspan="5">'+(q?'Sin Resultados Para «'+q.replace(/[<>&]/g,"")+'».':its.length?'Sin Artículos Con Última Pieza.':'Sin Artículos Todavía.')+'</td></tr>';
   });
@@ -438,6 +450,15 @@ function pintar(cascada){
   document.getElementById("pct").textContent=pc+" % Revisado";
   primera=false;
 }
+var MODO="",SETS={toma:{key:KEY,h:hechos},precio:{key:"precio-hechos",h:(function(){try{return JSON.parse(localStorage.getItem("precio-hechos")||"{}")}catch(e){return {}}})()}};
+function ponerModo(m,anim){MODO=m;document.body.classList.toggle("sin-rev",!m);
+  if(m){KEY=SETS[m].key;hechos=SETS[m].h}
+  document.getElementById("r-toma").setAttribute("aria-pressed",m==="toma");document.getElementById("r-precio").setAttribute("aria-pressed",m==="precio");
+  document.getElementById("rev-et").textContent=m==="precio"?"Precios Revisados":"Toma Uno Revisados";
+  try{localStorage.setItem("modo-rev",m)}catch(e){}
+  prev.rev=undefined;pintar(!!anim)}
+document.getElementById("r-toma").onclick=function(){ponerModo(MODO==="toma"?"":"toma",true)};
+document.getElementById("r-precio").onclick=function(){ponerModo(MODO==="precio"?"":"precio",true)};
 document.getElementById("filas").addEventListener("change",function(e){
   var s=e.target.getAttribute("data-s"); if(!s)return;
   if(e.target.checked)hechos[s]=1; else delete hechos[s];
@@ -649,6 +670,7 @@ document.getElementById("pegado").addEventListener("paste",function(){setTimeout
     docInv.onSnapshot(function(s){if(!s.exists)return;var d=s.data();if(d&&d.cant){try{localStorage.removeItem("toma1-cant")}catch(e){}aplicarCant(d.cant,{fecha:d.fecha},d.desc)}},function(){});
   }catch(e){}})();
 
+(function(){var m="";try{m=localStorage.getItem("modo-rev")||""}catch(e){}if(m!=="toma"&&m!=="precio")m="";MODO=m;document.body.classList.toggle("sin-rev",!m);if(m){KEY=SETS[m].key;hechos=SETS[m].h}document.getElementById("r-toma").setAttribute("aria-pressed",m==="toma");document.getElementById("r-precio").setAttribute("aria-pressed",m==="precio");document.getElementById("rev-et").textContent=m==="precio"?"Precios Revisados":"Toma Uno Revisados"})();
 pintar(true);
 </script>
 
