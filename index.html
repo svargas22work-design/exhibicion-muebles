@@ -124,6 +124,20 @@ tr.ult .num{color:var(--rojo-texto)}
 .disc{display:inline-block;border:2px solid var(--tinta);color:var(--tinta);font-weight:700;font-size:12px;padding:2px 8px;border-radius:4px;margin-top:6px}
 .badge{display:inline-block;background:var(--rojo);color:#fff;font-weight:700;font-size:13px;
   padding:5px 10px;border-radius:4px;margin-top:6px;white-space:nowrap;animation:late 2.4s ease-in-out infinite}
+.inicio{display:none}
+body.en-inicio .inicio{display:block;animation:aparece .5s 1.3s both}
+body.en-inicio .no-inicio,body.en-inicio .scroll{display:none}
+.ini-txt{color:var(--gris);font-size:14px;margin:4px 0 12px}
+.ini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:24px}
+.ini-card{display:flex;flex-direction:column;gap:4px;text-align:left;font-family:var(--sans);padding:18px 16px;border:2px solid var(--rojo);border-radius:12px;background:var(--blanco);color:var(--tinta);cursor:pointer;border-left-width:8px;transition:transform .15s var(--suave),box-shadow .2s}
+.ini-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px -12px var(--rojo)}
+.ini-card:active{transform:scale(.98)}
+.ini-card:focus-visible{outline:3px solid var(--tinta);outline-offset:2px}
+.ini-n{font-size:22px;font-weight:700}
+.ini-c{font-size:14px;color:var(--rojo-texto);font-weight:700}
+.ini-s{font-size:13px;color:var(--gris);line-height:1.4}
+.ini-todo{border-color:var(--tinta);border-style:dashed;border-left-width:2px}
+.ini-todo .ini-c{color:var(--gris)}
 .subs{display:flex;flex-direction:column;gap:8px;margin:0 0 10px;animation:aparece .5s 1.3s both;transition:opacity .2s}
 .subs .fila-deps,.subs .fila-subs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 .subs .fila-deps button{font-size:14px;border-color:var(--tinta);color:var(--tinta)}
@@ -194,14 +208,15 @@ th .sm{display:none}
   </form>
   <p class="scan-msg" id="scan-msg" aria-live="polite" hidden></p>
   <p class="fecha solo-mueb" id="fecha"></p>
-  <div class="tools" role="group" aria-label="Filtro">
+  <div class="inicio" id="inicio"></div>
+  <div class="tools no-inicio" role="group" aria-label="Filtro">
     <button type="button" id="f-todos" aria-pressed="true">Todos</button>
     <button type="button" id="f-ult" class="solo-mueb" aria-pressed="false">Solo Última Pieza</button>
     <button type="button" id="f-upc" aria-pressed="false">Sin UPC</button>
     <button type="button" id="m-todo" class="solo-rev">Marcar Todo</button>
     <button type="button" id="m-nada" class="solo-rev">Desmarcar Todo</button>
   </div>
-  <div class="subs" id="subs" role="group" aria-label="Subcategorías"></div>
+  <div class="subs no-inicio" id="subs" role="group" aria-label="Subcategorías"></div>
   <div class="scroll">
     <table>
       <thead><tr><th></th><th>SKU</th><th>Descripción</th><th class="n col-cant"><span class="lg">Cantidad</span><span class="sm">Cant.</span></th><th class="n col-hecho"><span class="lg">Hecho</span><span class="sm">✓</span></th></tr></thead>
@@ -219,7 +234,7 @@ th .sm{display:none}
 <div class="pie"><div><b>Responsable:</b> Santiago Vargas Almeida</div></div>
 <script>
 var CATS=["Archiveros","Gabinetes Y Lockers","Libreros Y Estantes","Credenzas","Escritorios","Mesas","Mamparas","Restiradores","Sillas","Sillones","Bancos","Ventiladores","Calefactores","Lámparas","Escritura","Arte Y Dibujo","Básicos De Papelería","Cintas Y Adhesivos","Accesorios De Oficina","Pizarrones Y Planificación","Folders Y Sobres","Papel Para Impresión","Cuadernos Y Blocks","Etiquetas","Reglas Y Escuadras","Contabilidad","Pilas Y Herramientas","Registradores Y Carpetas","Letreros Y Señalización","Papel Para Manualidades","Cafetería, Dulces Y Limpieza","Calculadoras","Cintas Para Etiquetadora","Rollos De Papel"];
-var DEPTOS=["Muebles","Papelería","Tecnología"],CDEP=CATS.map(function(c,i){return i<14?0:i<31?1:2}),subSel=-1,depSel=0;
+var DEPTOS=["Muebles","Papelería","Tecnología"],CDEP=CATS.map(function(c,i){return i<14?0:i<31?1:2}),subSel=-1,depSel=-1,INICIO=true;
 var FOTOS={"100048941":1,"100176679":1,"100056036":1,"100307211":1,"100269242":1,"100120384":1,"100307288":1,"100048925":1,"100156871":1,"000093894":1,"100056010":1,"100262526":1,"100055990":1,"000078318":1,"100172889":1,"100229161":1,"100262518":1,"000061450":1,"100048917":1,"100269234":1,"100056001":1,"100248290":1,"100172838":1,"000093895":1,"000093893":1,"100075552":1,"100229216":1,"100048933":1,"100082613":1,"100178990":1,"000090038":1,"100269226":1,"000068650":1,"100003663":1,"100224124":1,"100224263":1,"100176732":1,"000024504":1,"100163131":1,"100169891":1,"100262500":1,"100269251":1,"000030442":1,"100172897":1,"100164900":1,"000075884":1,"000081467":1,"100008966":1,"100188961":1,"100287475":1,"100262331":1,"100144984":1,"100169920":1,"100169874":1,"100224343":1,"100075632":1,"100163376":1,"100075528":1,"000064059":1,"100104894":1,"000068449":1,"000081459":1,"100314189":1,"000090012":1,"000059905":1,"000068417":1,"000060149":1,"100159035":1,"000060148":1,"100001941":1,"000090046":1,"100175035":1,"100283562":1,"100100631":1,"100186092":1,"100300730":1,"100158921":1,"100223826":1,"100231009":1,"100118321":1,"100172926":1,"100172942":1,"100248687":1,"100184396":1,"000056539":1,"100269200":1,"100069611":1,"100159078":1,"100260301":1,"000086172":1,"100220844":1,"100239625":1,"000090021":1,"100169962":1,"100075739":1,"100012527":1,"000081469":1,"100281735":1,"100184409":1,"100183828":1,"100012501":1,"100185452":1,"000023017":1,"000090028":1,"100159318":1,"100176636":1,"000050027":1,"100241864":1,"100176661":1,"100172723":1,"000065501":1,"100301821":1,"000064077":1,"100159182":1,"000044401":1,"100172731":1,"000085507":1,"000056566":1,"100195538":1,"000050062":1,"000068472":1,"000040707":1,"100279192":1,"100075561":1,"000068468":1,"000081458":1,"000081380":1,"100181312":1,"100169882":1,"100172900":1,"100170091":1,"100104931":1,"100189226":1,"100170074":1,"100284565":1,"100284590":1,"100284581":1,"000068420":1,"100284240":1,"100284709":1,"100241872":1,"100241856":1,"100284717":1,"100100615":1,"100284178":1,"100176847":1,"100284549":1,"100284186":1,"100159107":1,"100284557":1,"000081480":1,"100284899":1,"100104907":1,"000000001":1,"000000002":1,"000000003":1,"000000004":1,"000000005":1,"000000006":1,"000000007":1,"000000013":1,"000000014":1,"000000021":1,"000000033":1,"000000062":1,"000000067":1,"000000068":1,"000000072":1,"000000076":1,"000000080":1,"000000111":1,"000000112":1,"000000114":1,"000000116":1,"000000118":1,"000000119":1,"000000120":1,"000000142":1,"000000148":1,"000000149":1,"000000150":1,"000000151":1,"000000152":1,"000000154":1,"000000155":1,"000000159":1,"000000173":1,"000000176":1,"000000178":1,"000000185":1,"000000192":1,"000000193":1,"000000207":1,"000000262":1,"000000274":1,"000000349":1,"000000364":1,"000000372":1,"000000375":1,"000000382":1,"000000386":1,"000000387":1,"000000388":1,"000000389":1,"000000390":1,"000000391":1,"000000458":1,"000000459":1,"000000460":1,"000000536":1,"000000807":1,"000000809":1,"000001088":1,"000001325":1,"000001349":1,"000001416":1,"000001419":1,"000001424":1,"000001432":1,"000001435":1,"000001633":1,"000001634":1,"000001639":1,"000001644":1,"000001647":1,"000001648":1,"000001654":1,"000001657":1,"000001659":1,"000001660":1,"000001686":1,"000001732":1,"000001736":1,"000001740":1,"000001849":1,"000001850":1,"000001851":1,"000001852":1,"000001853":1,"000002406":1,"000002770":1,"000002781":1,"000002858":1,"000002877":1,"000002878":1,"000002904":1,"000003466":1,"000003467":1,"000003961":1,"000003972":1,"000003981":1,"000004319":1,"000004321":1,"000004322":1,"000004328":1,"000004385":1,"000004386":1,"000004387":1,"000004388":1,"000004393":1,"000004548":1,"000004964":1,"000004972":1,"000004984":1,"000004985":1,"000004992":1,"000005061":1,"000005252":1,"000005253":1,"000005254":1,"000005261":1,"000005311":1,"000005407":1,"000005408":1,"000005409":1,"000005410":1,"000005411":1,"000005412":1,"000005883":1,"000005892":1,"000005895":1,"000006283":1,"000006369":1,"000006468":1,"000006470":1,"000006473":1,"000006809":1,"000006810":1,"000006811":1,"000006879":1,"000006890":1,"000006891":1,"000006892":1,"000006998":1,"000007135":1,"000007136":1,"000007257":1,"000007258":1,"000007259":1,"000007283":1,"000007284":1,"000007339":1,"000007340":1,"000007754":1,"000008101":1,"000008263":1,"000008696":1,"000008703":1,"000008709":1,"000008712":1,"000008713":1,"000008714":1,"000008723":1,"000008805":1,"000008806":1,"000008811":1,"000008847":1,"000008848":1,"000008849":1,"000008997":1,"000009201":1,"000009205":1,"000009216":1,"000009286":1,"000009287":1,"000009304":1,"000009418":1,"000009419":1,"000010487":1,"000010604":1,"000010605":1,"000010670":1,"000010671":1,"000010735":1,"000010852":1,"000010894":1,"000011050":1,"000011051":1,"000011052":1,"000011087":1,"000011114":1,"000011201":1,"000011202":1,"000011203":1,"000011228":1,"000011229":1,"000011648":1,"000011668":1,"000011684":1,"000011698":1,"000011706":1,"000013859":1,"000013960":1,"000014004":1,"000014505":1,"000015447":1,"000015554":1,"000015709":1,"000016047":1,"000016080":1,"000016567":1,"000016568":1,"000016580":1,"000016583":1,"000016584":1,"000016620":1,"000016622":1,"000016624":1,"000016638":1,"000016639":1,"000016646":1,"000016647":1,"000016657":1,"000016660":1,"000016661":1,"000016666":1,"000017200":1,"000017277":1,"000017278":1,"000017437":1,"000017700":1,"000017701":1,"000017834":1,"000017838":1,"000017841":1,"000018470":1,"000018491":1,"000018580":1,"000018720":1,"000018835":1,"000018967":1,"000019297":1,"000019299":1,"000019993":1,"000020289":1,"000020316":1,"000020626":1,"000020637":1,"000020640":1,"000020741":1,"000020946":1,"000020951":1,"000020953":1,"000020955":1,"000020956":1,"000020957":1,"000020958":1,"000020959":1,"000020960":1,"000020961":1,"000020974":1,"000020995":1,"000021768":1,"000021801":1,"000021802":1,"000021817":1,"000021820":1,"000022017":1,"000022041":1,"000022055":1,"000022359":1,"000022748":1,"000022973":1,"000022984":1,"000022986":1,"000022988":1,"000022990":1,"000022992":1,"000022995":1,"000023001":1,"000023013":1,"000023030":1,"000023041":1};
 var REP=["100223826","000024504","100175035","100104894","100186092","100284565","100176847"];
 var D=[
@@ -690,11 +705,13 @@ function poner(id,txt){var el=document.getElementById(id);if(prev[id]!==undefine
 function pintar(cascada){
   var h="",ult=0,rev=0,k=0;
   var DM=D.filter(function(r){return CDEP[r[3]]===0}),DV=depSel<0?D:D.filter(function(r){return CDEP[r[3]]===depSel});
+  var enInicio=INICIO&&!q;document.body.classList.toggle("en-inicio",enInicio);if(enInicio)pintarInicio();
   document.body.classList.toggle("no-mueb",depSel!==0);document.body.classList.toggle("dep-otro",depSel>0);
   DM.forEach(function(r){var z=r[2]===0; if(z)ult++; if(hechos[r[0]])rev++;});
   function anim(){if(!cascada)return ' ent2"';var d=Math.min(k++*18,900)+(primera?1300:0);return ' ent" style="animation-delay:'+d+'ms"'}
   var total=0,nn=0;
   DEPTOS.forEach(function(dn,di){
+  if(enInicio)return;
   if(depSel>=0&&!q&&di!==depSel)return;
   var enDep=D.filter(function(r){return CDEP[r[3]]===di});if(!enDep.length)return;
   var udep=enDep.filter(function(r){return r[2]===0}).length,hDep="",cuenta=0;
@@ -722,7 +739,7 @@ function pintar(cascada){
   if(!cuenta)return;total+=cuenta;
   h+='<tr class="dep'+anim()+'><td colspan="5">'+dn+'<span class="cc">'+enDep.length+' Artículos'+(di===0?' · '+udep+' Última Pieza':'')+'</span></td></tr>'+hDep;
   });
-  if(!total)h+='<tr class="vacia'+anim()+'><td colspan="5">'+(q?'Sin Resultados Para «'+q.replace(/[<>&]/g,"")+'».':'Sin Artículos Con Ese Filtro.')+'</td></tr>';
+  if(!total&&!enInicio)h+='<tr class="vacia'+anim()+'><td colspan="5">'+(q?'Sin Resultados Para «'+q.replace(/[<>&]/g,"")+'».':'Sin Artículos Con Ese Filtro.')+'</td></tr>';
   pintarSubs();
   document.getElementById("filas").innerHTML=h;
   if(ultimo){var tr=document.querySelector('tr[data-s="'+ultimo+'"]');if(tr)tr.classList.add("marcada");ultimo=null}
@@ -900,16 +917,25 @@ try{localStorage.removeItem("toma1-cant")}catch(e){}
     db.doc("inventario/actual").onSnapshot(function(s){if(!s.exists)return;var d=s.data();if(d&&d.cant)aplicarCant(d.cant,d.fecha,d.desc)},function(){});
   }catch(e){}})();
 
-function pintarSubs(){var el=document.getElementById("subs"),h='<div class="fila-deps"><button type="button" data-d="-1" aria-pressed="'+(depSel<0)+'">Todo <small>'+D.length+'</small></button>';
+function pintarSubs(){var el=document.getElementById("subs"),h='<div class="fila-deps"><button type="button" data-d="inicio" aria-pressed="false">← Inicio</button><button type="button" data-d="-1" aria-pressed="'+(depSel<0&&!INICIO)+'">Todo <small>'+D.length+'</small></button>';
   DEPTOS.forEach(function(dn,di){var n=D.filter(function(r){return CDEP[r[3]]===di}).length;if(!n)return;h+='<button type="button" data-d="'+di+'" aria-pressed="'+(depSel===di)+'">'+dn+' <small>'+n+'</small></button>'});
   h+='</div>';
   if(depSel>=0){h+='<div class="fila-subs"><button type="button" data-c="-1" aria-pressed="'+(subSel<0)+'">Todo '+DEPTOS[depSel]+'</button>';
     CATS.forEach(function(cn,ci){if(CDEP[ci]!==depSel)return;var n=D.filter(function(r){return r[3]===ci}).length;if(!n)return;h+='<button type="button" data-c="'+ci+'" aria-pressed="'+(subSel===ci)+'">'+cn+' <small>'+n+'</small></button>'});h+='</div>'}
   el.innerHTML=h;el.classList.toggle("apagado",!!q)}
 document.getElementById("subs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
-  if(b.hasAttribute("data-d")){depSel=+b.getAttribute("data-d");subSel=-1;try{localStorage.setItem("dep-sel",depSel)}catch(x){}if(depSel!==0&&solo){filtro(false);return}}else subSel=+b.getAttribute("data-c");pintar(true)});
+  if(b.getAttribute("data-d")==="inicio"){irInicio();return}
+  if(b.hasAttribute("data-d")){depSel=+b.getAttribute("data-d");subSel=-1;INICIO=false;if(depSel!==0&&solo){filtro(false);return}}else subSel=+b.getAttribute("data-c");pintar(true)});
 
-try{var dz=localStorage.getItem("dep-sel");if(dz!==null&&!isNaN(+dz)&&+dz>=-1&&+dz<DEPTOS.length)depSel=+dz}catch(e){}
+function pintarInicio(){var el=document.getElementById("inicio"),h='<p class="ini-txt">Busca Por SKU, UPC O Nombre, Escanea El Código, O Elige Un Área:</p><div class="ini-grid">';
+  DEPTOS.forEach(function(dn,di){var its=D.filter(function(r){return CDEP[r[3]]===di});if(!its.length)return;
+    var subs=CATS.filter(function(c,ci){return CDEP[ci]===di&&D.some(function(r){return r[3]===ci})});
+    h+='<button type="button" class="ini-card" data-d="'+di+'"><span class="ini-n">'+dn+'</span><span class="ini-c">'+its.length+' Artículos · '+subs.length+' Subcategorías</span><span class="ini-s">'+subs.slice(0,4).join(" · ")+(subs.length>4?" …":"")+'</span></button>'});
+  h+='<button type="button" class="ini-card ini-todo" data-d="-1"><span class="ini-n">Ver Todo</span><span class="ini-c">'+D.length+' Artículos</span></button></div>';
+  el.innerHTML=h}
+function irInicio(){INICIO=true;depSel=-1;subSel=-1;if(solo){filtro(false);return}pintar(true);window.scrollTo({top:0,behavior:quieto?"auto":"smooth"})}
+document.getElementById("inicio").addEventListener("click",function(e){var b=e.target.closest(".ini-card");if(!b)return;INICIO=false;depSel=+b.getAttribute("data-d");subSel=-1;pintar(true);
+  var t=document.getElementById("subs");if(t)setTimeout(function(){t.scrollIntoView({behavior:quieto?"auto":"smooth",block:"start"})},60)});
 (function(){var m="";try{m=localStorage.getItem("modo-rev")||""}catch(e){}if(m!=="toma"&&m!=="precio")m="";MODO=m;document.body.classList.toggle("sin-rev",!m);if(m){KEY=SETS[m].key;hechos=SETS[m].h}document.getElementById("r-toma").setAttribute("aria-pressed",m==="toma");document.getElementById("r-precio").setAttribute("aria-pressed",m==="precio");document.getElementById("rev-et").textContent=m==="precio"?"Precios Revisados":"Toma Uno Revisados"})();
 pintar(true);
 </script>
