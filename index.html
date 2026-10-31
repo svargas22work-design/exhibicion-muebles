@@ -31,7 +31,7 @@ body{background:var(--blanco);color:var(--tinta);font-family:var(--sans)}
 h1{font-size:clamp(32px,6.4vw,50px);line-height:1.08;margin:0 0 22px;text-wrap:balance;animation:sube .7s .65s var(--suave) both}
 .datos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
 body.sin-rev .datos{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:22px}
-body.sin-rev .solo-rev,body.sin-rev .col-hecho,body.no-mueb .solo-mueb,body.no-mueb .solo-rev,body.no-mueb .col-hecho{display:none}
+body.dep-otro .col-cant,body.sin-rev .solo-rev,body.sin-rev .col-hecho,body.no-mueb .solo-mueb,body.no-mueb .solo-rev,body.no-mueb .col-hecho{display:none}
 body.no-mueb .datos{grid-template-columns:minmax(0,1fr);max-width:50%}
 @media(max-width:520px){body.no-mueb .datos{max-width:none}}
 .modo{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;margin:0 0 14px;animation:aparece .5s .2s both}
@@ -204,12 +204,12 @@ th .sm{display:none}
   <div class="subs" id="subs" role="group" aria-label="Subcategorías"></div>
   <div class="scroll">
     <table>
-      <thead><tr><th></th><th>SKU</th><th>Descripción</th><th class="n"><span class="lg">Cantidad</span><span class="sm">Cant.</span></th><th class="n col-hecho"><span class="lg">Hecho</span><span class="sm">✓</span></th></tr></thead>
+      <thead><tr><th></th><th>SKU</th><th>Descripción</th><th class="n col-cant"><span class="lg">Cantidad</span><span class="sm">Cant.</span></th><th class="n col-hecho"><span class="lg">Hecho</span><span class="sm">✓</span></th></tr></thead>
       <tbody id="filas"></tbody>
     </table>
   </div>
 </div>
-<div class="marco-rep"><div class="nota-rep"><b>Repetidos En Piso:</b> Estos Siete Artículos Están Exhibidos Dos Veces.<br><span class="sku">100223826</span> Ventilador Pedestal 16″ 3v Rt<br><span class="sku">000024504</span> Silla Ejecutiva Fio 5 290 R Ng<br><span class="sku">100175035</span> Silla Gamer Led Fio56 15r Ng<br><span class="sku">100104894</span> Silla Mesh Gerente Ng<br><span class="sku">100186092</span> Silla Pleg Lt P/Exterior Ng<br><span class="sku">100284565</span> Credenza Skanor 5entrep Gr/Nog<br><span class="sku">100176847</span> Silla Ejecutiva Gf-82 579s-B Ng</div></div>
+<div class="marco-rep solo-mueb"><div class="nota-rep"><b>Repetidos En Piso:</b> Estos Siete Artículos Están Exhibidos Dos Veces.<br><span class="sku">100223826</span> Ventilador Pedestal 16″ 3v Rt<br><span class="sku">000024504</span> Silla Ejecutiva Fio 5 290 R Ng<br><span class="sku">100175035</span> Silla Gamer Led Fio56 15r Ng<br><span class="sku">100104894</span> Silla Mesh Gerente Ng<br><span class="sku">100186092</span> Silla Pleg Lt P/Exterior Ng<br><span class="sku">100284565</span> Credenza Skanor 5entrep Gr/Nog<br><span class="sku">100176847</span> Silla Ejecutiva Gf-82 579s-B Ng</div></div>
 <div class="escaner" id="escaner" role="dialog" aria-label="Escáner De Códigos" hidden>
   <video id="vid" playsinline muted></video>
   <div class="marco" id="marco"><i class="linea"></i></div>
@@ -690,7 +690,7 @@ function poner(id,txt){var el=document.getElementById(id);if(prev[id]!==undefine
 function pintar(cascada){
   var h="",ult=0,rev=0,k=0;
   var DM=D.filter(function(r){return CDEP[r[3]]===0}),DV=depSel<0?D:D.filter(function(r){return CDEP[r[3]]===depSel});
-  document.body.classList.toggle("no-mueb",depSel!==0);
+  document.body.classList.toggle("no-mueb",depSel!==0);document.body.classList.toggle("dep-otro",depSel>0);
   DM.forEach(function(r){var z=r[2]===0; if(z)ult++; if(hechos[r[0]])rev++;});
   function anim(){if(!cascada)return ' ent2"';var d=Math.min(k++*18,900)+(primera?1300:0);return ' ent" style="animation-delay:'+d+'ms"'}
   var total=0,nn=0;
@@ -712,7 +712,7 @@ function pintar(cascada){
      +'<td class="num-fila">'+(++nn)+'</td>'
      +'<td>'+(FOTOS[r[0]]?'<img class="th" data-g="1" alt="Foto '+r[0]+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+r[0]+'.jpg">':'')+'<span class="sku">'+r[0]+'</span>'+'</td>'
      +'<td class="d"><span class="t">'+r[1]+'</span>'+(z?'<br><span class="badge">Última Pieza</span>':'')+(r[4]?'<br><span class="disc">Descontinuado</span>':'')+(REP.indexOf(r[0])>-1?(r[4]?'':'<br>')+'<span class="rep">Exhibido 2 Veces</span>':'')+'</td>'
-     +'<td class="q">'+(r[2]==null?'<span class="num sd">—</span><span class="lbl">Sin Dato</span>':'<span class="num">'+r[2]+'</span><span class="lbl">Disponible</span>')+'</td>'
+     +(di!==0?'<td class="q col-cant"></td>':'<td class="q col-cant">'+(r[2]==null?'<span class="num sd">—</span><span class="lbl">Sin Dato</span>':'<span class="num">'+r[2]+'</span><span class="lbl">Disponible</span>')+'</td>')
      +'<td class="q col-hecho"><input class="chk" type="checkbox" data-s="'+r[0]+'" aria-label="Marcar '+r[0]+'"'+(hechos[r[0]]?" checked":"")+'></td></tr>';
     hc+=h;h=h0;
    });
