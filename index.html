@@ -95,7 +95,8 @@ body.sin-rev .solo-rev,body.sin-rev .col-hecho{display:none}
 .tools button:focus-visible,.chk:focus-visible,.busca button:focus-visible{outline:3px solid var(--tinta);outline-offset:2px}
 .nota{color:var(--gris);font-size:14px;margin:0 0 16px;max-width:65ch;animation:aparece .5s 1.3s both}
 .scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:560px}
+table{width:100%;border-collapse:collapse;min-width:0;table-layout:auto}
+td.q{width:1%;white-space:nowrap}
 th{text-align:left;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);
   padding:8px 10px;border-bottom:2px solid var(--tinta)}
 th.n,td.q{text-align:center}
@@ -154,7 +155,9 @@ tr.hecho td.d .t{background-size:100% 2px}
 @keyframes destello{0%{background-color:var(--flash)}}
 @keyframes late{0%,100%{box-shadow:0 0 0 0 rgba(204,0,51,.45)}50%{box-shadow:0 0 0 6px rgba(204,0,51,0)}}
 @keyframes corre{from{background-position:-60px 0}to{background-position:calc(100% + 60px) 0}}
-@media(max-width:520px){td{padding:10px 6px}.sku{font-size:13px}.datos{gap:8px}.caja{padding:12px 10px}.caja .cif{font-size:32px}.caja .et{font-size:13px}}
+@media(max-width:520px){td{padding:10px 4px}th{padding:8px 4px;font-size:11px}.num-fila{width:auto;font-size:11px}.th{width:48px}td.d{font-size:14px}td.q .num{font-size:26px}td.q .lbl{font-size:9px}}
+th .sm{display:none}
+@media(max-width:400px){th .lg{display:none}th .sm{display:inline}td.q .lbl{font-size:8px;letter-spacing:0}td.q .num{font-size:24px}.sku{font-size:11.5px;padding:3px 5px;letter-spacing:0}.th{width:44px}.chk{width:22px;height:22px}td.q .lbl{letter-spacing:.02em}tr.cat .cc,tr.dep .cc{float:none;display:block;margin-top:2px}.sku{font-size:13px}.datos{gap:8px}.caja{padding:12px 10px}.caja .cif{font-size:32px}.caja .et{font-size:13px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <div class="bar"></div>
@@ -194,7 +197,7 @@ tr.hecho td.d .t{background-size:100% 2px}
   <div class="subs" id="subs" role="group" aria-label="Subcategorías"></div>
   <div class="scroll">
     <table>
-      <thead><tr><th></th><th>SKU</th><th>Descripción</th><th class="n">Cantidad</th><th class="n col-hecho">Hecho</th></tr></thead>
+      <thead><tr><th></th><th>SKU</th><th>Descripción</th><th class="n"><span class="lg">Cantidad</span><span class="sm">Cant.</span></th><th class="n col-hecho"><span class="lg">Hecho</span><span class="sm">✓</span></th></tr></thead>
       <tbody id="filas"></tbody>
     </table>
   </div>
