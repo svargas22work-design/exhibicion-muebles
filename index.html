@@ -1121,6 +1121,8 @@ function foto(img){if(document.querySelector(".zoom"))return;
   var z=document.createElement("div");z.className="zoom";z.setAttribute("role","dialog");z.setAttribute("aria-label",img.alt);
   z.innerHTML='<div class="zoom-fondo"></div>';
   var g=new Image();g.className="zoom-img";g.alt=img.alt;g.src=img.currentSrc||img.src;z.appendChild(g);
+  var gu=(img.currentSrc||img.src).replace(/img\/([^\/?#]+\.jpg)/,"img/g/$1");
+  if(gu!==g.src){var gr=new Image();gr.onload=function(){g.src=gu};gr.src=gu}
   if(sku){var c=document.createElement("div");c.className="zoom-pie";c.innerHTML='<span class="sku">'+sku+'</span>'+(des?des.textContent:"");z.appendChild(c)}
   var listo=g.decode?g.decode().catch(function(){}):Promise.resolve();
   listo.then(function(){document.body.appendChild(z);
