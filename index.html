@@ -1053,7 +1053,7 @@ function pintar(cascada){
     var h0=h;h="";
     h+='<tr data-s="'+r[0]+'" class="fila '+(z?"ult ":"")+(PEX.indexOf(r[0])>-1?"pex ":"")+(MODO&&di===0&&hechos[r[0]]?"hecho":"")+anim()+'>'
      +'<td class="num-fila">'+(++nn)+'</td>'
-     +'<td>'+(FOTOS[r[0]]?'<img class="th" data-g="1" alt="Foto '+r[0]+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+r[0]+'.jpg">':'')+'<span class="sku">'+r[0]+'</span>'+'</td>'
+     +'<td>'+(FOTOS[r[0]]?'<img class="th" data-g="1" alt="Foto '+r[0]+'" loading="lazy" decoding="async" width="56" height="56" onerror="this.remove()" src="img/'+r[0]+'.jpg">':'')+'<span class="sku">'+r[0]+'</span>'+'</td>'
      +'<td class="d"><span class="t">'+r[1]+'</span>'+(z?'<br><span class="badge">Última Pieza</span>':'')+(r[4]?'<br><span class="disc">Descontinuado</span>':'')+(REP.indexOf(r[0])>-1?(r[4]?'':'<br>')+'<span class="rep">Exhibido 2 Veces</span>':'')+(PEX.indexOf(r[0])>-1?'<br><span class="pexb">Por Exhibir</span>':'')+'</td>'
      +(di!==0?'<td class="q col-cant"></td>':'<td class="q col-cant">'+(r[2]==null?'<span class="num sd">—</span><span class="lbl">Sin Dato</span>':'<span class="num">'+r[2]+'</span><span class="lbl">Disponible</span>')+'</td>')
      +'<td class="q col-hecho"><input class="chk" type="checkbox" data-s="'+r[0]+'" aria-label="Marcar '+r[0]+'"'+(hechos[r[0]]?" checked":"")+'></td></tr>';
