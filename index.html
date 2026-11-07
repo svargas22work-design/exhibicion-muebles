@@ -106,6 +106,9 @@ td{padding:12px 10px;border-bottom:1px solid var(--linea);vertical-align:middle;
 .ent2{animation:aparece .25s ease-out both}
 .marcada td{animation:destello .9s ease-out}
 .marcada .chk{animation:bump .4s var(--suave)}
+.td-foto{position:relative}
+.llave{position:absolute;right:10px;top:40px;width:14px;height:14px;border-radius:50%;border:2px solid var(--blanco);box-shadow:0 0 0 1.5px var(--gris);box-sizing:content-box}
+@media(max-width:520px){.llave{right:4px}}
 .sku{font:700 15px var(--mono);background:var(--sku-bg);border:1px solid var(--linea);padding:4px 8px;border-radius:4px;white-space:nowrap;letter-spacing:.04em}
 td.d{font-size:15px;min-width:0}
 td.d .t{background-image:linear-gradient(var(--gris),var(--gris));background-size:0 2px;background-position:0 55%;background-repeat:no-repeat;transition:background-size .45s var(--suave)}
@@ -1928,6 +1931,7 @@ function contar(id,valor,fin,txt){
   setTimeout(function(){requestAnimationFrame(paso)},850);
 }
 function poner(id,txt){var el=document.getElementById(id);if(prev[id]!==undefined&&prev[id]!==txt){el.classList.remove("bump");void el.offsetWidth;el.classList.add("bump")}prev[id]=txt;el.textContent=txt}
+var LLAVES={"100229161":["Amarillo","#FFC400"],"100172862":["Azul","#1E6FD9"],"000061584":["Rojo","#E0261F"],"100056028":["Verde","#0E9E7E"]};
 function pintar(cascada){
   var h="",ult=0,rev=0,k=0;
   var DM=D.filter(function(r){return CDEP[r[3]]===0}),DV=depSel<0?D:D.filter(function(r){return CDEP[r[3]]===depSel});
@@ -1953,7 +1957,7 @@ function pintar(cascada){
     var h0=h;h="";
     h+='<tr data-s="'+r[0]+'" class="fila '+(z?"ult ":"")+(PEX.indexOf(r[0])>-1?"pex ":"")+(MODO&&di===0&&hechos[r[0]]?"hecho":"")+anim()+'>'
      +'<td class="num-fila">'+(++nn)+'</td>'
-     +'<td>'+(FOTOS[r[0]]?'<img class="th" data-g="1" alt="Foto '+r[0]+'" loading="lazy" decoding="async" width="56" height="56" onerror="this.remove()" src="img/'+r[0]+'.jpg">':'')+'<span class="sku">'+r[0]+'</span>'+'</td>'
+     +'<td class="td-foto">'+(LLAVES[r[0]]?'<i class="llave" role="img" aria-label="Llave '+LLAVES[r[0]][0]+'" title="Llave '+LLAVES[r[0]][0]+'" style="background:'+LLAVES[r[0]][1]+'"></i>':'')+(FOTOS[r[0]]?'<img class="th" data-g="1" alt="Foto '+r[0]+'" loading="lazy" decoding="async" width="56" height="56" onerror="this.remove()" src="img/'+r[0]+'.jpg">':'')+'<span class="sku">'+r[0]+'</span>'+'</td>'
      +'<td class="d"><span class="t">'+r[1]+'</span>'+(z?'<br><span class="badge">Última Pieza</span>':'')+(r[4]?'<br><span class="disc">Descontinuado</span>':'')+(REP.indexOf(r[0])>-1?(r[4]?'':'<br>')+'<span class="rep">Exhibido 2 Veces</span>':'')+(PEX.indexOf(r[0])>-1?'<br><span class="pexb">Por Exhibir</span>':'')+'</td>'
      +(di!==0?'<td class="q col-cant"></td>':'<td class="q col-cant">'+(r[2]==null?'<span class="num sd">—</span><span class="lbl">Sin Dato</span>':'<span class="num">'+r[2]+'</span><span class="lbl">Disponible</span>')+'</td>')
      +'<td class="q col-hecho"><input class="chk" type="checkbox" data-s="'+r[0]+'" aria-label="Marcar '+r[0]+'"'+(hechos[r[0]]?" checked":"")+'></td></tr>';
