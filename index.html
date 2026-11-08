@@ -258,7 +258,7 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
     <div class="p-bus"><input id="p-q" type="search" enterkeyhint="search" placeholder="Buscar SKU O Artículo" aria-label="Buscar SKU O Artículo" autocomplete="off"></div>
     <div class="p-scroll">
       <table class="p-tabla">
-        <thead><tr><th></th><th>Artículo</th><th>Descripción</th></tr></thead>
+        <thead><tr><th></th><th>Artículo</th><th>Descripción</th><th class="n"><span class="lg">Hecho</span><span class="sm">✓</span></th></tr></thead>
         <tbody id="p-filas"></tbody>
       </table>
     </div>
@@ -2315,15 +2315,17 @@ function tarjetaPromo(){
     +(PD?(PD.f?'Reporte Del '+esc(PD.f):'Reporte Cargado'):'Sube El PDF Del Día')+'</span></button>'}
 function pintarPromo(){
   var its=PD?PD.i:[],q2=normT(PQ),h="",n=0;
-  $id("p-sub").textContent=PD?((PD.f?"Reporte Del "+PD.f+" · ":"")+its.length+" Artículos · "+conFoto()+" Con Imagen"):"";
+  var HH=(PD&&PD.h)||{},nh=its.filter(function(x){return HH[x[0]]}).length;
+  $id("p-sub").textContent=PD?((PD.f?"Reporte Del "+PD.f+" · ":"")+its.length+" Artículos · "+conFoto()+" Con Imagen · "+nh+" Marcados"):"";
   its.forEach(function(x){
     var sku=x[0],r=IDX[sku],desc=r?r[1]:titulo(x[1]||"Sin Descripción");
     if(q2&&normT(desc).indexOf(q2)<0&&sku.indexOf(q2)<0&&!(/^\d+$/.test(q2)&&sinCeros(sku).indexOf(sinCeros(q2))>-1))return;
     n++;
-    h+='<tr data-s="'+sku+'" class="fila"><td class="num-fila">'+n+'</td><td class="td-foto">'
+    h+='<tr data-s="'+sku+'" class="fila'+(HH[sku]?" hecho":"")+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
       +(FOTOS[sku]?'<img class="th" data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+sku+'.jpg">':'<div class="th sin" role="img" aria-label="Sin Imagen">Sin Imagen</div>')
-      +'<span class="sku">'+sku+'</span></td><td class="d"><span class="t">'+esc(desc)+'</span></td></tr>'});
-  if(!n)h='<tr class="vacia"><td colspan="3">'+(PD?'Sin Resultados Para «'+esc(PQ)+'».':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Finalización De Promociones.')+'</td></tr>';
+      +'<span class="sku">'+sku+'</span></td><td class="d"><span class="t">'+esc(desc)+'</span></td>'
+      +'<td class="q"><input class="chk" type="checkbox" data-s="'+sku+'" aria-label="Marcar '+sku+'"'+(HH[sku]?" checked":"")+'></td></tr>'});
+  if(!n)h='<tr class="vacia"><td colspan="4">'+(PD?'Sin Resultados Para «'+esc(PQ)+'».':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Finalización De Promociones.')+'</td></tr>';
   $id("p-filas").innerHTML=h}
 function abrirPromo(){PROMO=true;INICIO=false;pintar(true);window.scrollTo(0,0)}
 async function subirPromo(file){
@@ -2334,7 +2336,8 @@ async function subirPromo(file){
     if(esPdf){var P=await cargarPDF();r=await leerPDF(P,buf)}
     else{var X=await cargarXLSX();r=leerLibro(X,buf)}
     if(!r.items.length){pmsg(esPdf?"No Se Encontraron Artículos En El PDF. Si Es Un PDF Escaneado (Imagen), Mándaselo A Claude Para Ajustar La Lectura.":"No Se Encontraron Artículos. Revisa Que El Archivo Tenga La Columna «SKU».","err");return}
-    PD={f:r.fecha,a:file.name,t:new Date().toISOString(),i:r.items};
+    var hv={};if(PD&&PD.h&&PD.f&&PD.f===r.fecha){r.items.forEach(function(x){if(PD.h[x[0]])hv[x[0]]=1})}
+    PD={f:r.fecha,a:file.name,t:new Date().toISOString(),i:r.items,h:hv};
     try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(e){}
     PQ="";$id("p-q").value="";pintarPromo();
     var nc=enCat(r.items);
@@ -2346,6 +2349,12 @@ $id("p-subir").onclick=function(){var f=$id("p-file");f.value="";f.click()};
 $id("p-file").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)subirPromo(f)});
 $id("p-q").addEventListener("input",function(){PQ=this.value.trim();pintarPromo()});
 $id("p-filas").addEventListener("click",function(e){var t=e.target;if(t.getAttribute&&t.getAttribute("data-g"))foto(t)});
+$id("p-filas").addEventListener("change",function(e){var t=e.target;if(!t.classList||!t.classList.contains("chk")||!PD)return;
+  var s=t.getAttribute("data-s");if(!PD.h)PD.h={};if(t.checked)PD.h[s]=1;else delete PD.h[s];
+  try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(err){}
+  var tr=t.closest("tr");if(tr){tr.classList.toggle("hecho",t.checked);tr.classList.remove("marcada");void tr.offsetWidth;tr.classList.add("marcada")}
+  var n=PD.i.filter(function(x){return PD.h[x[0]]}).length;
+  $id("p-sub").textContent=(PD.f?"Reporte Del "+PD.f+" · ":"")+PD.i.length+" Artículos · "+conFoto()+" Con Imagen · "+n+" Marcados"});
 $id("promo").addEventListener("dragover",function(e){e.preventDefault()});
 $id("promo").addEventListener("drop",function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)subirPromo(f)});
 pintar(true);
