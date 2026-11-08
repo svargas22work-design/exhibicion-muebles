@@ -249,8 +249,8 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
   <div class="promo" id="promo">
     <div class="p-top">
       <button type="button" class="p-btn" id="p-volver">← Inicio</button>
-      <button type="button" class="p-btn pri" id="p-subir">Subir Excel</button>
-      <input type="file" id="p-file" class="oculto" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
+      <button type="button" class="p-btn pri" id="p-subir">Subir PDF</button>
+      <input type="file" id="p-file" class="oculto" accept=".pdf,application/pdf,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
     </div>
     <h2 class="p-tit">Finalización De Promociones Del Día</h2>
     <p class="p-sub" id="p-sub"></p>
@@ -2261,12 +2261,58 @@ function leerLibro(X,buf){
   });
   return {items:items,fecha:fecha};
 }
+var PDF_URL="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",PDF_W="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js",pdP=null;
+function cargarPDF(){if(window.pdfjsLib)return Promise.resolve(window.pdfjsLib);
+  if(!pdP)pdP=new Promise(function(ok,no){var s=document.createElement("script");s.src=PDF_URL;s.onload=function(){if(!window.pdfjsLib){no(new Error("pdf"));return}window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDF_W;ok(window.pdfjsLib)};s.onerror=function(){pdP=null;no(new Error("pdf"))};document.head.appendChild(s)});
+  return pdP}
+var RE_FECHA=/\b(\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4})\b/;
+async function leerPDF(P,buf){
+  var doc=await P.getDocument({data:new Uint8Array(buf)}).promise,items=[],seen={},fecha="",hx={s:null,d:null,f:null},p;
+  for(p=1;p<=doc.numPages;p++){
+    var pg=await doc.getPage(p),tc=await pg.getTextContent(),toks=[],lines=[],cur=null;
+    tc.items.forEach(function(it){var s=String(it.str||"").replace(/\s+/g," ").trim();if(s)toks.push({s:s,x:it.transform[4],y:it.transform[5]})});
+    toks.sort(function(a,b){return b.y-a.y||a.x-b.x});
+    toks.forEach(function(t){if(cur&&Math.abs(cur.y-t.y)<=3)cur.t.push(t);else{cur={y:t.y,t:[t]};lines.push(cur)}});
+    lines.forEach(function(l){
+      l.t.sort(function(a,b){return a.x-b.x});
+      var t=l.t,i,n,esEnc=false,txt=t.map(function(z){return z.s}).join(" ");
+      for(i=0;i<t.length;i++){n=normT(t[i].s);
+        if(n==="sku"||n==="articulo"||n==="codigo"||n==="item"){hx.s=t[i].x;esEnc=true}
+        else if(n.indexOf("descrip")===0){hx.d=t[i].x;esEnc=true}
+        else if(/^fecha/.test(n)&&!/\d/.test(n)&&n!=="fecha"&&n!=="fecha:"){hx.f=t[i].x;esEnc=true}}
+      if(esEnc)return;
+      if(!fecha){var mf=/fecha:?\s*(\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4})/i.exec(txt);if(mf)fecha=mf[1]}
+      var sk=null,si=-1;
+      for(i=0;i<t.length;i++){
+        if(/^\d{4,9}$/.test(t[i].s)&&(hx.s==null||Math.abs(t[i].x-hx.s)<=40)){sk=t[i].s;si=i;break}
+        var mm=/^(\d{4,9})\s+\S/.exec(t[i].s);
+        if(mm&&(hx.s==null||Math.abs(t[i].x-hx.s)<=40)){sk=mm[1];si=i;break}}
+      if(!sk||(hx.s==null&&si>0))return;
+      var ds=[];
+      t.forEach(function(z,j){
+        var s=z.s;
+        if(j===si)s=s.replace(/^\d{4,9}\s*/,"");
+        else if(j<si)return;
+        if(!s)return;
+        if(hx.d!=null&&j!==si&&z.x<hx.d-6)return;
+        if(hx.f!=null&&z.x>=hx.f-6){if(!fecha){var m2=RE_FECHA.exec(s);if(m2)fecha=m2[1]}return}
+        if(RE_FECHA.test(s)&&s.length<=12){if(!fecha)fecha=RE_FECHA.exec(s)[1];return}
+        if(/^[\d.,$%\-\s]+$/.test(s))return;
+        ds.push(s)});
+      sk=("000000000"+sk).slice(-9);
+      if(seen[sk])return;seen[sk]=1;
+      items.push([sk,ds.join(" ").replace(/\s+/g," ").trim()]);
+    });
+  }
+  return {items:items,fecha:fecha};
+}
+function enCat(its){return its.filter(function(x){return IDX[x[0]]}).length}
 function pmsg(html,tipo){var m=$id("p-msg");m.hidden=!html;m.className="p-msg"+(tipo?" "+tipo:"");m.innerHTML=html||""}
 function conFoto(){return PD?PD.i.filter(function(x){return FOTOS[x[0]]}).length:0}
 function tarjetaPromo(){
   return '<button type="button" class="ini-card ini-promo" data-promo="1"><span class="ini-n">Finalización De Promociones Del Día</span><span class="ini-c">'
     +(PD?PD.i.length+' Artículos · '+conFoto()+' Con Imagen':'Sin Reporte Cargado')+'</span><span class="ini-s">'
-    +(PD?(PD.f?'Reporte Del '+esc(PD.f):'Reporte Cargado'):'Sube El Excel Del Día')+'</span></button>'}
+    +(PD?(PD.f?'Reporte Del '+esc(PD.f):'Reporte Cargado'):'Sube El PDF Del Día')+'</span></button>'}
 function pintarPromo(){
   var its=PD?PD.i:[],q2=normT(PQ),h="",n=0;
   $id("p-sub").textContent=PD?((PD.f?"Reporte Del "+PD.f+" · ":"")+its.length+" Artículos · "+conFoto()+" Con Imagen"):"";
@@ -2277,19 +2323,23 @@ function pintarPromo(){
     h+='<tr data-s="'+sku+'" class="fila"><td class="num-fila">'+n+'</td><td class="td-foto">'
       +(FOTOS[sku]?'<img class="th" data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+sku+'.jpg">':'<div class="th sin" role="img" aria-label="Sin Imagen">Sin Imagen</div>')
       +'<span class="sku">'+sku+'</span></td><td class="d"><span class="t">'+esc(desc)+'</span></td></tr>'});
-  if(!n)h='<tr class="vacia"><td colspan="3">'+(PD?'Sin Resultados Para «'+esc(PQ)+'».':'Aún No Hay Reporte. Toca «Subir Excel» Y Elige El Archivo De Finalización De Promociones.')+'</td></tr>';
+  if(!n)h='<tr class="vacia"><td colspan="3">'+(PD?'Sin Resultados Para «'+esc(PQ)+'».':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Finalización De Promociones.')+'</td></tr>';
   $id("p-filas").innerHTML=h}
 function abrirPromo(){PROMO=true;INICIO=false;pintar(true);window.scrollTo(0,0)}
 async function subirPromo(file){
-  pmsg("Leyendo Excel…");
+  var esPdf=/\.pdf$/i.test(file.name||"")||file.type==="application/pdf";
+  pmsg(esPdf?"Leyendo PDF…":"Leyendo Archivo…");
   try{
-    var X=await cargarXLSX(),buf=await file.arrayBuffer(),r=leerLibro(X,buf);
-    if(!r.items.length){pmsg("No Se Encontraron Artículos. Revisa Que El Archivo Tenga La Columna «SKU».","err");return}
+    var buf=await file.arrayBuffer(),r;
+    if(esPdf){var P=await cargarPDF();r=await leerPDF(P,buf)}
+    else{var X=await cargarXLSX();r=leerLibro(X,buf)}
+    if(!r.items.length){pmsg(esPdf?"No Se Encontraron Artículos En El PDF. Si Es Un PDF Escaneado (Imagen), Mándaselo A Claude Para Ajustar La Lectura.":"No Se Encontraron Artículos. Revisa Que El Archivo Tenga La Columna «SKU».","err");return}
     PD={f:r.fecha,a:file.name,t:new Date().toISOString(),i:r.items};
     try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(e){}
     PQ="";$id("p-q").value="";pintarPromo();
-    pmsg("Listo: "+r.items.length+" Artículos Leídos · "+conFoto()+" Con Imagen.","ok");
-  }catch(err){pmsg(err&&err.message==="xl"?"No Se Pudo Cargar El Lector De Excel. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un Excel (.xlsx) O CSV.","err")}
+    var nc=enCat(r.items);
+    pmsg("Listo: "+r.items.length+" Artículos Leídos · "+nc+" En El Catálogo · "+conFoto()+" Con Imagen."+(nc<r.items.length?" "+(r.items.length-nc)+" No Están En Artículos Totales.":""),"ok");
+  }catch(err){var em=err&&err.message;pmsg(em==="xl"||em==="pdf"?"No Se Pudo Cargar El Lector. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un PDF (O Excel).","err")}
 }
 $id("p-volver").onclick=irInicio;
 $id("p-subir").onclick=function(){var f=$id("p-file");f.value="";f.click()};
