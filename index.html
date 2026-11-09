@@ -129,8 +129,6 @@ button.pexb{cursor:pointer}
 button.pexb:hover{background:#E6B000}
 .pex-add{display:inline-block;background:transparent;border:1px dashed #BFA000;color:#8A6E00;font-size:11px;font-weight:600;padding:1px 7px;border-radius:4px;margin-top:4px;cursor:pointer;font-family:var(--sans);touch-action:manipulation;transition:background .15s}
 .pex-add:hover{background:rgba(255,196,0,.15)}
-.upc-btn{display:inline-block;background:transparent;border:1px dashed var(--rojo);color:var(--rojo-texto);font-size:11px;font-weight:600;padding:1px 7px;border-radius:4px;margin-top:4px;cursor:pointer;font-family:var(--sans);touch-action:manipulation;transition:background .15s}
-.upc-btn:hover{background:rgba(204,0,51,.08)}
 .pexb::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 12px 2px rgba(255,196,0,.85);pointer-events:none;animation:pulso 2.6s ease-in-out infinite;will-change:opacity}
 @keyframes pulso{0%,100%{opacity:.25}50%{opacity:1}}
 tr.pex td{background:rgba(255,206,0,.16);border-top:2px solid #FFC400;border-bottom:2px solid #FFC400}
@@ -2028,7 +2026,7 @@ function pintar(cascada){
     h+='<tr data-s="'+r[0]+'" class="fila '+(z?"ult ":"")+(PEX.indexOf(r[0])>-1?"pex ":"")+(MODO&&di===0&&hechos[r[0]]?"hecho":"")+anim()+'>'
      +'<td class="num-fila">'+(++nn)+'</td>'
      +'<td class="td-foto">'+(LLAVES[r[0]]?'<i class="llave" role="img" aria-label="Llave '+LLAVES[r[0]][0]+'" title="Llave '+LLAVES[r[0]][0]+'" style="background:'+LLAVES[r[0]][1]+'"></i>':'')+(FOTOS[r[0]]?'<img class="th" data-g="1" alt="Foto '+r[0]+'" loading="lazy" decoding="async" width="56" height="56" onerror="this.remove()" src="img/'+r[0]+'.jpg">':'')+'<span class="sku">'+r[0]+'</span>'+'</td>'
-     +'<td class="d"><span class="t">'+r[1]+'</span>'+(z?'<br><span class="badge">Última Pieza</span>':'')+(r[4]?'<br><span class="disc">Descontinuado</span>':'')+(REP.indexOf(r[0])>-1?(r[4]?'':'<br>')+'<span class="rep">Exhibido 2 Veces</span>':'')+(PEX.indexOf(r[0])>-1?'<br>'+(esAdmin?'<button type="button" class="pexb pex-tog" data-pex="'+r[0]+'">Por Exhibir ×</button>':'<span class="pexb">Por Exhibir</span>'):'')+(di===0&&esAdmin&&PEX.indexOf(r[0])<0?'<br><button type="button" class="pex-add pex-tog" data-pex="'+r[0]+'" title="Marcar como Por Exhibir">↑ Exhibir</button>':'')+(sinUpc&&esAdmin&&!UPC[r[0]]&&!UPC_EXT[r[0]]?'<br><button type="button" class="upc-btn" data-upc="'+r[0]+'" title="Registrar código UPC">+ UPC</button>':'')+'</td>'
+     +'<td class="d"><span class="t">'+r[1]+'</span>'+(z?'<br><span class="badge">Última Pieza</span>':'')+(r[4]?'<br><span class="disc">Descontinuado</span>':'')+(REP.indexOf(r[0])>-1?(r[4]?'':'<br>')+'<span class="rep">Exhibido 2 Veces</span>':'')+(PEX.indexOf(r[0])>-1?'<br>'+(esAdmin?'<button type="button" class="pexb pex-tog" data-pex="'+r[0]+'">Por Exhibir ×</button>':'<span class="pexb">Por Exhibir</span>'):'')+(di===0&&esAdmin&&PEX.indexOf(r[0])<0?'<br><button type="button" class="pex-add pex-tog" data-pex="'+r[0]+'" title="Marcar como Por Exhibir">Sin Exhibir</button>':'')+'</td>'
      +(di!==0?'<td class="q col-cant"></td>':'<td class="q col-cant">'+(r[2]==null?'<span class="num sd">—</span><span class="lbl">Sin Dato</span>':'<span class="num">'+r[2]+'</span><span class="lbl">Disponible</span>')+'</td>')
      +'<td class="q col-hecho"><input class="chk" type="checkbox" data-s="'+r[0]+'" aria-label="Marcar '+r[0]+'"'+(hechos[r[0]]?" checked":"")+'></td></tr>';
     hc+=h;h=h0;
@@ -2113,10 +2111,8 @@ function foto(img){if(document.querySelector(".zoom"))return;
     function tecla(e){if(e.key==="Escape")cerrar()}
     z.addEventListener("click",cerrar);document.addEventListener("keydown",tecla)})}
 async function togglePex(sku){var idx=PEX.indexOf(sku);if(idx>-1)PEX.splice(idx,1);else PEX.push(sku);var obj={list:PEX,fecha:new Date().toISOString()};try{localStorage.setItem(PEX_KEY,JSON.stringify(obj))}catch(e){}if(fbAuth.currentUser){try{await fbSet("pex",obj)}catch(e){exmsg("Error Al Guardar Por Exhibir: "+e.message,"err")}}pintar(false)}
-async function agregarUpc(sku,cod){if(!cod||!cod.trim())return;UPC_EXT[sku]=cod.trim();try{localStorage.setItem(UPC_EKEY,JSON.stringify(UPC_EXT))}catch(e){}if(fbAuth.currentUser){try{await fbSet("upc-ext",UPC_EXT)}catch(e){exmsg("Error Al Guardar UPC: "+e.message,"err")}}pintar(false)}
 document.getElementById("filas").addEventListener("click",function(e){
   var b=e.target.closest(".pex-tog");if(b){e.stopPropagation();togglePex(b.getAttribute("data-pex"));return}
-  var u=e.target.closest(".upc-btn");if(u){e.stopPropagation();var sk=u.getAttribute("data-upc");var c=prompt("Código UPC Para El SKU "+sk+":",UPC[sk]||UPC_EXT[sk]||"");if(c!==null)agregarUpc(sk,c);return}
   var t=e.target;if(t.getAttribute&&t.getAttribute("data-g"))foto(t);});
 document.getElementById("busca").addEventListener("submit",function(e){e.preventDefault();buscar();document.getElementById("q").blur();});
 document.getElementById("q").addEventListener("input",alEscribir);
@@ -2244,7 +2240,7 @@ function pintarSubs(){var el=document.getElementById("subs"),h='<div class="fila
   DEPTOS.forEach(function(dn,di){var n=D.filter(function(r){return CDEP[r[3]]===di}).length;if(!n)return;h+='<button type="button" data-d="'+di+'" aria-pressed="'+(depSel===di)+'">'+dn+' <small>'+n+'</small></button>'});
   h+='</div>';
   if(depSel>=0){h+='<div class="fila-subs"><button type="button" data-c="-1" aria-pressed="'+(subSel<0)+'">Todo '+DEPTOS[depSel]+'</button>';
-    CATS.forEach(function(cn,ci){if(CDEP[ci]!==depSel)return;var n=D.filter(function(r){return r[3]===ci}).length;if(!n)return;h+='<button type="button" data-c="'+ci+'" aria-pressed="'+(subSel===ci)+'">'+cn+' <small>'+n+'</small></button>'});h+='</div>'}
+    CATS.forEach(function(cn,ci){if(CDEP[ci]!==depSel)return;var n=D.filter(function(r){if(r[3]!==ci)return false;var z=r[2]===0;if(solo&&!z)return false;if(sinUpc&&(UPC[r[0]]||UPC_EXT[r[0]]))return false;if(porEx&&PEX.indexOf(r[0])<0)return false;if(!coincide(r))return false;return true}).length;if(!n)return;h+='<button type="button" data-c="'+ci+'" aria-pressed="'+(subSel===ci)+'">'+cn+' <small>'+n+'</small></button>'});h+='</div>'}
   el.innerHTML=h;el.classList.toggle("apagado",!!q)}
 document.getElementById("subs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
   if(b.getAttribute("data-d")==="inicio"){irInicio();return}
