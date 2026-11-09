@@ -322,6 +322,43 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
 th .sm{display:none}
 @media(max-width:400px){th .lg{display:none}th .sm{display:inline}td.q .lbl{font-size:8px;letter-spacing:0}td.q .num{font-size:22px}.sku{font-size:12px;padding:3px 6px;letter-spacing:0}.th{width:44px}.chk{width:22px;height:22px}
   tr.cat .cc,tr.dep .cc{float:none;display:block;margin-top:2px}.datos{gap:8px}.caja{padding:14px 12px 12px;border-radius:16px}.caja .cif{font-size:32px}.caja .et{font-size:12px}}
+/* ===== Tutorial (Botón De Información) ===== */
+.info-btn{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--linea);background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--tinta);font:600 italic 19px Georgia,"Times New Roman",serif;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 10px -4px rgba(20,20,30,.25);transition:box-shadow .2s,border-color .2s;animation:funde .6s 1.6s ease-out both;touch-action:manipulation}
+.info-btn:hover{border-color:var(--gris-cl);box-shadow:0 4px 14px -4px rgba(20,20,30,.3)}
+.info-btn:active{opacity:.7}
+.info-btn:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
+.tuto{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:16px}
+.tuto-fondo{position:absolute;inset:0;background:rgba(20,20,26,.38);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:funde .3s ease-out}
+.tuto-caja{position:relative;width:min(100%,440px);max-height:calc(100dvh - 32px);overflow:auto;background:#fff;border-radius:22px;box-shadow:0 24px 60px -20px rgba(20,20,30,.45);padding:26px 24px 20px;animation:tuto-entra .35s cubic-bezier(.25,.1,.25,1);box-sizing:border-box}
+.tuto-caja::before{content:"";position:absolute;left:24px;right:24px;top:0;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--rojo) 0 25%,var(--azul) 25% 50%,var(--naranja) 50% 75%,var(--marino) 75%)}
+.tuto-x{position:absolute;right:14px;top:14px;width:32px;height:32px;border-radius:50%;border:0;background:var(--fondo);color:var(--gris);font:400 20px/1 var(--sans);cursor:pointer;display:grid;place-items:center}
+.tuto-x:hover{background:var(--pista)}
+.tuto-paso{font:500 12px var(--sans);color:var(--gris-cl);letter-spacing:.04em;margin:0 0 14px}
+.tuto-ico{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin:0 0 14px;background:var(--c,var(--rojo))}
+.tuto-ico svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tuto-tit{font:700 22px/1.2 var(--sans);letter-spacing:-.01em;margin:0 0 10px;color:var(--tinta)}
+.tuto-txt{font:400 15px/1.55 var(--sans);color:#444;margin:0}
+.tuto-txt p{margin:0 0 10px}
+.tuto-txt b{font-weight:600;color:var(--tinta)}
+.tuto-txt ul{margin:4px 0 10px;padding-left:18px}
+.tuto-txt li{margin:0 0 4px}
+.tuto-et{display:inline-block;font:600 11.5px var(--sans);padding:2px 9px;border-radius:99px;vertical-align:1px}
+.tuto-cuerpo{min-height:250px;animation:funde .3s ease-out}
+.tuto-pie{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}
+.tuto-puntos{display:flex;gap:6px}
+.tuto-puntos i{width:7px;height:7px;border-radius:99px;background:var(--pista);transition:width .3s,background .3s}
+.tuto-puntos i.on{width:20px;background:var(--tinta)}
+.tuto-nav{display:flex;gap:8px}
+.tuto-nav button{font:600 14px var(--sans);padding:10px 18px;border-radius:99px;cursor:pointer;border:1.5px solid var(--linea);background:#fff;color:var(--tinta);transition:opacity .2s,border-color .2s}
+.tuto-nav button:hover{border-color:var(--gris-cl)}
+.tuto-nav .sig{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.tuto-nav .sig:hover{opacity:.88;border-color:var(--rojo)}
+.tuto-nav button[disabled]{visibility:hidden}
+.tuto-nav button:focus-visible,.tuto-x:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
+@keyframes tuto-entra{from{opacity:0;transform:translateY(8px) scale(.98)}}
+@media(max-width:520px){.tuto{align-items:flex-end;padding:0}.tuto-caja{width:100%;border-radius:22px 22px 0 0;padding:24px 20px calc(env(safe-area-inset-bottom,0px) + 18px);animation:tuto-sube .35s cubic-bezier(.25,.1,.25,1)}.tuto-cuerpo{min-height:290px}}
+@keyframes tuto-sube{from{transform:translateY(40px);opacity:0}}
+body.tuto-abierto{overflow:hidden}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.bar i,.acento i{transform:none}.anillo circle.a{stroke-dashoffset:0}}
 </style>
 <div class="bar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -400,6 +437,7 @@ th .sm{display:none}
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
 <div class="pie"><div><b>Responsable:</b> Santiago Vargas Almeida</div></div>
+<button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
@@ -2576,6 +2614,51 @@ $id("ex-file").addEventListener("change",function(e){var f=e.target.files&&e.tar
     pintar(false)}
 })();
 pintar(true);
+</script>
+<script>
+/* ===== Tutorial ===== */
+(function(){
+var I={
+ info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+ area:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+ busca:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+ escanea:'<path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M8 9v6M11 9v6M14 9v6M17 9v6"/>',
+ tabla:'<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 10h16M10 10v9"/>',
+ filtro:'<path d="M4 6h16l-6 7v5l-4 2v-7z"/>',
+ revisa:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16.5 9"/>',
+ promo:'<path d="M3.5 12.5l8-8H19.5v8l-8 8z"/><circle cx="15.5" cy="8.5" r="1.3"/>',
+ llave:'<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2 2M14 9l2 2"/>'
+};
+var P=[
+ {c:'var(--rojo)',i:'info',t:'Bienvenido A Artículos',x:'<p>Aquí consultas el inventario de la <b>Tienda Querétaro 106</b>: cuántas piezas hay de cada artículo, su foto y su SKU.</p><p>Este recorrido te explica cómo usar cada parte de la página. Lo puedes volver a abrir cuando quieras con el botón <b>i</b>.</p>'},
+ {c:'var(--azul)',i:'area',t:'Elige Un Área',x:'<p>En el inicio toca <b>Muebles</b>, <b>Papelería</b> o <b>Tecnología</b>, o <b>Ver Todo</b> para ver la tienda completa.</p><p>Ya dentro, usa las subcategorías (Archiveros, Escritorios…) para ver solo una parte. <b>← Inicio</b> te regresa al principio.</p>'},
+ {c:'var(--naranja)',i:'busca',t:'Busca Un Artículo',x:'<p>Escribe el <b>SKU</b>, el <b>código de barras (UPC)</b> o parte del nombre, y toca <b>Buscar</b>.</p><p>Para quitar la búsqueda y ver todo otra vez, toca <b>Limpiar</b>.</p>'},
+ {c:'var(--marino)',i:'escanea',t:'Escanea El Código',x:'<p>Toca el botón del <b>código de barras</b> junto al buscador y apunta la cámara al código o QR del artículo. Lo encuentra solo.</p><p>Si la cámara no abre, toca <b>Usar Foto</b> y tómale una foto al código.</p>'},
+ {c:'var(--rojo)',i:'tabla',t:'Lee La Tabla',x:'<p>Cada fila muestra la foto, el SKU, la descripción y las piezas <b>disponibles</b>. Toca la foto para verla en grande.</p><ul><li><span class="tuto-et" style="background:var(--rojo);color:#fff">Última Pieza</span> ya no hay más en sistema: la de piso es la última.</li><li><span class="tuto-et" style="border:1.5px solid var(--gris-cl);color:var(--gris)">Descontinuado</span> ya no se surte.</li><li><span class="tuto-et" style="background:var(--marino);color:#fff">Exhibido 2 Veces</span> está repetido en piso.</li><li><span class="tuto-et" style="background:var(--naranja);color:#fff">Por Exhibir</span> falta ponerlo en piso.</li></ul>'},
+ {c:'var(--azul)',i:'llave',t:'Llaves De Los Muebles',x:'<p>Algunos muebles tienen un <b>punto de color</b> junto a su foto: es el color de la llave que los abre.</p><p>Así sabes qué llave tomar antes de ir al mueble.</p>'},
+ {c:'var(--naranja)',i:'filtro',t:'Lo Que Falta Exhibir',x:'<p>En Muebles, el botón <b>Sin Exhibir</b> muestra solo los muebles con la etiqueta naranja <b>Por Exhibir</b>. <b>Todos</b> regresa a la lista completa.</p><p>Si ya no falta ninguno por exhibir, el botón desaparece solo.</p>'},
+ {c:'var(--marino)',i:'revisa',t:'Toma Uno Y Precios',x:'<p>Arriba a la derecha elige <b>Toma Uno</b> o <b>Precios</b> para empezar una revisión. Aparece la columna <b>Hecho</b>: marca cada artículo conforme lo revises y la barra te muestra tu avance.</p><p><b>Marcar Todo</b> y <b>Desmarcar Todo</b> solo afectan lo que tienes en pantalla. Tu avance se guarda en este dispositivo. Toca el modo otra vez para salir.</p>'},
+ {c:'var(--rojo)',i:'promo',t:'Promociones Del Día',x:'<p>En el inicio, la tarjeta roja abre la <b>Finalización De Promociones Del Día</b>. Ahí se sube el PDF del día y vas marcando cada artículo conforme lo terminas.</p><p>Las existencias de Muebles se actualizan con <b>Subir Excel</b>; para que se vean en todos los celulares hay que <b>Entrar Con Google</b> con la cuenta autorizada.</p>'}
+];
+var n=0,el=null,ultimoFoco=null,x0=null;
+function pintarT(){var p=P[n],h='<div class="tuto-cuerpo"><p class="tuto-paso">Paso '+(n+1)+' De '+P.length+'</p><div class="tuto-ico" style="--c:'+p.c+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+I[p.i]+'</svg></div><h2 class="tuto-tit" id="tuto-tit">'+p.t+'</h2><div class="tuto-txt">'+p.x+'</div></div>';
+  el.querySelector(".tuto-contenido").innerHTML=h;
+  el.querySelector(".tuto-puntos").innerHTML=P.map(function(_,k){return '<i class="'+(k===n?'on':'')+'"></i>'}).join("");
+  var a=el.querySelector(".ant"),s=el.querySelector(".sig");a.disabled=n===0;s.textContent=n===P.length-1?"Listo":"Siguiente"}
+function abrir(){if(el)return;ultimoFoco=document.activeElement;n=0;el=document.createElement("div");el.className="tuto";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-labelledby","tuto-tit");
+  el.innerHTML='<div class="tuto-fondo"></div><div class="tuto-caja"><button type="button" class="tuto-x" aria-label="Cerrar">×</button><div class="tuto-contenido"></div><div class="tuto-pie"><div class="tuto-puntos" aria-hidden="true"></div><div class="tuto-nav"><button type="button" class="ant">Atrás</button><button type="button" class="sig">Siguiente</button></div></div></div>';
+  document.body.appendChild(el);document.body.classList.add("tuto-abierto");pintarT();
+  el.querySelector(".tuto-fondo").onclick=cerrar;el.querySelector(".tuto-x").onclick=cerrar;
+  el.querySelector(".ant").onclick=function(){if(n>0){n--;pintarT()}};
+  el.querySelector(".sig").onclick=function(){if(n<P.length-1){n++;pintarT()}else cerrar()};
+  var c=el.querySelector(".tuto-caja");
+  c.addEventListener("touchstart",function(e){x0=e.touches[0].clientX},{passive:true});
+  c.addEventListener("touchend",function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<50)return;if(dx<0&&n<P.length-1){n++;pintarT()}else if(dx>0&&n>0){n--;pintarT()}});
+  document.addEventListener("keydown",tecla);el.querySelector(".sig").focus()}
+function cerrar(){if(!el)return;document.removeEventListener("keydown",tecla);el.remove();el=null;document.body.classList.remove("tuto-abierto");if(ultimoFoco&&ultimoFoco.focus)ultimoFoco.focus()}
+function tecla(e){if(e.key==="Escape")cerrar();else if(e.key==="ArrowRight"&&n<P.length-1){n++;pintarT()}else if(e.key==="ArrowLeft"&&n>0){n--;pintarT()}}
+document.getElementById("info-btn").onclick=abrir;
+})();
 </script>
 
 </body></html>
