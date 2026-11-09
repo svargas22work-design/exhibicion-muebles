@@ -284,6 +284,7 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
     </div>
   </div>
   <div class="tools no-inicio" role="group" aria-label="Filtro">
+    <button type="button" id="f-todos" aria-pressed="true">Todos</button>
     <button type="button" id="f-pex" class="solo-mueb" aria-pressed="false">Sin Exhibir</button>
     <button type="button" id="m-todo" class="solo-rev">Marcar Todo</button>
     <button type="button" id="m-nada" class="solo-rev">Desmarcar Todo</button>
@@ -2071,7 +2072,9 @@ document.getElementById("filas").addEventListener("change",function(e){
   poner("rev",String(rev));document.getElementById("prog").style.width=pc+"%";
   document.getElementById("prog-b").setAttribute("aria-valuenow",pc);document.getElementById("pct").textContent=pc+" % Revisado";ultimo=null;
 });
-var porEx=false;document.getElementById("f-pex").onclick=function(){porEx=!porEx;this.setAttribute("aria-pressed",porEx);if(porEx){depSel=0;subSel=-1;INICIO=false}pintar(true)};
+var porEx=false;
+document.getElementById("f-todos").onclick=function(){porEx=false;this.setAttribute("aria-pressed",true);document.getElementById("f-pex").setAttribute("aria-pressed",false);pintar(true)};
+document.getElementById("f-pex").onclick=function(){porEx=!porEx;this.setAttribute("aria-pressed",porEx);document.getElementById("f-todos").setAttribute("aria-pressed",!porEx);if(porEx){depSel=0;subSel=-1;INICIO=false}pintar(true)};
 function visibles(){return [].map.call(document.querySelectorAll("#filas tr.fila"),function(t){return t.getAttribute("data-s")})}
 function confirmar(btn,txt,accion){if(btn.dataset.ok){clearTimeout(btn._t);delete btn.dataset.ok;btn.textContent=txt;accion();return}
   btn.dataset.ok=1;var n=visibles().length;btn.textContent="¿"+txt+" ("+n+")? Toca Otra Vez";btn._t=setTimeout(function(){delete btn.dataset.ok;btn.textContent=txt},3500)}
@@ -2232,7 +2235,10 @@ function pintarSubs(){var el=document.getElementById("subs"),h='<div class="fila
   h+='</div>';
   if(depSel>=0){h+='<div class="fila-subs"><button type="button" data-c="-1" aria-pressed="'+(subSel<0)+'">Todo '+DEPTOS[depSel]+'</button>';
     CATS.forEach(function(cn,ci){if(CDEP[ci]!==depSel)return;var n=D.filter(function(r){if(r[3]!==ci)return false;if(porEx&&PEX.indexOf(r[0])<0)return false;if(!coincide(r))return false;return true}).length;if(!n)return;h+='<button type="button" data-c="'+ci+'" aria-pressed="'+(subSel===ci)+'">'+cn+' <small>'+n+'</small></button>'});h+='</div>'}
-  el.innerHTML=h;el.classList.toggle("apagado",!!q)}
+  el.innerHTML=h;el.classList.toggle("apagado",!!q);
+  var hayPex=D.some(function(r){return CDEP[r[3]]===0&&PEX.indexOf(r[0])<0});
+  var fpex=document.getElementById("f-pex");fpex.hidden=!hayPex;
+  if(!hayPex&&porEx){porEx=false;fpex.setAttribute("aria-pressed",false);document.getElementById("f-todos").setAttribute("aria-pressed",true)}}
 document.getElementById("subs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
   if(b.getAttribute("data-d")==="inicio"){irInicio();return}
   if(b.hasAttribute("data-d")){depSel=+b.getAttribute("data-d");subSel=-1;INICIO=false;if(depSel!==0&&porEx){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false)}}else subSel=+b.getAttribute("data-c");pintar(true)});
@@ -2243,7 +2249,7 @@ function pintarInicio(){var el=document.getElementById("inicio"),h='<p class="in
     h+='<button type="button" class="ini-card" data-d="'+di+'"><span class="ini-n">'+dn+'</span><span class="ini-c">'+its.length+' Artículos · '+subs.length+' Subcategorías</span><span class="ini-s">'+subs.slice(0,4).join(" · ")+(subs.length>4?" …":"")+'</span></button>'});
   h+='<button type="button" class="ini-card ini-todo" data-d="-1"><span class="ini-n">Ver Todo</span><span class="ini-c">'+D.length+' Artículos</span></button></div>';
   el.innerHTML=h}
-function irInicio(){PROMO=false;INICIO=true;porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);depSel=-1;subSel=-1;pintar(true);window.scrollTo({top:0,behavior:quieto?"auto":"smooth"})}
+function irInicio(){PROMO=false;INICIO=true;porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);document.getElementById("f-todos").setAttribute("aria-pressed",true);depSel=-1;subSel=-1;pintar(true);window.scrollTo({top:0,behavior:quieto?"auto":"smooth"})}
 document.getElementById("inicio").addEventListener("click",function(e){var b=e.target.closest(".ini-card");if(!b)return;if(b.hasAttribute("data-promo")){abrirPromo();return}INICIO=false;depSel=+b.getAttribute("data-d");subSel=-1;if(depSel!==0){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);}pintar(true);
   var t=document.getElementById("subs");if(t)setTimeout(function(){t.scrollIntoView({behavior:quieto?"auto":"smooth",block:"start"})},60)});
 (function(){var m="";try{m=localStorage.getItem("modo-rev")||""}catch(e){}if(m!=="toma"&&m!=="precio")m="";MODO=m;document.body.classList.toggle("sin-rev",!m);if(m){KEY=SETS[m].key;hechos=SETS[m].h}document.getElementById("r-toma").setAttribute("aria-pressed",m==="toma");document.getElementById("r-precio").setAttribute("aria-pressed",m==="precio");document.getElementById("rev-et").textContent=m==="precio"?"Precios Revisados":"Toma Uno Revisados"})();
