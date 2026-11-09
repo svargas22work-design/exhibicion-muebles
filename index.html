@@ -196,7 +196,7 @@ th .sm{display:none}
 /* ===== Finalización De Promociones Del Día ===== */
 .promo{display:none}
 body.en-promo .promo{display:block;animation:aparece .35s both}
-body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .pct,body.en-promo .busca,body.en-promo .scan-msg,body.en-promo .fecha,body.en-promo .tools,body.en-promo .subs,body.en-promo .scroll,body.en-promo .inicio,body.en-promo .marco-rep{display:none!important}
+body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .pct,body.en-promo .busca,body.en-promo .scan-msg,body.en-promo .fecha,body.en-promo .ex-bar,body.en-promo .tools,body.en-promo .subs,body.en-promo .scroll,body.en-promo .inicio,body.en-promo .marco-rep{display:none!important}
 .p-top{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
 .p-btn{font:700 14px var(--sans);padding:10px 14px;min-height:44px;border:2px solid var(--rojo);border-radius:10px;background:var(--blanco);color:var(--rojo-texto);cursor:pointer;transition:transform .15s var(--suave),box-shadow .2s}
 .p-btn:hover{transform:translateY(-2px);box-shadow:0 6px 14px -8px var(--rojo)}
@@ -214,6 +214,15 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
 .p-tabla .th{width:76px;max-height:none}
 .th.sin{display:grid;place-items:center;box-sizing:border-box;padding:4px;font-size:10px;font-weight:700;line-height:1.15;text-align:center;color:var(--gris);cursor:default;border-style:dashed}
 @media(max-width:520px){.p-tabla .th{width:64px}}
+.ex-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:-4px 0 12px}
+.ex-bar .fecha{margin:0}
+.ex-btn{font:700 13px var(--sans);padding:8px 12px;min-height:40px;border:2px solid var(--rojo);border-radius:10px;background:var(--rojo);color:#fff;cursor:pointer;transition:transform .15s var(--suave)}
+.ex-btn.sec{background:var(--blanco);color:var(--rojo-texto)}
+.ex-btn:active{transform:scale(.96)}
+.ex-btn:focus-visible{outline:3px solid var(--tinta);outline-offset:2px}
+.ex-msg{flex-basis:100%;font-size:14px;line-height:1.4;margin:0;padding:9px 12px;border-radius:8px;background:var(--sku-bg);border-left:4px solid var(--rojo)}
+.ex-msg.ok{border-left-color:var(--tinta)}
+.p-tabla tr.dep td,.p-tabla tr.cat td{text-align:left}
 .ini-promo{background:var(--rojo);border-color:var(--rojo);color:#fff}
 .ini-promo .ini-c,.ini-promo .ini-s{color:#fff}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
@@ -244,7 +253,13 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
     <button type="button" id="b-limpiar" hidden>Limpiar</button>
   </form>
   <p class="scan-msg" id="scan-msg" aria-live="polite" hidden></p>
-  <p class="fecha solo-mueb" id="fecha"></p>
+  <div class="ex-bar solo-mueb no-inicio">
+    <p class="fecha" id="fecha"></p>
+    <button type="button" class="ex-btn" id="ex-subir">Subir Excel</button>
+    <button type="button" class="ex-btn sec" id="ex-llave" hidden>Conectar GitHub</button>
+    <input type="file" id="ex-file" class="oculto" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
+    <p class="ex-msg" id="ex-msg" role="status" aria-live="polite" hidden></p>
+  </div>
   <div class="inicio" id="inicio"></div>
   <div class="promo" id="promo">
     <div class="p-top">
@@ -2317,14 +2332,24 @@ function pintarPromo(){
   var its=PD?PD.i:[],q2=normT(PQ),h="",n=0;
   var HH=(PD&&PD.h)||{},nh=its.filter(function(x){return HH[x[0]]}).length;
   $id("p-sub").textContent=PD?((PD.f?"Reporte Del "+PD.f+" · ":"")+its.length+" Artículos · "+conFoto()+" Con Imagen · "+nh+" Marcados"):"";
+  var grupos={},orden=[];
   its.forEach(function(x){
     var sku=x[0],r=IDX[sku],desc=r?r[1]:titulo(x[1]||"Sin Descripción");
     if(q2&&normT(desc).indexOf(q2)<0&&sku.indexOf(q2)<0&&!(/^\d+$/.test(q2)&&sinCeros(sku).indexOf(sinCeros(q2))>-1))return;
-    n++;
-    h+='<tr data-s="'+sku+'" class="fila'+(HH[sku]?" hecho":"")+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
-      +(FOTOS[sku]?'<img class="th" data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+sku+'.jpg">':'<div class="th sin" role="img" aria-label="Sin Imagen">Sin Imagen</div>')
-      +'<span class="sku">'+sku+'</span></td><td class="d"><span class="t">'+esc(desc)+'</span></td>'
-      +'<td class="q"><input class="chk" type="checkbox" data-s="'+sku+'" aria-label="Marcar '+sku+'"'+(HH[sku]?" checked":"")+'></td></tr>'});
+    var c=r?r[3]:-1;if(!grupos[c]){grupos[c]=[];orden.push(c)}grupos[c].push([sku,desc])});
+  orden.sort(function(a,b){if(a<0)return 1;if(b<0)return -1;return CDEP[a]-CDEP[b]||a-b});
+  var depAnt=null;
+  orden.forEach(function(c){
+    var g=grupos[c],dp=c<0?-1:CDEP[c],hg=g.filter(function(z){return HH[z[0]]}).length;
+    if(dp!==depAnt){depAnt=dp;
+      var nd=0;orden.forEach(function(c2){if((c2<0?-1:CDEP[c2])===dp)nd+=grupos[c2].length});
+      h+='<tr class="dep"><td colspan="4">'+(dp<0?'No Están En El Catálogo':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
+    if(c>=0)h+='<tr class="cat"><td colspan="4">'+CATS[c]+'<span class="cc">'+g.length+' Artículos · '+hg+' Marcados</span></td></tr>';
+    g.forEach(function(z){var sku=z[0];n++;
+      h+='<tr data-s="'+sku+'" class="fila'+(HH[sku]?" hecho":"")+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
+        +(FOTOS[sku]?'<img class="th" data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+sku+'.jpg">':'<div class="th sin" role="img" aria-label="Sin Imagen">Sin Imagen</div>')
+        +'<span class="sku">'+sku+'</span></td><td class="d"><span class="t">'+esc(z[1])+'</span></td>'
+        +'<td class="q"><input class="chk" type="checkbox" data-s="'+sku+'" aria-label="Marcar '+sku+'"'+(HH[sku]?" checked":"")+'></td></tr>'})});
   if(!n)h='<tr class="vacia"><td colspan="4">'+(PD?'Sin Resultados Para «'+esc(PQ)+'».':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Finalización De Promociones.')+'</td></tr>';
   $id("p-filas").innerHTML=h}
 function abrirPromo(){PROMO=true;INICIO=false;pintar(true);window.scrollTo(0,0)}
@@ -2341,7 +2366,10 @@ async function subirPromo(file){
     try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(e){}
     PQ="";$id("p-q").value="";pintarPromo();
     var nc=enCat(r.items);
-    pmsg("Listo: "+r.items.length+" Artículos Leídos · "+nc+" En El Catálogo · "+conFoto()+" Con Imagen."+(nc<r.items.length?" "+(r.items.length-nc)+" No Están En Artículos Totales.":""),"ok");
+    var pb="Listo: "+r.items.length+" Artículos Leídos · "+nc+" En El Catálogo · "+conFoto()+" Con Imagen."+(nc<r.items.length?" "+(r.items.length-nc)+" No Están En Artículos Totales.":"");
+    pmsg(pb+" Publicando Para Todos…","ok");
+    try{await ghPut("promos.json",{f:PD.f,a:PD.a,t:PD.t,i:PD.i},"Finalización De Promociones "+(PD.f||""));pmsg(pb+" Publicado: En Todos Los Dispositivos Se Verá En Aprox. 1 Minuto.","ok")}
+    catch(e2){pmsg(pb+textoPublicar(e2),"err")}
   }catch(err){var em=err&&err.message;pmsg(em==="xl"||em==="pdf"?"No Se Pudo Cargar El Lector. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un PDF (O Excel).","err")}
 }
 $id("p-volver").onclick=irInicio;
@@ -2353,10 +2381,91 @@ $id("p-filas").addEventListener("change",function(e){var t=e.target;if(!t.classL
   var s=t.getAttribute("data-s");if(!PD.h)PD.h={};if(t.checked)PD.h[s]=1;else delete PD.h[s];
   try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(err){}
   var tr=t.closest("tr");if(tr){tr.classList.toggle("hecho",t.checked);tr.classList.remove("marcada");void tr.offsetWidth;tr.classList.add("marcada")}
+  var cr=tr&&tr.previousElementSibling;while(cr&&!cr.classList.contains("cat")&&!cr.classList.contains("dep"))cr=cr.previousElementSibling;
+  if(cr&&cr.classList.contains("cat")){var cc=cr.querySelector(".cc"),tt=0,mk=0,nx=cr.nextElementSibling;while(nx&&nx.classList.contains("fila")){tt++;if(nx.classList.contains("hecho"))mk++;nx=nx.nextElementSibling}if(cc)cc.textContent=tt+" Artículos · "+mk+" Marcados"}
   var n=PD.i.filter(function(x){return PD.h[x[0]]}).length;
   $id("p-sub").textContent=(PD.f?"Reporte Del "+PD.f+" · ":"")+PD.i.length+" Artículos · "+conFoto()+" Con Imagen · "+n+" Marcados"});
 $id("promo").addEventListener("dragover",function(e){e.preventDefault()});
 $id("promo").addEventListener("drop",function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)subirPromo(f)});
+/* ===== Publicar En GitHub (Para Que Se Vea En Todos Los Dispositivos) ===== */
+var GH_API="https://api.github.com/repos/svargas22work-design/exhibicion-muebles/contents/",GKEY="gh-llave";
+function llave(){try{return localStorage.getItem(GKEY)||""}catch(e){return ""}}
+function pintarLlave(){var b=$id("ex-llave");b.hidden=false;b.textContent=llave()?"GitHub Conectado ✓":"Conectar GitHub"}
+$id("ex-llave").onclick=function(){
+  if(llave()){if(confirm("¿Desconectar GitHub En Este Dispositivo? Lo Que Subas Ya No Se Publicará Para Todos.")){try{localStorage.removeItem(GKEY)}catch(e){}pintarLlave()}return}
+  var t=prompt("Pega Tu Llave (Token) De GitHub Con Permiso De Escritura En El Repositorio exhibicion-muebles:");
+  if(t&&t.trim()){try{localStorage.setItem(GKEY,t.trim())}catch(e){}pintarLlave()}};
+function b64(txt){return btoa(unescape(encodeURIComponent(txt)))}
+async function ghPut(ruta,obj,msg){var tk=llave();if(!tk)throw new Error("sin-llave");
+  var hd={Authorization:"Bearer "+tk,Accept:"application/vnd.github+json"},sha=null;
+  var g=await fetch(GH_API+ruta+"?ref=main&t="+Date.now(),{headers:hd,cache:"no-store"});
+  if(g.status===401||g.status===403)throw new Error("llave");
+  if(g.ok)sha=(await g.json()).sha;
+  var cuerpo={message:msg,content:b64(JSON.stringify(obj)),branch:"main"};if(sha)cuerpo.sha=sha;
+  var r=await fetch(GH_API+ruta,{method:"PUT",headers:hd,body:JSON.stringify(cuerpo)});
+  if(r.status===401||r.status===403)throw new Error("llave");
+  if(!r.ok)throw new Error("gh")}
+async function leerNube(ruta){try{var r=await fetch(ruta+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)return null;return await r.json()}catch(e){return null}}
+function textoPublicar(err){var m=err&&err.message;
+  if(m==="sin-llave")return " Solo Se Ve En Este Dispositivo: Toca «Conectar GitHub» Y Vuelve A Subirlo Para Que Se Vea En Todos.";
+  if(m==="llave")return " No Se Publicó: GitHub Rechazó La Llave (Revisa Que Siga Vigente Y Tenga Permiso De Escritura).";
+  return " No Se Publicó Para Todos (Revisa Tu Conexión) — Por Ahora Solo Se Ve En Este Dispositivo."}
+
+/* ===== Subir Excel De Existencias (Muebles) ===== */
+var EKEY="existencias-local";
+function exmsg(html,tipo){var m=$id("ex-msg");m.hidden=!html;m.className="ex-msg"+(tipo?" "+tipo:"");m.innerHTML=html||""}
+function leerExistencias(X,buf){
+  var wb=X.read(buf,{type:"array",cellDates:true,raw:true}),cant={},dsc={},n=0;
+  wb.SheetNames.forEach(function(nm){
+    var rows=X.utils.sheet_to_json(wb.Sheets[nm],{header:1,raw:true,defval:""}),hi=-1,cs=-1,ct=-1,ce=-1,cst=-1,i,j,v;
+    for(i=0;i<rows.length&&i<40&&hi<0;i++){var a=-1,b=-1,c=-1,d=-1;
+      for(j=0;j<rows[i].length;j++){v=normT(rows[i][j]);
+        if(a<0&&(v==="sku"||v.indexOf("sku")===0||v==="articulo"||v==="item"||v==="codigo"))a=j;
+        else if(b<0&&v.indexOf("stock disp")>-1)b=j;
+        else if(c<0&&v.indexOf("exhibicion")===0)c=j;
+        else if(d<0&&(v==="status"||v==="estatus"))d=j}
+      if(a>=0&&b>=0){hi=i;cs=a;ct=b;ce=c;cst=d}}
+    if(hi<0)return;
+    for(i=hi+1;i<rows.length;i++){var r=rows[i],k=r[cs],sk=(typeof k==="number")?String(Math.round(k)):String(k==null?"":k).trim();
+      if(!/^\d{1,9}$/.test(sk))continue;sk=("000000000"+sk).slice(-9);
+      var tot=parseFloat(String(r[ct]).replace(/,/g,""))||0,ex=ce>=0?(parseFloat(String(r[ce]).replace(/,/g,""))||0):0;
+      cant[sk]=Math.max(0,Math.round(tot-ex));
+      if(cst>=0)dsc[sk]=/discont|discount|descontin/i.test(String(r[cst]))?1:0;
+      n++}});
+  return {cant:cant,dsc:dsc,n:n}}
+async function subirExcel(file){
+  exmsg("Leyendo Excel…");
+  try{
+    var X=await cargarXLSX(),r=leerExistencias(X,await file.arrayBuffer());
+    if(!r.n){exmsg("No Encontré Las Columnas «SKU» Y «TOTAL DE STOCK DISP.» En El Excel. Revisa Que Sea El Informe De Muebles.","err");return}
+    var c={},d={},act=0,des=0;
+    D.forEach(function(x){c[x[0]]=x[2];d[x[0]]=x[4];
+      if(CDEP[x[3]]===0&&Object.prototype.hasOwnProperty.call(r.cant,x[0])){c[x[0]]=r.cant[x[0]];act++;
+        if(Object.prototype.hasOwnProperty.call(r.dsc,x[0])){d[x[0]]=r.dsc[x[0]];if(r.dsc[x[0]])des++}}});
+    if(!act){exmsg("El Excel Tiene "+r.n+" SKU, Pero Ninguno Coincide Con Los Muebles De La Página.","err");return}
+    var obj={cant:c,desc:d,fecha:new Date().toISOString(),archivo:file.name};
+    aplicarCant(c,obj.fecha,d);try{localStorage.setItem(EKEY,JSON.stringify(obj))}catch(e){}
+    var base="Listo: "+act+" Muebles Actualizados"+(des?" · "+des+" Descontinuados":"")+".";
+    exmsg(base+" Publicando Para Todos…","ok");
+    try{await ghPut("existencias.json",obj,"Existencias "+new Date().toLocaleDateString("es-MX"));exmsg(base+" Publicado: En Todos Los Dispositivos Se Verá En Aprox. 1 Minuto (Al Recargar La Página).","ok")}
+    catch(err){exmsg(base+textoPublicar(err),"err")}
+  }catch(err){exmsg((err&&err.message)==="xl"?"No Se Pudo Cargar El Lector De Excel. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un Excel (.xlsx).","err")}}
+$id("ex-subir").onclick=function(){var f=$id("ex-file");f.value="";f.click()};
+$id("ex-file").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)subirExcel(f)});
+pintarLlave();
+
+/* ===== Cargar Lo Publicado (Existencias Y Promociones) ===== */
+(async function(){
+  var loc=null;try{loc=JSON.parse(localStorage.getItem(EKEY)||"null")}catch(e){}
+  var nube=await leerNube("existencias.json"),mejor=loc;
+  if(nube&&nube.cant&&(!mejor||String(nube.fecha)>String(mejor.fecha)))mejor=nube;
+  if(mejor&&mejor.cant&&String(mejor.fecha)>FECHA_BASE)aplicarCant(mejor.cant,mejor.fecha,mejor.desc);
+  var pn=await leerNube("promos.json");
+  if(pn&&pn.i&&(!PD||String(pn.t)>String(PD.t||""))){
+    var hv={};if(PD&&PD.h&&PD.f===pn.f)hv=PD.h;
+    PD={f:pn.f,a:pn.a,t:pn.t,i:pn.i,h:hv};try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(e){}
+    if(PROMO)pintarPromo();else if(INICIO)pintar(false)}
+})();
 pintar(true);
 </script>
 
