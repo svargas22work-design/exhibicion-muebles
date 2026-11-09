@@ -286,8 +286,7 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
   <div class="tools no-inicio" role="group" aria-label="Filtro">
     <button type="button" id="f-todos" aria-pressed="true">Todos</button>
     <button type="button" id="f-ult" class="solo-mueb" aria-pressed="false">Solo Última Pieza</button>
-    <button type="button" id="f-upc" aria-pressed="false">Sin UPC</button>
-    <button type="button" id="f-pex" class="solo-mueb" aria-pressed="false">Por Exhibir</button>
+    <button type="button" id="f-pex" class="solo-mueb" aria-pressed="false">Sin Exhibir</button>
     <button type="button" id="m-todo" class="solo-rev">Marcar Todo</button>
     <button type="button" id="m-nada" class="solo-rev">Desmarcar Todo</button>
   </div>
@@ -2021,7 +2020,7 @@ function pintar(cascada){
    var nu=its.filter(function(p){return p[0][2]===0}).length,hc="",shown=0;
    its.forEach(function(p){var r=p[0],i=p[1];
     var z=r[2]===0;
-    if(solo&&!z)return; if(sinUpc&&(UPC[r[0]]||UPC_EXT[r[0]]))return; if(porEx&&PEX.indexOf(r[0])<0)return; if(!coincide(r))return; shown++;
+    if(solo&&!z)return; if(porEx&&PEX.indexOf(r[0])<0)return; if(!coincide(r))return; shown++;
     var h0=h;h="";
     h+='<tr data-s="'+r[0]+'" class="fila '+(z?"ult ":"")+(PEX.indexOf(r[0])>-1?"pex ":"")+(MODO&&di===0&&hechos[r[0]]?"hecho":"")+anim()+'>'
      +'<td class="num-fila">'+(++nn)+'</td>'
@@ -2080,7 +2079,6 @@ function filtro(v){solo=v;
 document.getElementById("f-todos").onclick=function(){filtro(false)};
 document.getElementById("f-ult").onclick=function(){filtro(true)};
 var porEx=false;document.getElementById("f-pex").onclick=function(){porEx=!porEx;this.setAttribute("aria-pressed",porEx);if(porEx){depSel=0;subSel=-1;INICIO=false}pintar(true)};
-var sinUpc=false;document.getElementById("f-upc").onclick=function(){sinUpc=!sinUpc;this.setAttribute("aria-pressed",sinUpc);pintar(true)};
 function visibles(){return [].map.call(document.querySelectorAll("#filas tr.fila"),function(t){return t.getAttribute("data-s")})}
 function confirmar(btn,txt,accion){if(btn.dataset.ok){clearTimeout(btn._t);delete btn.dataset.ok;btn.textContent=txt;accion();return}
   btn.dataset.ok=1;var n=visibles().length;btn.textContent="¿"+txt+" ("+n+")? Toca Otra Vez";btn._t=setTimeout(function(){delete btn.dataset.ok;btn.textContent=txt},3500)}
@@ -2240,7 +2238,7 @@ function pintarSubs(){var el=document.getElementById("subs"),h='<div class="fila
   DEPTOS.forEach(function(dn,di){var n=D.filter(function(r){return CDEP[r[3]]===di}).length;if(!n)return;h+='<button type="button" data-d="'+di+'" aria-pressed="'+(depSel===di)+'">'+dn+' <small>'+n+'</small></button>'});
   h+='</div>';
   if(depSel>=0){h+='<div class="fila-subs"><button type="button" data-c="-1" aria-pressed="'+(subSel<0)+'">Todo '+DEPTOS[depSel]+'</button>';
-    CATS.forEach(function(cn,ci){if(CDEP[ci]!==depSel)return;var n=D.filter(function(r){if(r[3]!==ci)return false;var z=r[2]===0;if(solo&&!z)return false;if(sinUpc&&(UPC[r[0]]||UPC_EXT[r[0]]))return false;if(porEx&&PEX.indexOf(r[0])<0)return false;if(!coincide(r))return false;return true}).length;if(!n)return;h+='<button type="button" data-c="'+ci+'" aria-pressed="'+(subSel===ci)+'">'+cn+' <small>'+n+'</small></button>'});h+='</div>'}
+    CATS.forEach(function(cn,ci){if(CDEP[ci]!==depSel)return;var n=D.filter(function(r){if(r[3]!==ci)return false;var z=r[2]===0;if(solo&&!z)return false;if(porEx&&PEX.indexOf(r[0])<0)return false;if(!coincide(r))return false;return true}).length;if(!n)return;h+='<button type="button" data-c="'+ci+'" aria-pressed="'+(subSel===ci)+'">'+cn+' <small>'+n+'</small></button>'});h+='</div>'}
   el.innerHTML=h;el.classList.toggle("apagado",!!q)}
 document.getElementById("subs").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
   if(b.getAttribute("data-d")==="inicio"){irInicio();return}
