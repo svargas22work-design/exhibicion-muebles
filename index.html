@@ -2248,7 +2248,8 @@ document.getElementById("inicio").addEventListener("click",function(e){var b=e.t
 /* ===== Finalización De Promociones Del Día ===== */
 var PROMO=false,PD=null,PKEY="promos-dia",PQ="",XLSX_URL="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js",xlP=null,IDX={};
 D.forEach(function(r){IDX[r[0]]=r});
-try{PD=JSON.parse(localStorage.getItem(PKEY)||"null");if(!PD||!PD.i)PD=null}catch(e){PD=null}
+function esDeHoy(iso){if(!iso)return false;var d=new Date(iso),h=new Date(),tz="America/Mexico_City";return d.toLocaleDateString("en-CA",{timeZone:tz})===h.toLocaleDateString("en-CA",{timeZone:tz})}
+try{PD=JSON.parse(localStorage.getItem(PKEY)||"null");if(!PD||!PD.i||!esDeHoy(PD.t))PD=null}catch(e){PD=null}
 function cargarXLSX(){if(window.XLSX)return Promise.resolve(window.XLSX);
   if(!xlP)xlP=new Promise(function(ok,no){var s=document.createElement("script");s.src=XLSX_URL;s.onload=function(){window.XLSX?ok(window.XLSX):no(new Error("xl"))};s.onerror=function(){xlP=null;no(new Error("xl"))};document.head.appendChild(s)});
   return xlP}
@@ -2452,7 +2453,7 @@ $id("ex-file").addEventListener("change",function(e){var f=e.target.files&&e.tar
   if(nube&&nube.cant&&(!mejor||String(nube.fecha)>String(mejor.fecha)))mejor=nube;
   if(mejor&&mejor.cant&&String(mejor.fecha)>FECHA_BASE)aplicarCant(mejor.cant,mejor.fecha,mejor.desc);
   var pn=await fbGet("promos");
-  if(pn&&pn.i&&(!PD||String(pn.t)>String(PD.t||""))){
+  if(pn&&pn.i&&esDeHoy(pn.t)&&(!PD||String(pn.t)>String(PD.t||""))){
     var hv={};if(PD&&PD.h&&PD.f===pn.f)hv=PD.h;
     PD={f:pn.f,a:pn.a,t:pn.t,i:pn.i,h:hv};try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(e){}
     if(PROMO)pintarPromo();else if(INICIO)pintar(false)}
