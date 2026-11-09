@@ -322,43 +322,44 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
 th .sm{display:none}
 @media(max-width:400px){th .lg{display:none}th .sm{display:inline}td.q .lbl{font-size:8px;letter-spacing:0}td.q .num{font-size:22px}.sku{font-size:12px;padding:3px 6px;letter-spacing:0}.th{width:44px}.chk{width:22px;height:22px}
   tr.cat .cc,tr.dep .cc{float:none;display:block;margin-top:2px}.datos{gap:8px}.caja{padding:14px 12px 12px;border-radius:16px}.caja .cif{font-size:32px}.caja .et{font-size:12px}}
-/* ===== Tutorial (Botón De Información) ===== */
+/* Después de la primera carga, las secciones aparecen sin esperar */
+body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,body.cargada .caja,body.cargada .progreso,body.cargada .pct,body.cargada .nota,body.cargada .modo{animation-delay:0s;animation-duration:.3s}
+/* ===== Tutorial Guiado (Botón De Información) ===== */
 .info-btn{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--linea);background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--tinta);font:600 italic 19px Georgia,"Times New Roman",serif;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 10px -4px rgba(20,20,30,.25);transition:box-shadow .2s,border-color .2s;animation:funde .6s 1.6s ease-out both;touch-action:manipulation}
 .info-btn:hover{border-color:var(--gris-cl);box-shadow:0 4px 14px -4px rgba(20,20,30,.3)}
 .info-btn:active{opacity:.7}
 .info-btn:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
-.tuto{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:16px}
-.tuto-fondo{position:absolute;inset:0;background:rgba(20,20,26,.38);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:funde .3s ease-out}
-.tuto-caja{position:relative;width:min(100%,440px);max-height:calc(100dvh - 32px);overflow:auto;background:#fff;border-radius:22px;box-shadow:0 24px 60px -20px rgba(20,20,30,.45);padding:26px 24px 20px;animation:tuto-entra .35s cubic-bezier(.25,.1,.25,1);box-sizing:border-box}
-.tuto-caja::before{content:"";position:absolute;left:24px;right:24px;top:0;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--rojo) 0 25%,var(--azul) 25% 50%,var(--naranja) 50% 75%,var(--marino) 75%)}
-.tuto-x{position:absolute;right:14px;top:14px;width:32px;height:32px;border-radius:50%;border:0;background:var(--fondo);color:var(--gris);font:400 20px/1 var(--sans);cursor:pointer;display:grid;place-items:center}
-.tuto-x:hover{background:var(--pista)}
-.tuto-paso{font:500 12px var(--sans);color:var(--gris-cl);letter-spacing:.04em;margin:0 0 14px}
-.tuto-ico{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin:0 0 14px;background:var(--c,var(--rojo))}
-.tuto-ico svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.tuto-tit{font:700 22px/1.2 var(--sans);letter-spacing:-.01em;margin:0 0 10px;color:var(--tinta)}
-.tuto-txt{font:400 15px/1.55 var(--sans);color:#444;margin:0}
-.tuto-txt p{margin:0 0 10px}
-.tuto-txt b{font-weight:600;color:var(--tinta)}
-.tuto-txt ul{margin:4px 0 10px;padding-left:18px}
-.tuto-txt li{margin:0 0 4px}
-.tuto-et{display:inline-block;font:600 11.5px var(--sans);padding:2px 9px;border-radius:99px;vertical-align:1px}
-.tuto-cuerpo{min-height:250px;animation:funde .3s ease-out}
-.tuto-pie{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}
-.tuto-puntos{display:flex;gap:6px}
-.tuto-puntos i{width:7px;height:7px;border-radius:99px;background:var(--pista);transition:width .3s,background .3s}
-.tuto-puntos i.on{width:20px;background:var(--tinta)}
-.tuto-nav{display:flex;gap:8px}
-.tuto-nav button{font:600 14px var(--sans);padding:10px 18px;border-radius:99px;cursor:pointer;border:1.5px solid var(--linea);background:#fff;color:var(--tinta);transition:opacity .2s,border-color .2s}
-.tuto-nav button:hover{border-color:var(--gris-cl)}
-.tuto-nav .sig{background:var(--rojo);border-color:var(--rojo);color:#fff}
-.tuto-nav .sig:hover{opacity:.88;border-color:var(--rojo)}
-.tuto-nav button[disabled]{visibility:hidden}
-.tuto-nav button:focus-visible,.tuto-x:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
-@keyframes tuto-entra{from{opacity:0;transform:translateY(8px) scale(.98)}}
-@media(max-width:520px){.tuto{align-items:flex-end;padding:0}.tuto-caja{width:100%;border-radius:22px 22px 0 0;padding:24px 20px calc(env(safe-area-inset-bottom,0px) + 18px);animation:tuto-sube .35s cubic-bezier(.25,.1,.25,1)}.tuto-cuerpo{min-height:290px}}
-@keyframes tuto-sube{from{transform:translateY(40px);opacity:0}}
-body.tuto-abierto{overflow:hidden}
+.tour-tapa{position:fixed;inset:0;z-index:80;background:transparent}
+.tour-hueco{position:fixed;z-index:81;left:50%;top:50%;width:0;height:0;border-radius:16px;pointer-events:none;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 0 200vmax rgba(20,20,26,.58);animation:funde .35s ease-out}
+.tour-hueco.mueve{transition:left .45s cubic-bezier(.25,.1,.25,1),top .45s cubic-bezier(.25,.1,.25,1),width .45s cubic-bezier(.25,.1,.25,1),height .45s cubic-bezier(.25,.1,.25,1)}
+.tour-globo{position:fixed;z-index:82;width:min(360px,calc(100vw - 32px));box-sizing:border-box;background:#fff;border-radius:20px;box-shadow:0 20px 50px -18px rgba(0,0,0,.5);padding:20px 20px 16px;opacity:0;transition:opacity .25s ease-out}
+.tour-globo.ver{opacity:1}
+.tour-globo::before{content:"";position:absolute;left:20px;right:20px;top:0;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--rojo) 0 25%,var(--azul) 25% 50%,var(--naranja) 50% 75%,var(--marino) 75%)}
+.tour-cab{display:flex;align-items:center;gap:12px;margin:0 0 10px;padding-right:30px}
+.tour-ico{flex:0 0 40px;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--c,var(--rojo))}
+.tour-ico svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tour-paso{font:500 11.5px var(--sans);color:var(--gris-cl);letter-spacing:.03em;margin:0 0 1px}
+.tour-tit{font:700 18px/1.2 var(--sans);letter-spacing:-.01em;margin:0;color:var(--tinta)}
+.tour-txt{font:400 14.5px/1.55 var(--sans);color:#444;margin:0}
+.tour-txt p{margin:0 0 8px}
+.tour-txt b{font-weight:600;color:var(--tinta)}
+.tour-x{position:absolute;right:12px;top:12px;width:30px;height:30px;border-radius:50%;border:0;background:var(--fondo);color:var(--gris);font:400 19px/1 var(--sans);cursor:pointer;display:grid;place-items:center}
+.tour-x:hover{background:var(--pista)}
+.tour-pie{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+.tour-puntos{display:flex;gap:4px;flex-wrap:nowrap;min-width:0}
+.tour-puntos i{flex:0 0 auto;width:5px;height:5px;border-radius:99px;background:var(--pista);transition:width .3s,background .3s}
+.tour-puntos i.on{width:14px;background:var(--tinta)}
+.tour-nav{display:flex;gap:8px;flex:0 0 auto}
+.tour-nav button{font:600 14px var(--sans);padding:9px 16px;border-radius:99px;cursor:pointer;border:1.5px solid var(--linea);background:#fff;color:var(--tinta);transition:opacity .2s,border-color .2s}
+.tour-nav button:hover{border-color:var(--gris-cl)}
+.tour-nav .sig{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.tour-nav .sig:hover{opacity:.88;border-color:var(--rojo)}
+.tour-nav button[disabled]{display:none}
+.tour-nav button:focus-visible,.tour-x:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
+.tour-et{display:inline-block;font:600 11px var(--sans);padding:1px 8px;border-radius:99px;vertical-align:1px}
+@media(max-width:520px){.tour-globo{left:0!important;right:0;width:100%;border-radius:20px 20px 0 0;padding:20px 18px calc(env(safe-area-inset-bottom,0px) + 14px)}
+  .tour-globo.arriba{border-radius:0 0 20px 20px;padding-top:calc(env(safe-area-inset-top,0px) + 18px)}
+  .tour-globo.arriba::before{top:auto;bottom:0;border-radius:3px 3px 0 0}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.bar i,.acento i{transform:none}.anillo circle.a{stroke-dashoffset:0}}
 </style>
 <div class="bar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -2616,7 +2617,7 @@ $id("ex-file").addEventListener("change",function(e){var f=e.target.files&&e.tar
 pintar(true);
 </script>
 <script>
-/* ===== Tutorial ===== */
+/* ===== Tutorial Guiado ===== */
 (function(){
 var I={
  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
@@ -2624,40 +2625,72 @@ var I={
  busca:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
  escanea:'<path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M8 9v6M11 9v6M14 9v6M17 9v6"/>',
  tabla:'<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 10h16M10 10v9"/>',
+ chips:'<rect x="3" y="8" width="8" height="8" rx="4"/><rect x="13" y="8" width="8" height="8" rx="4"/>',
  filtro:'<path d="M4 6h16l-6 7v5l-4 2v-7z"/>',
+ etiqueta:'<path d="M3.5 12.5l8-8H19.5v8l-8 8z"/><circle cx="15.5" cy="8.5" r="1.3"/>',
  revisa:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16.5 9"/>',
- promo:'<path d="M3.5 12.5l8-8H19.5v8l-8 8z"/><circle cx="15.5" cy="8.5" r="1.3"/>',
- llave:'<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2 2M14 9l2 2"/>'
+ subir:'<path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M5 19h14"/>',
+ llave:'<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2 2M14 9l2 2"/>',
+ promo:'<path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"/>'
 };
+function $(s){return document.querySelector(s)}
+function fila(sel){var e=document.querySelector("#filas "+sel);return e?e.closest("tr"):null}
+function aInicio(){if(!INICIO||PROMO){PROMO=false;INICIO=true;porEx=false;$("#f-pex").setAttribute("aria-pressed",false);$("#f-todos").setAttribute("aria-pressed",true);depSel=-1;subSel=-1;pintar(false);return true}return false}
+function aMuebles(){if(INICIO||PROMO||depSel!==0||subSel!==-1){PROMO=false;INICIO=false;depSel=0;subSel=-1;pintar(false);return true}return false}
 var P=[
- {c:'var(--rojo)',i:'info',t:'Bienvenido A Artículos',x:'<p>Aquí consultas el inventario de la <b>Tienda Querétaro 106</b>: cuántas piezas hay de cada artículo, su foto y su SKU.</p><p>Este recorrido te explica cómo usar cada parte de la página. Lo puedes volver a abrir cuando quieras con el botón <b>i</b>.</p>'},
- {c:'var(--azul)',i:'area',t:'Elige Un Área',x:'<p>En el inicio toca <b>Muebles</b>, <b>Papelería</b> o <b>Tecnología</b>, o <b>Ver Todo</b> para ver la tienda completa.</p><p>Ya dentro, usa las subcategorías (Archiveros, Escritorios…) para ver solo una parte. <b>← Inicio</b> te regresa al principio.</p>'},
- {c:'var(--naranja)',i:'busca',t:'Busca Un Artículo',x:'<p>Escribe el <b>SKU</b>, el <b>código de barras (UPC)</b> o parte del nombre, y toca <b>Buscar</b>.</p><p>Para quitar la búsqueda y ver todo otra vez, toca <b>Limpiar</b>.</p>'},
- {c:'var(--marino)',i:'escanea',t:'Escanea El Código',x:'<p>Toca el botón del <b>código de barras</b> junto al buscador y apunta la cámara al código o QR del artículo. Lo encuentra solo.</p><p>Si la cámara no abre, toca <b>Usar Foto</b> y tómale una foto al código.</p>'},
- {c:'var(--rojo)',i:'tabla',t:'Lee La Tabla',x:'<p>Cada fila muestra la foto, el SKU, la descripción y las piezas <b>disponibles</b>. Toca la foto para verla en grande.</p><ul><li><span class="tuto-et" style="background:var(--rojo);color:#fff">Última Pieza</span> ya no hay más en sistema: la de piso es la última.</li><li><span class="tuto-et" style="border:1.5px solid var(--gris-cl);color:var(--gris)">Descontinuado</span> ya no se surte.</li><li><span class="tuto-et" style="background:var(--marino);color:#fff">Exhibido 2 Veces</span> está repetido en piso.</li><li><span class="tuto-et" style="background:var(--naranja);color:#fff">Por Exhibir</span> falta ponerlo en piso.</li></ul>'},
- {c:'var(--azul)',i:'llave',t:'Llaves De Los Muebles',x:'<p>Algunos muebles tienen un <b>punto de color</b> junto a su foto: es el color de la llave que los abre.</p><p>Así sabes qué llave tomar antes de ir al mueble.</p>'},
- {c:'var(--naranja)',i:'filtro',t:'Lo Que Falta Exhibir',x:'<p>En Muebles, el botón <b>Sin Exhibir</b> muestra solo los muebles con la etiqueta naranja <b>Por Exhibir</b>. <b>Todos</b> regresa a la lista completa.</p><p>Si ya no falta ninguno por exhibir, el botón desaparece solo.</p>'},
- {c:'var(--marino)',i:'revisa',t:'Toma Uno Y Precios',x:'<p>Arriba a la derecha elige <b>Toma Uno</b> o <b>Precios</b> para empezar una revisión. Aparece la columna <b>Hecho</b>: marca cada artículo conforme lo revises y la barra te muestra tu avance.</p><p><b>Marcar Todo</b> y <b>Desmarcar Todo</b> solo afectan lo que tienes en pantalla. Tu avance se guarda en este dispositivo. Toca el modo otra vez para salir.</p>'},
- {c:'var(--rojo)',i:'promo',t:'Promociones Del Día',x:'<p>En el inicio, la tarjeta roja abre la <b>Finalización De Promociones Del Día</b>. Ahí se sube el PDF del día y vas marcando cada artículo conforme lo terminas.</p><p>Las existencias de Muebles se actualizan con <b>Subir Excel</b>; para que se vean en todos los celulares hay que <b>Entrar Con Google</b> con la cuenta autorizada.</p>'}
+ {v:aInicio,t:function(){return $(".cabeza")},c:'var(--rojo)',i:'info',tit:'Bienvenido A Artículos',x:'<p>Aquí consultas el inventario de la <b>Tienda Querétaro 106</b>: piezas disponibles, foto y SKU de cada artículo.</p><p>Te voy a llevar por cada parte de la página.</p>'},
+ {v:aInicio,t:function(){return $("#busca")},c:'var(--naranja)',i:'busca',tit:'Busca Un Artículo',x:'<p>Escribe el <b>SKU</b>, el <b>código de barras (UPC)</b> o parte del nombre y toca <b>Buscar</b>. Para volver a ver todo, toca <b>Limpiar</b>.</p>'},
+ {v:aInicio,t:function(){return $("#b-cam")},c:'var(--marino)',i:'escanea',tit:'Escanea El Código',x:'<p>Toca este botón y apunta la cámara al código de barras o QR del artículo. Lo encuentra solo.</p><p>Si la cámara no abre, toca <b>Usar Foto</b> y tómale una foto al código.</p>'},
+ {v:aInicio,t:function(){return $(".ini-card[data-d]:not(.ini-todo)")&&$(".ini-grid")},c:'var(--azul)',i:'area',tit:'Elige Un Área',x:'<p>Toca <b>Muebles</b>, <b>Papelería</b> o <b>Tecnología</b>, o <b>Ver Todo</b> para ver la tienda completa.</p>'},
+ {v:aInicio,t:function(){return $(".ini-promo")},c:'var(--rojo)',i:'promo',tit:'Promociones Del Día',x:'<p>Esta tarjeta abre la <b>Finalización De Promociones Del Día</b>: se sube el PDF del día y vas marcando cada artículo conforme lo terminas.</p>'},
+ {v:aMuebles,t:function(){return $("#subs")},c:'var(--azul)',i:'chips',tit:'Muévete Entre Secciones',x:'<p>Ya dentro de un área, <b>← Inicio</b> te regresa al principio. Abajo están las subcategorías (Archiveros, Escritorios…) para ver solo una parte.</p>'},
+ {v:aMuebles,t:function(){var e=$(".tools");return e&&e.offsetParent?e:null},c:'var(--naranja)',i:'filtro',tit:'Lo Que Falta Exhibir',x:'<p><b>Sin Exhibir</b> muestra solo los muebles con la etiqueta naranja <b>Por Exhibir</b>. <b>Todos</b> regresa a la lista completa.</p><p>Si ya no falta ninguno, el botón desaparece solo.</p>'},
+ {v:aMuebles,t:function(){return fila("tr.fila td")},c:'var(--rojo)',i:'tabla',tit:'Lee Cada Fila',x:'<p>Cada fila muestra la <b>foto</b>, el <b>SKU</b>, la <b>descripción</b> y las piezas <b>disponibles</b>. Toca la foto para verla en grande.</p>'},
+ {v:aMuebles,t:function(){return fila(".badge")||fila(".pexb")||fila(".rep")||fila(".disc")},c:'var(--marino)',i:'etiqueta',tit:'Etiquetas',x:'<p><span class="tour-et" style="background:var(--rojo);color:#fff">Última Pieza</span> ya no hay más en sistema: la de piso es la última.</p><p><span class="tour-et" style="background:var(--naranja);color:#fff">Por Exhibir</span> falta ponerlo en piso. <span class="tour-et" style="background:var(--marino);color:#fff">Exhibido 2 Veces</span> está repetido. <span class="tour-et" style="border:1.5px solid var(--gris-cl);color:var(--gris)">Descontinuado</span> ya no se surte.</p>'},
+ {v:aMuebles,t:function(){return fila(".llave")},c:'var(--azul)',i:'llave',tit:'Llaves De Los Muebles',x:'<p>El <b>punto de color</b> junto a la foto es el color de la llave que abre ese mueble. Así sabes cuál tomar antes de ir.</p>'},
+ {v:aMuebles,t:function(){var e=$(".modo");return e&&e.offsetParent?e:null},c:'var(--marino)',i:'revisa',tit:'Toma Uno Y Precios',x:'<p>Elige un modo para empezar una revisión: aparece la columna <b>Hecho</b> para marcar cada artículo y una barra con tu avance.</p><p>Se guarda en este dispositivo. Toca el modo otra vez para salir.</p>'},
+ {v:aMuebles,t:function(){var e=$(".ex-bar");return e&&e.offsetParent?e:null},c:'var(--rojo)',i:'subir',tit:'Existencias',x:'<p>Aquí ves cuándo se actualizaron las existencias. Con <b>Subir Excel</b> se cargan las nuevas; para que se vean en todos los celulares hay que <b>Entrar Con Google</b> con la cuenta autorizada.</p>'},
+ {v:null,t:function(){return $("#info-btn")},arriba:true,c:'var(--naranja)',i:'info',tit:'¿Lo Necesitas Otra Vez?',x:'<p>Toca este botón cuando quieras para repetir el recorrido.</p>'}
 ];
-var n=0,el=null,ultimoFoco=null,x0=null;
-function pintarT(){var p=P[n],h='<div class="tuto-cuerpo"><p class="tuto-paso">Paso '+(n+1)+' De '+P.length+'</p><div class="tuto-ico" style="--c:'+p.c+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+I[p.i]+'</svg></div><h2 class="tuto-tit" id="tuto-tit">'+p.t+'</h2><div class="tuto-txt">'+p.x+'</div></div>';
-  el.querySelector(".tuto-contenido").innerHTML=h;
-  el.querySelector(".tuto-puntos").innerHTML=P.map(function(_,k){return '<i class="'+(k===n?'on':'')+'"></i>'}).join("");
-  var a=el.querySelector(".ant"),s=el.querySelector(".sig");a.disabled=n===0;s.textContent=n===P.length-1?"Listo":"Siguiente"}
-function abrir(){if(el)return;ultimoFoco=document.activeElement;n=0;el=document.createElement("div");el.className="tuto";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-labelledby","tuto-tit");
-  el.innerHTML='<div class="tuto-fondo"></div><div class="tuto-caja"><button type="button" class="tuto-x" aria-label="Cerrar">×</button><div class="tuto-contenido"></div><div class="tuto-pie"><div class="tuto-puntos" aria-hidden="true"></div><div class="tuto-nav"><button type="button" class="ant">Atrás</button><button type="button" class="sig">Siguiente</button></div></div></div>';
-  document.body.appendChild(el);document.body.classList.add("tuto-abierto");pintarT();
-  el.querySelector(".tuto-fondo").onclick=cerrar;el.querySelector(".tuto-x").onclick=cerrar;
-  el.querySelector(".ant").onclick=function(){if(n>0){n--;pintarT()}};
-  el.querySelector(".sig").onclick=function(){if(n<P.length-1){n++;pintarT()}else cerrar()};
-  var c=el.querySelector(".tuto-caja");
-  c.addEventListener("touchstart",function(e){x0=e.touches[0].clientX},{passive:true});
-  c.addEventListener("touchend",function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<50)return;if(dx<0&&n<P.length-1){n++;pintarT()}else if(dx>0&&n>0){n--;pintarT()}});
-  document.addEventListener("keydown",tecla);el.querySelector(".sig").focus()}
-function cerrar(){if(!el)return;document.removeEventListener("keydown",tecla);el.remove();el=null;document.body.classList.remove("tuto-abierto");if(ultimoFoco&&ultimoFoco.focus)ultimoFoco.focus()}
-function tecla(e){if(e.key==="Escape")cerrar();else if(e.key==="ArrowRight"&&n<P.length-1){n++;pintarT()}else if(e.key==="ArrowLeft"&&n>0){n--;pintarT()}}
-document.getElementById("info-btn").onclick=abrir;
+var n=0,on=false,dir=1,raf=0,tapa,hueco,globo,inicial=null,x0=null,cambio=0;
+function mq(){return matchMedia("(max-width:520px)").matches}
+function posicion(){if(!on)return;var t=P[n]._el;if(t&&t.isConnected){var r=t.getBoundingClientRect(),m=8,vw=innerWidth,vh=innerHeight;
+  var L=Math.max(4,r.left-m),T=r.top-m,W=Math.min(vw-8,r.right+m)-L,H=r.height+2*m;
+  hueco.style.left=L+"px";hueco.style.top=T+"px";hueco.style.width=W+"px";hueco.style.height=H+"px";
+  var gh=globo.offsetHeight,gw=globo.offsetWidth;
+  if(mq()){var arriba=!!P[n].arriba;globo.classList.toggle("arriba",arriba);globo.style.top=arriba?"0px":(vh-gh)+"px"}
+  else{var gt;if(T+H+12+gh<vh-8)gt=T+H+12;else if(T-12-gh>8)gt=T-12-gh;else gt=vh-gh-16;
+    var gl=Math.min(Math.max(16,r.left+r.width/2-gw/2),vw-gw-16);globo.style.top=gt+"px";globo.style.left=gl+"px"}}
+  raf=requestAnimationFrame(posicion)}
+function llevar(t){var r=t.getBoundingClientRect();if(getComputedStyle(t).position==="fixed")return;
+  var vh=innerHeight,gh=globo.offsetHeight,arriba,meta;
+  if(mq()){var libre=vh-gh;meta=Math.max(84,(libre-r.height)/2);if(r.height>libre-100)meta=84}
+  else{var tot=r.height+gh+28;meta=tot<vh-100?Math.max(90,(vh-tot)/2):90}
+  var y=scrollY+r.top-meta;if(Math.abs(r.top-meta)>4)window.scrollTo({top:Math.max(0,y),behavior:quieto?"auto":"smooth"})}
+function mostrar(){var p=P[n],cambia=p.v?p.v():false;
+  setTimeout(function(){if(!on)return;var t=p.t();if(!t){n+=dir;if(n<0)n=0;if(n>=P.length){cerrar();return}mostrar();return}
+    p._el=t;pintarGlobo();llevar(t);
+    hueco.classList.add("mueve");clearTimeout(cambio);cambio=setTimeout(function(){hueco.classList.remove("mueve")},700)},cambia?420:0)}
+function pintarGlobo(){var p=P[n];globo.classList.remove("ver");
+  globo.innerHTML='<button type="button" class="tour-x" aria-label="Salir Del Tutorial">×</button><div class="tour-cab"><div class="tour-ico" style="--c:'+p.c+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+I[p.i]+'</svg></div><div><p class="tour-paso">Paso '+(n+1)+' De '+P.length+'</p><h2 class="tour-tit" id="tour-tit">'+p.tit+'</h2></div></div><div class="tour-txt">'+p.x+'</div><div class="tour-pie"><div class="tour-puntos" aria-hidden="true">'+P.map(function(_,k){return '<i class="'+(k===n?'on':'')+'"></i>'}).join("")+'</div><div class="tour-nav"><button type="button" class="ant"'+(n===0?' disabled':'')+'>Atrás</button><button type="button" class="sig">'+(n===P.length-1?'Listo':'Siguiente')+'</button></div></div>';
+  globo.querySelector(".tour-x").onclick=cerrar;
+  globo.querySelector(".ant").onclick=function(){ir(-1)};globo.querySelector(".sig").onclick=function(){if(n===P.length-1)cerrar();else ir(1)};
+  requestAnimationFrame(function(){globo.classList.add("ver")});globo.querySelector(".sig").focus({preventScroll:true})}
+function ir(d){var k=n+d;if(k<0||k>=P.length)return;dir=d;n=k;mostrar()}
+function abrir(){if(on)return;on=true;n=0;dir=1;inicial={INICIO:INICIO,PROMO:PROMO,depSel:depSel,subSel:subSel,y:scrollY};
+  tapa=document.createElement("div");tapa.className="tour-tapa";hueco=document.createElement("div");hueco.className="tour-hueco";
+  globo=document.createElement("div");globo.className="tour-globo";globo.setAttribute("role","dialog");globo.setAttribute("aria-labelledby","tour-tit");
+  document.body.append(tapa,hueco,globo);
+  tapa.addEventListener("touchstart",function(e){x0=e.touches[0].clientX},{passive:true});
+  tapa.addEventListener("touchend",function(e){if(x0==null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>50)ir(dx<0?1:-1)});
+  document.addEventListener("keydown",tecla);mostrar();raf=requestAnimationFrame(posicion)}
+function cerrar(){if(!on)return;on=false;cancelAnimationFrame(raf);document.removeEventListener("keydown",tecla);[tapa,hueco,globo].forEach(function(e){e&&e.remove()});
+  if(inicial){if(inicial.INICIO){aInicio()}else if(inicial.PROMO){abrirPromo()}else{INICIO=false;PROMO=false;depSel=inicial.depSel;subSel=inicial.subSel;pintar(false)}
+    window.scrollTo({top:inicial.y,behavior:"auto"})}
+  $("#info-btn").focus({preventScroll:true})}
+function tecla(e){if(e.key==="Escape")cerrar();else if(e.key==="ArrowRight")ir(1);else if(e.key==="ArrowLeft")ir(-1)}
+$("#info-btn").onclick=abrir;
+setTimeout(function(){document.body.classList.add("cargada")},2200);
 })();
 </script>
 
