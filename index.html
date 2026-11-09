@@ -2230,8 +2230,9 @@ try{localStorage.removeItem("toma1-cant")}catch(e){}
     db.doc("inventario/actual").onSnapshot(function(s){if(!s.exists)return;var d=s.data();if(d&&d.cant)aplicarCant(d.cant,d.fecha,d.desc)},function(){});
   }catch(e){}})();
 
-function pintarSubs(){var el=document.getElementById("subs"),h='<div class="fila-deps"><button type="button" data-d="inicio" aria-pressed="false">← Inicio</button><button type="button" data-d="-1" aria-pressed="'+(depSel<0&&!INICIO)+'">Todo <small>'+D.length+'</small></button>';
-  DEPTOS.forEach(function(dn,di){var n=D.filter(function(r){if(CDEP[r[3]]!==di)return false;if(porEx&&PEX.indexOf(r[0])<0)return false;if(!coincide(r))return false;return true}).length;if(!n)return;h+='<button type="button" data-d="'+di+'" aria-pressed="'+(depSel===di)+'">'+dn+' <small>'+n+'</small></button>'});
+function pintarSubs(){var el=document.getElementById("subs"),h='<div class="fila-deps"><button type="button" data-d="inicio" aria-pressed="false">← Inicio</button>';
+  if(depSel>=0){var n=D.filter(function(r){if(CDEP[r[3]]!==depSel)return false;if(porEx&&PEX.indexOf(r[0])<0)return false;if(!coincide(r))return false;return true}).length;h+='<button type="button" data-d="'+depSel+'" aria-pressed="true">'+DEPTOS[depSel]+' <small>'+n+'</small></button>';}
+  else{DEPTOS.forEach(function(dn,di){var n=D.filter(function(r){if(CDEP[r[3]]!==di)return false;if(porEx&&PEX.indexOf(r[0])<0)return false;if(!coincide(r))return false;return true}).length;if(!n)return;h+='<button type="button" data-d="'+di+'" aria-pressed="false">'+dn+' <small>'+n+'</small></button>'});}
   h+='</div>';
   if(depSel>=0){h+='<div class="fila-subs"><button type="button" data-c="-1" aria-pressed="'+(subSel<0)+'">Todo '+DEPTOS[depSel]+'</button>';
     CATS.forEach(function(cn,ci){if(CDEP[ci]!==depSel)return;var n=D.filter(function(r){if(r[3]!==ci)return false;if(porEx&&PEX.indexOf(r[0])<0)return false;if(!coincide(r))return false;return true}).length;if(!n)return;h+='<button type="button" data-c="'+ci+'" aria-pressed="'+(subSel===ci)+'">'+cn+' <small>'+n+'</small></button>'});h+='</div>'}
