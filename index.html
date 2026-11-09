@@ -230,6 +230,43 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
 .p-tabla tr.dep td,.p-tabla tr.cat td{text-align:left}
 .ini-promo{background:var(--rojo);border-color:var(--rojo);color:#fff}
 .ini-promo .ini-c,.ini-promo .ini-s{color:#fff}
+/* ===== Vista Dinámica ===== */
+/* Fondo: nebula roja sutil en modo oscuro */
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) body{
+  background:radial-gradient(ellipse 130% 42% at 50% -6%,rgba(150,0,32,.32) 0%,transparent 68%) #171214}}
+:root[data-theme="dark"] body{
+  background:radial-gradient(ellipse 130% 42% at 50% -6%,rgba(150,0,32,.32) 0%,transparent 68%) #171214}
+/* Barra superior y acento con gradiente */
+.bar{background:linear-gradient(90deg,#a80028,var(--rojo) 35%,#ff1f4e 65%,var(--rojo))}
+.acento{background:linear-gradient(90deg,var(--rojo),#ff4466 55%,var(--rojo))}
+/* Tarjetas con capa de brillo interno y hover más dramático */
+.caja{position:relative;overflow:hidden;border-radius:12px}
+.caja::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(145deg,rgba(255,255,255,.055) 0%,transparent 55%);pointer-events:none;z-index:0}
+.caja>*{position:relative;z-index:1}
+.caja:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 20px 40px -14px rgba(204,0,51,.5),0 0 0 1px rgba(204,0,51,.18)}
+/* Botones de filtro: píldora + gradiente activo + glow */
+.tools button{border-radius:99px;transition:transform .15s var(--suave),background .2s,color .2s,box-shadow .25s}
+.tools button[aria-pressed="true"]{background:linear-gradient(135deg,var(--rojo),#9e0024);box-shadow:0 0 24px -3px rgba(204,0,51,.55),inset 0 1px 0 rgba(255,255,255,.12)}
+.tools button:hover:not([aria-pressed="true"]){box-shadow:0 6px 20px -6px rgba(204,0,51,.35)}
+/* Sin Exhibir activo: gradiente dorado + glow cálido */
+.tools #f-pex[aria-pressed="true"]{background:linear-gradient(135deg,#FFC400,#E0A800)!important;color:#1A1A1A!important;box-shadow:0 0 24px -3px rgba(255,196,0,.7),inset 0 1px 0 rgba(255,255,255,.18)!important}
+/* Chips de navegación: glow activo + hover con elevación */
+.subs button{transition:background .2s,color .2s,transform .18s var(--suave),box-shadow .22s}
+.subs button[aria-pressed="true"]{background:linear-gradient(135deg,var(--rojo),#a30028);box-shadow:0 4px 20px -4px rgba(204,0,51,.65),inset 0 1px 0 rgba(255,255,255,.1)}
+.subs .fila-deps button[aria-pressed="true"]{background:linear-gradient(135deg,var(--tinta),var(--tinta));box-shadow:0 4px 16px -6px rgba(0,0,0,.5)}
+.subs button:hover:not([aria-pressed="true"]){transform:translateY(-2px);box-shadow:0 8px 18px -6px rgba(204,0,51,.3)}
+/* Hover de filas: fondo + acento lateral izquierdo */
+@media(hover:hover) and (pointer:fine){
+  tbody tr.fila:not(.ult):hover td{background:var(--pista)}
+  tbody tr.fila:not(.ult):hover td:first-child{box-shadow:inset 3px 0 0 var(--rojo)}}
+/* Encabezados de categoría / depto en tabla con gradiente sutil */
+tr.cat td{background:linear-gradient(90deg,var(--rojo) 0%,#b5001f 100%)}
+/* Input de búsqueda: glow extra al enfocar */
+.busca input:focus{box-shadow:0 0 0 4px var(--rosa),0 2px 24px -4px rgba(204,0,51,.22)}
+/* Badge con sombra de color */
+.badge{box-shadow:0 2px 10px -3px rgba(204,0,51,.55)}
+/* Tarjeta .ini-card con gradiente izquierdo */
+.ini-card{border-radius:14px;background:linear-gradient(100deg,rgba(255,255,255,.025) 0%,transparent 50%)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 <div class="bar"></div>
