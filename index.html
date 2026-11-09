@@ -256,7 +256,7 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
   <div class="ex-bar solo-mueb no-inicio">
     <p class="fecha" id="fecha"></p>
     <button type="button" class="ex-btn" id="ex-subir">Subir Excel</button>
-    <button type="button" class="ex-btn sec" id="ex-llave" hidden>Conectar GitHub</button>
+    <button type="button" class="ex-btn sec" id="ex-llave" hidden>Entrar Con Google</button>
     <input type="file" id="ex-file" class="oculto" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
     <p class="ex-msg" id="ex-msg" role="status" aria-live="polite" hidden></p>
   </div>
@@ -302,6 +302,9 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
 <div class="pie"><div><b>Responsable:</b> Santiago Vargas Almeida</div></div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <script>
 var CATS=["Archiveros","Gabinetes Y Lockers","Libreros Y Estantes","Credenzas","Escritorios","Mesas","Mamparas","Restiradores","Sillas","Sillones","Bancos","Ventiladores","Calefactores","Lámparas","Escritura","Arte Y Dibujo","Básicos De Papelería","Cintas Y Adhesivos","Accesorios De Oficina","Pizarrones Y Planificación","Folders Y Sobres","Papel Para Impresión","Cuadernos Y Blocks","Etiquetas","Reglas Y Escuadras","Contabilidad","Pilas Y Herramientas","Registradores Y Carpetas","Letreros Y Señalización","Papel Para Manualidades","Cafetería, Dulces Y Limpieza","Calculadoras","Cintas Para Etiquetadora","Rollos De Papel","Accesorios De Cómputo","Artículos Escolares","Tintas Y Tóners"];
 var DEPTOS=["Muebles","Papelería","Tecnología"],CDEP=CATS.map(function(c,i){return i<14?0:(i<31||i===35)?1:2}),subSel=-1,depSel=-1,INICIO=true;
@@ -2368,8 +2371,8 @@ async function subirPromo(file){
     var nc=enCat(r.items);
     var pb="Listo: "+r.items.length+" Artículos Leídos · "+nc+" En El Catálogo · "+conFoto()+" Con Imagen."+(nc<r.items.length?" "+(r.items.length-nc)+" No Están En Artículos Totales.":"");
     pmsg(pb+" Publicando Para Todos…","ok");
-    try{await ghPut("promos.json",{f:PD.f,a:PD.a,t:PD.t,i:PD.i},"Finalización De Promociones "+(PD.f||""));pmsg(pb+" Publicado: En Todos Los Dispositivos Se Verá En Aprox. 1 Minuto.","ok")}
-    catch(e2){pmsg(pb+textoPublicar(e2),"err")}
+    if(fbAuth.currentUser){try{await fbSet("promos",{f:PD.f,a:PD.a,t:PD.t,i:PD.i});pmsg(pb+" Publicado: Se Ve Al Instante En Todos Los Dispositivos.","ok")}catch(e2){pmsg(pb+textoPublicar(e2),"err")}}
+    else{pmsg(pb+" Solo En Este Dispositivo: Toca «Entrar Con Google» Y Vuelve A Subirlo Para Publicarlo.","ok")}
   }catch(err){var em=err&&err.message;pmsg(em==="xl"||em==="pdf"?"No Se Pudo Cargar El Lector. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un PDF (O Excel).","err")}
 }
 $id("p-volver").onclick=irInicio;
@@ -2387,29 +2390,18 @@ $id("p-filas").addEventListener("change",function(e){var t=e.target;if(!t.classL
   $id("p-sub").textContent=(PD.f?"Reporte Del "+PD.f+" · ":"")+PD.i.length+" Artículos · "+conFoto()+" Con Imagen · "+n+" Marcados"});
 $id("promo").addEventListener("dragover",function(e){e.preventDefault()});
 $id("promo").addEventListener("drop",function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)subirPromo(f)});
-/* ===== Publicar En GitHub (Para Que Se Vea En Todos Los Dispositivos) ===== */
-var GH_API="https://api.github.com/repos/svargas22work-design/exhibicion-muebles/contents/",GKEY="gh-llave";
-function llave(){try{return localStorage.getItem(GKEY)||""}catch(e){return ""}}
-function pintarLlave(){var b=$id("ex-llave");b.hidden=false;b.textContent=llave()?"GitHub Conectado ✓":"Conectar GitHub"}
+/* ===== Firebase (Para Que Se Vea En Todos Los Dispositivos) ===== */
+var FB_CFG={apiKey:"AIzaSyDYYzsFDaBvcp356FUlDjphP2jyYa1_Rz4",authDomain:"tienda-106.firebaseapp.com",databaseURL:"https://tienda-106-default-rtdb.firebaseio.com",projectId:"tienda-106",storageBucket:"tienda-106.firebasestorage.app",messagingSenderId:"221177568260",appId:"1:221177568260:web:1eb191d5f3880982482951"};
+firebase.initializeApp(FB_CFG);
+var fbAuth=firebase.auth(),fbDb=firebase.database();
+function pintarLlave(user){var b=$id("ex-llave");b.hidden=false;b.textContent=user?"✓ "+(user.displayName||user.email).split(" ")[0]+" (Salir)":"Entrar Con Google"}
 $id("ex-llave").onclick=function(){
-  if(llave()){if(confirm("¿Desconectar GitHub En Este Dispositivo? Lo Que Subas Ya No Se Publicará Para Todos.")){try{localStorage.removeItem(GKEY)}catch(e){}pintarLlave()}return}
-  var t=prompt("Pega Tu Llave (Token) De GitHub Con Permiso De Escritura En El Repositorio exhibicion-muebles:");
-  if(t&&t.trim()){try{localStorage.setItem(GKEY,t.trim())}catch(e){}pintarLlave()}};
-function b64(txt){return btoa(unescape(encodeURIComponent(txt)))}
-async function ghPut(ruta,obj,msg){var tk=llave();if(!tk)throw new Error("sin-llave");
-  var hd={Authorization:"Bearer "+tk,Accept:"application/vnd.github+json"},sha=null;
-  var g=await fetch(GH_API+ruta+"?ref=main&t="+Date.now(),{headers:hd,cache:"no-store"});
-  if(g.status===401||g.status===403)throw new Error("llave");
-  if(g.ok)sha=(await g.json()).sha;
-  var cuerpo={message:msg,content:b64(JSON.stringify(obj)),branch:"main"};if(sha)cuerpo.sha=sha;
-  var r=await fetch(GH_API+ruta,{method:"PUT",headers:hd,body:JSON.stringify(cuerpo)});
-  if(r.status===401||r.status===403)throw new Error("llave");
-  if(!r.ok)throw new Error("gh")}
-async function leerNube(ruta){try{var r=await fetch(ruta+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)return null;return await r.json()}catch(e){return null}}
-function textoPublicar(err){var m=err&&err.message;
-  if(m==="sin-llave")return " Solo Se Ve En Este Dispositivo: Toca «Conectar GitHub» Y Vuelve A Subirlo Para Que Se Vea En Todos.";
-  if(m==="llave")return " No Se Publicó: GitHub Rechazó La Llave (Revisa Que Siga Vigente Y Tenga Permiso De Escritura).";
-  return " No Se Publicó Para Todos (Revisa Tu Conexión) — Por Ahora Solo Se Ve En Este Dispositivo."}
+  if(fbAuth.currentUser){if(confirm("¿Cerrar Sesión De Google En Este Dispositivo? Lo Que Subas Ya No Se Publicará Para Todos."))fbAuth.signOut();return}
+  fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(function(e){exmsg("No Se Pudo Iniciar Sesión: "+e.message,"err")})};
+fbAuth.onAuthStateChanged(function(user){pintarLlave(user)});
+async function fbSet(ruta,obj){await fbDb.ref(ruta).set(obj)}
+async function fbGet(ruta){try{var s=await fbDb.ref(ruta).get();return s.exists()?s.val():null}catch(e){return null}}
+function textoPublicar(err){return " No Se Publicó Para Todos ("+(err&&err.message||"error")+") — Por Ahora Solo Se Ve En Este Dispositivo."}
 
 /* ===== Subir Excel De Existencias (Muebles) ===== */
 var EKEY="existencias-local";
@@ -2447,20 +2439,19 @@ async function subirExcel(file){
     aplicarCant(c,obj.fecha,d);try{localStorage.setItem(EKEY,JSON.stringify(obj))}catch(e){}
     var base="Listo: "+act+" Muebles Actualizados"+(des?" · "+des+" Descontinuados":"")+".";
     exmsg(base+" Publicando Para Todos…","ok");
-    try{await ghPut("existencias.json",obj,"Existencias "+new Date().toLocaleDateString("es-MX"));exmsg(base+" Publicado: En Todos Los Dispositivos Se Verá En Aprox. 1 Minuto (Al Recargar La Página).","ok")}
-    catch(err){exmsg(base+textoPublicar(err),"err")}
+    if(fbAuth.currentUser){try{await fbSet("existencias",obj);exmsg(base+" Publicado: Se Ve Al Instante En Todos Los Dispositivos.","ok")}catch(e2){exmsg(base+textoPublicar(e2),"err")}}
+    else{exmsg(base+" Solo En Este Dispositivo: Toca «Entrar Con Google» Y Vuelve A Subirlo Para Publicarlo.","ok")}
   }catch(err){exmsg((err&&err.message)==="xl"?"No Se Pudo Cargar El Lector De Excel. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un Excel (.xlsx).","err")}}
 $id("ex-subir").onclick=function(){var f=$id("ex-file");f.value="";f.click()};
 $id("ex-file").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)subirExcel(f)});
-pintarLlave();
 
 /* ===== Cargar Lo Publicado (Existencias Y Promociones) ===== */
 (async function(){
   var loc=null;try{loc=JSON.parse(localStorage.getItem(EKEY)||"null")}catch(e){}
-  var nube=await leerNube("existencias.json"),mejor=loc;
+  var nube=await fbGet("existencias"),mejor=loc;
   if(nube&&nube.cant&&(!mejor||String(nube.fecha)>String(mejor.fecha)))mejor=nube;
   if(mejor&&mejor.cant&&String(mejor.fecha)>FECHA_BASE)aplicarCant(mejor.cant,mejor.fecha,mejor.desc);
-  var pn=await leerNube("promos.json");
+  var pn=await fbGet("promos");
   if(pn&&pn.i&&(!PD||String(pn.t)>String(PD.t||""))){
     var hv={};if(PD&&PD.h&&PD.f===pn.f)hv=PD.h;
     PD={f:pn.f,a:pn.a,t:pn.t,i:pn.i,h:hv};try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(e){}
