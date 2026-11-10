@@ -2601,7 +2601,7 @@ function pintarLlave(user){esAdmin=!!user;var b=$id("ex-llave");b.hidden=false;b
 $id("ex-llave").onclick=function(){
   if(!fbOk){exmsg("Aún Conectando Con Google. Intenta De Nuevo En Un Momento.","err");return}
   if(fbAuth.currentUser){if(confirm("¿Cerrar Sesión De Google En Este Dispositivo? Lo Que Subas Ya No Se Publicará Para Todos."))fbAuth.signOut();return}
-  fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(function(e){exmsg("No Se Pudo Iniciar Sesión: "+e.message,"err")})};
+  fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(function(e){var c=e&&e.code||"";if(/popup-blocked|operation-not-supported|popup-closed-by-browser/.test(c)){fbAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()).catch(function(e2){exmsg("No Se Pudo Iniciar Sesión: "+e2.message,"err")});return}if(c!=="auth/popup-closed-by-user"&&c!=="auth/cancelled-popup-request")exmsg("No Se Pudo Iniciar Sesión: "+e.message,"err")})};
 async function fbSet(ruta,obj){if(!await fbListo)throw new Error("Sin Conexión Con La Nube");await fbDb.ref(ruta).set(obj)}
 async function fbGet(ruta){try{if(!await fbListo)return null;var s=await fbDb.ref(ruta).get();return s.exists()?s.val():null}catch(e){return null}}
 function textoPublicar(err){return " No Se Publicó Para Todos ("+(err&&err.message||"error")+") — Por Ahora Solo Se Ve En Este Dispositivo."}
@@ -2672,6 +2672,15 @@ $id("ex-file").addEventListener("change",function(e){var f=e.target.files&&e.tar
   if(upcNube&&typeof upcNube==="object"){
     Object.assign(UPC_EXT,upcNube);try{localStorage.setItem(UPC_EKEY,JSON.stringify(UPC_EXT))}catch(e){}
     pintar(false)}
+})();
+/* ===== Gesto De Atrás = Inicio (En Vez De Salir De La Página) ===== */
+(function(){
+  function fuera(){return !INICIO||PROMO}
+  function marca(){try{if(!(history.state&&history.state.t106))history.pushState({t106:1},"")}catch(e){}}
+  var _pintar=pintar;pintar=function(a){var r=_pintar.apply(this,arguments);if(fuera())marca();return r};
+  addEventListener("popstate",function(){
+    if(fuera()){irInicio();return}
+    if(!(history.state&&history.state.t106))try{history.back()}catch(e){}});
 })();
 pintar(true);
 </script>
