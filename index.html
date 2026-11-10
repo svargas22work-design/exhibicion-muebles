@@ -322,6 +322,9 @@ body.en-prec .prec{display:block;animation:aparece .35s both}
 .ini-prec .ini-s{opacity:.9}
 .p-btn.fil[aria-pressed="true"]{background:var(--naranja);border-color:var(--naranja);color:#fff}
 .p-btn[hidden]{display:none}
+.p-tot{font-size:13px;color:var(--gris);margin:-6px 0 12px}
+.p-tot b{color:var(--tinta)}
+.p-tot.falta{color:var(--rojo);font-weight:600}
 .et{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-top:6px;padding:6px 10px;border:1.5px dashed var(--linea);border-radius:10px;background:var(--fondo)}
 .et-n{font:700 16px var(--sans);color:var(--tinta)}
 .et-a{font-size:12px;color:var(--gris);text-decoration:line-through}
@@ -484,10 +487,12 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
     <div class="p-top">
       <button type="button" class="p-btn" id="p-volver">← Inicio</button>
       <button type="button" class="p-btn pri" id="p-subir">Subir PDF</button>
+      <button type="button" class="p-btn" data-tot="1">Subir Artículos Totales</button>
       <input type="file" id="p-file" class="oculto" accept=".pdf,application/pdf,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
     </div>
     <h2 class="p-tit">Finalización De Promociones Del Día</h2>
     <p class="p-sub" id="p-sub"></p>
+    <p class="p-tot" data-tot-et="1"></p>
     <p class="p-msg" id="p-msg" role="status" aria-live="polite" hidden></p>
     <div class="p-bus"><input id="p-q" type="search" enterkeyhint="search" placeholder="Buscar SKU O Artículo" aria-label="Buscar SKU O Artículo" autocomplete="off"></div>
     <div class="p-scroll">
@@ -502,10 +507,13 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
       <button type="button" class="p-btn" id="c-volver">← Inicio</button>
       <button type="button" class="p-btn pri" id="c-subir">Subir PDF</button>
       <button type="button" class="p-btn fil" id="c-ent" aria-pressed="false" hidden>Solo Descuentos Enteros</button>
+      <button type="button" class="p-btn" data-tot="1">Subir Artículos Totales</button>
       <input type="file" id="c-file" class="oculto" accept=".pdf,application/pdf,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
     </div>
+    <input type="file" id="t-file" class="oculto" accept=".pdf,application/pdf,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
     <h2 class="p-tit">Cambio De Precios</h2>
     <p class="p-sub" id="c-sub"></p>
+    <p class="p-tot" data-tot-et="1"></p>
     <p class="p-msg" id="c-msg" role="status" aria-live="polite" hidden></p>
     <div class="p-bus"><input id="c-q" type="search" enterkeyhint="search" placeholder="Buscar SKU O Artículo" aria-label="Buscar SKU O Artículo" autocomplete="off"></div>
     <div class="p-scroll">
@@ -536,7 +544,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
   <p class="esc-txt" id="esc-txt">Apunta Al Código De Barras O QR</p>
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 10/11 · 14:20</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 10/11 · 14:40</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -2571,13 +2579,13 @@ async function leerPDF(P,buf){
 }
 function enCat(its){return its.filter(function(x){return IDX[x[0]]}).length}
 function pmsg(html,tipo){var m=$id("p-msg");m.hidden=!html;m.className="p-msg"+(tipo?" "+tipo:"");m.innerHTML=html||""}
-function conFoto(){return PD?PD.i.filter(function(x){return FOTOS[x[0]]}).length:0}
+function conFoto(){return PD?pItems().filter(function(x){return FOTOS[x[0]]}).length:0}
 function tarjetaPromo(){
   return '<button type="button" class="ini-card ini-promo" data-promo="1"><span class="ini-n">Finalización De Promociones Del Día</span><span class="ini-c">'
-    +(PD?PD.i.length+' Artículos · '+conFoto()+' Con Imagen':'Sin Reporte Cargado')+'</span><span class="ini-s">'
+    +(PD?pItems().length+' Artículos · '+conFoto()+' Con Imagen':'Sin Reporte Cargado')+'</span><span class="ini-s">'
     +(PD?(PD.f?'Reporte Del '+esc(PD.f):'Reporte Cargado'):'Sube El PDF Del Día')+'</span></button>'}
 function pintarPromo(){
-  var its=PD?PD.i:[],q2=normT(PQ),h="",n=0;
+  var its=pItems(),q2=normT(PQ),h="",n=0;
   var HH=(PD&&PD.h)||{},nh=its.filter(function(x){return HH[x[0]]}).length;
   $id("p-sub").textContent=PD?((PD.f?"Reporte Del "+PD.f+" · ":"")+its.length+" Artículos · "+conFoto()+" Con Imagen · "+nh+" Marcados"):"";
   var grupos={},orden=[];
@@ -2591,7 +2599,7 @@ function pintarPromo(){
     var g=grupos[c],dp=c<0?-1:CDEP[c],hg=g.filter(function(z){return HH[z[0]]}).length;
     if(dp!==depAnt){depAnt=dp;
       var nd=0;orden.forEach(function(c2){if((c2<0?-1:CDEP[c2])===dp)nd+=grupos[c2].length});
-      h+='<tr class="dep"><td colspan="4">'+(dp<0?'No Están En El Catálogo':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
+      h+='<tr class="dep"><td colspan="4">'+(dp<0?'Sin Categoría En La Página':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
     if(c>=0)h+='<tr class="cat"><td colspan="4">'+CATS[c]+'<span class="cc">'+g.length+' Artículos · '+hg+' Marcados</span></td></tr>';
     g.forEach(function(z){var sku=z[0];n++;
       h+='<tr data-s="'+sku+'" class="fila'+(HH[sku]?" hecho":"")+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
@@ -2613,8 +2621,8 @@ async function subirPromo(file){
     PD={f:r.fecha,a:file.name,t:new Date().toISOString(),i:r.items,h:hv};
     try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(e){}
     PQ="";$id("p-q").value="";pintarPromo();
-    var nc=enCat(r.items);
-    var pb="Listo: "+r.items.length+" Artículos Leídos · "+nc+" En El Catálogo · "+conFoto()+" Con Imagen."+(nc<r.items.length?" "+(r.items.length-nc)+" No Están En Artículos Totales.":"");
+    var fu=fueraTot(r.items.map(function(x){return x[0]}));
+    var pb="Listo: "+r.items.length+" Artículos Leídos · "+pItems().length+" En Artículos Totales · "+conFoto()+" Con Imagen."+avisoTot(fu);
     pmsg(pb+" Publicando Para Todos…","ok");
     if(fbAuth.currentUser){try{await fbSet("promos",{f:PD.f,a:PD.a,t:PD.t,i:PD.i});pmsg(pb+" Publicado: Se Ve Al Instante En Todos Los Dispositivos.","ok")}catch(e2){pmsg(pb+textoPublicar(e2),"err")}}
     else{pmsg(pb+" Solo En Este Dispositivo: Toca «Entrar Con Google» Y Vuelve A Subirlo Para Publicarlo.","ok")}
@@ -2631,8 +2639,8 @@ $id("p-filas").addEventListener("change",function(e){var t=e.target;if(!t.classL
   var tr=t.closest("tr");if(tr){tr.classList.toggle("hecho",t.checked);tr.classList.remove("marcada");void tr.offsetWidth;tr.classList.add("marcada")}
   var cr=tr&&tr.previousElementSibling;while(cr&&!cr.classList.contains("cat")&&!cr.classList.contains("dep"))cr=cr.previousElementSibling;
   if(cr&&cr.classList.contains("cat")){var cc=cr.querySelector(".cc"),tt=0,mk=0,nx=cr.nextElementSibling;while(nx&&nx.classList.contains("fila")){tt++;if(nx.classList.contains("hecho"))mk++;nx=nx.nextElementSibling}if(cc)cc.textContent=tt+" Artículos · "+mk+" Marcados"}
-  var n=PD.i.filter(function(x){return PD.h[x[0]]}).length;
-  $id("p-sub").textContent=(PD.f?"Reporte Del "+PD.f+" · ":"")+PD.i.length+" Artículos · "+conFoto()+" Con Imagen · "+n+" Marcados"});
+  var n=pItems().filter(function(x){return PD.h[x[0]]}).length;
+  $id("p-sub").textContent=(PD.f?"Reporte Del "+PD.f+" · ":"")+pItems().length+" Artículos · "+conFoto()+" Con Imagen · "+n+" Marcados"});
 $id("promo").addEventListener("dragover",function(e){e.preventDefault()});
 $id("promo").addEventListener("drop",function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)subirPromo(f)});
 /* ===== Cambio De Precios ===== */
@@ -2753,16 +2761,16 @@ function etiqueta(x){
   if(!h)h='<span class="et-s">Sin Precio En El Reporte</span>';
   return '<span class="et">'+h+'</span>'}
 function cmsg(html,tipo){var m=$id("c-msg");m.hidden=!html;m.className="p-msg"+(tipo?" "+tipo:"");m.innerHTML=html||""}
-function cConFoto(){return PC?PC.i.filter(function(x){return FOTOS[x.s]}).length:0}
-function cRes(){return PC?PC.i.filter(resaltar).length:0}
+function cConFoto(){return PC?cItems().filter(function(x){return FOTOS[x.s]}).length:0}
+function cRes(){return PC?cItems().filter(resaltar).length:0}
 function tarjetaPrec(){
   return '<button type="button" class="ini-card ini-prec" data-prec="1"><span class="ini-n">Cambio De Precios</span><span class="ini-c">'
-    +(PC?PC.i.length+' Artículos · '+cRes()+' Resaltados':'Sin Reporte Cargado')+'</span><span class="ini-s">'
+    +(PC?cItems().length+' Artículos · '+cRes()+' Resaltados':'Sin Reporte Cargado')+'</span><span class="ini-s">'
     +(PC?(PC.f?'Reporte Del '+esc(PC.f):'Reporte Cargado'):'Sube El PDF Del Día')+'</span></button>'}
-function cSub(){var nh=PC.i.filter(function(x){return PC.h&&PC.h[x.s]}).length;
-  $id("c-sub").textContent=(PC.f?"Reporte Del "+PC.f+" · ":"")+PC.i.length+" Artículos · "+cConFoto()+" Con Imagen · "+cRes()+" Resaltados · "+nh+" Marcados"}
+function cSub(){var nh=cItems().filter(function(x){return PC.h&&PC.h[x.s]}).length;
+  $id("c-sub").textContent=(PC.f?"Reporte Del "+PC.f+" · ":"")+cItems().length+" Artículos · "+cConFoto()+" Con Imagen · "+cRes()+" Resaltados · "+nh+" Marcados"}
 function pintarPrec(){
-  var its=PC?PC.i:[],q2=normT(CQ),h="",n=0,HH=(PC&&PC.h)||{},nr=cRes();
+  var its=cItems(),q2=normT(CQ),h="",n=0,HH=(PC&&PC.h)||{},nr=cRes();
   if(PC)cSub();else $id("c-sub").textContent="";
   var bt=$id("c-ent");bt.hidden=!nr;if(!nr)CENT=false;bt.setAttribute("aria-pressed",CENT);bt.textContent="Solo Descuentos Enteros ("+nr+")";
   var grupos={},orden=[];
@@ -2777,7 +2785,7 @@ function pintarPrec(){
     var g=grupos[c],dp=c<0?-1:CDEP[c],hg=g.filter(function(z){return HH[z[0].s]}).length;
     if(dp!==depAnt){depAnt=dp;
       var nd=0;orden.forEach(function(c2){if((c2<0?-1:CDEP[c2])===dp)nd+=grupos[c2].length});
-      h+='<tr class="dep"><td colspan="4">'+(dp<0?'No Están En El Catálogo':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
+      h+='<tr class="dep"><td colspan="4">'+(dp<0?'Sin Categoría En La Página':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
     if(c>=0)h+='<tr class="cat"><td colspan="4">'+CATS[c]+'<span class="cc">'+g.length+' Artículos · '+hg+' Marcados</span></td></tr>';
     g.forEach(function(z){var x=z[0],sku=x.s,rs=resaltar(x);n++;
       h+='<tr data-s="'+sku+'" class="fila'+(HH[sku]?" hecho":"")+(rs?" ent":"")+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
@@ -2801,7 +2809,8 @@ async function subirPrec(file){
     try{localStorage.setItem(CKEY,JSON.stringify(PC))}catch(e){}
     CQ="";CENT=false;$id("c-q").value="";pintarPrec();
     var np=r.items.filter(function(x){return x.n!=null||x.a!=null||x.p!=null}).length;
-    var pb="Listo: "+r.items.length+" Artículos Leídos · "+cConFoto()+" Con Imagen · "+cRes()+" Con Descuento Entero Resaltado."+(np<r.items.length?" "+(r.items.length-np)+" Sin Precio Leído (Si Faltan Precios, Mándale El PDF A Claude).":"");
+    var fu=fueraTot(r.items.map(function(x){return x.s}));
+    var pb="Listo: "+r.items.length+" Artículos Leídos · "+cItems().length+" En Artículos Totales · "+cConFoto()+" Con Imagen · "+cRes()+" Con Descuento Entero Resaltado."+avisoTot(fu)+(np<r.items.length?" "+(r.items.length-np)+" Sin Precio Leído (Si Faltan Precios, Mándale El PDF A Claude).":"");
     cmsg(pb+" Publicando Para Todos…","ok");
     if(fbAuth.currentUser){try{await fbSet("precios",{f:PC.f,a:PC.a,t:PC.t,i:PC.i});cmsg(pb+" Publicado: Se Ve Al Instante En Todos Los Dispositivos.","ok")}catch(e2){cmsg(pb+textoPublicar(e2),"err")}}
     else{cmsg(pb+" Solo En Este Dispositivo: Toca «Entrar Con Google» Y Vuelve A Subirlo Para Publicarlo.","ok")}
@@ -2822,6 +2831,58 @@ $id("c-filas").addEventListener("change",function(e){var t=e.target;if(!t.classL
   cSub()});
 $id("precios").addEventListener("dragover",function(e){e.preventDefault()});
 $id("precios").addEventListener("drop",function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)subirPrec(f)});
+/* ===== Artículos Totales (Solo Se Muestran SKU Que Estén Aquí) ===== */
+var TT=null,TOT=null,TKEY="articulos-totales";
+function ponerTot(o){if(!o||!o.s)return;TT=o;TOT={};String(o.s).split(",").forEach(function(s){if(s)TOT[s]=1});pintarTot()}
+try{ponerTot(JSON.parse(localStorage.getItem(TKEY)||"null"))}catch(e){}
+function enTot(s){return !TOT||!!TOT[s]}
+function pItems(){return PD?PD.i.filter(function(x){return enTot(x[0])}):[]}
+function cItems(){return PC?PC.i.filter(function(x){return enTot(x.s)}):[]}
+function fueraTot(skus){return TOT?skus.filter(function(s){return !TOT[s]}).length:-1}
+function avisoTot(n){return n<0?" Aún No Hay Artículos Totales: Se Muestran Todos (Toca «Subir Artículos Totales»).":(n?" "+n+" No Están En Artículos Totales Y No Se Muestran.":"")}
+function pintarTot(){document.querySelectorAll("[data-tot-et]").forEach(function(e){
+  if(TT){e.className="p-tot";e.innerHTML="Artículos Totales: <b>"+Object.keys(TOT).length.toLocaleString("es-MX")+" SKU</b>"+(TT.f?" · Del "+esc(TT.f):"")+" · Solo Se Muestran Los Que Estén Ahí."}
+  else{e.className="p-tot falta";e.textContent="Falta Subir Artículos Totales: Por Ahora Se Muestran Todos Los SKU."}})}
+function tmsg(h,t){if(PREC)cmsg(h,t);else pmsg(h,t)}
+async function leerPDFTot(P,buf){
+  var doc=await P.getDocument({data:new Uint8Array(buf)}).promise,s={},n=0,fecha="",hs=null,p;
+  for(p=1;p<=doc.numPages;p++){
+    if(p%10===1)tmsg("Leyendo Artículos Totales… Página "+p+" De "+doc.numPages);
+    var tc=await (await doc.getPage(p)).getTextContent(),lines={};
+    tc.items.forEach(function(it){var z=String(it.str||"").trim();if(!z)return;var y=Math.round(it.transform[5]/3);(lines[y]=lines[y]||[]).push({s:z,x:it.transform[4]})});
+    Object.keys(lines).forEach(function(k){var t=lines[k].sort(function(a,b){return a.x-b.x});
+      t.forEach(function(z){if(normT(z.s)==="sku")hs=z.x});
+      if(!fecha){var tx=t.map(function(z){return z.s}).join(" "),mf=/printed:?\s*(\d{1,2})\/(\d{1,2})\/(\d{4})/i.exec(tx);if(mf)fecha=("0"+mf[2]).slice(-2)+"/"+("0"+mf[1]).slice(-2)+"/"+mf[3]}
+      var m=/^(\d{4,9})(\s|$)/.exec(t[0].s);
+      if(!m||(hs!=null&&Math.abs(t[0].x-hs)>45))return;
+      var k9=("000000000"+m[1]).slice(-9);if(!s[k9]){s[k9]=1;n++}})}
+  return {s:s,n:n,fecha:fecha}}
+function leerLibroTot(X,buf){
+  var wb=X.read(buf,{type:"array",raw:true}),s={},n=0;
+  wb.SheetNames.forEach(function(nm){var rows=X.utils.sheet_to_json(wb.Sheets[nm],{header:1,raw:true,defval:""}),ci=-1,i,j;
+    for(i=0;i<rows.length&&i<40&&ci<0;i++)for(j=0;j<rows[i].length;j++)if(normT(rows[i][j])==="sku"){ci=j;break}
+    if(ci<0)return;
+    for(i=0;i<rows.length;i++){var v=rows[i][ci],k=(typeof v==="number")?String(Math.round(v)):String(v==null?"":v).trim();
+      if(!/^\d{1,9}$/.test(k))continue;k=("000000000"+k).slice(-9);if(!s[k]){s[k]=1;n++}}});
+  return {s:s,n:n,fecha:""}}
+async function subirTot(file){
+  var esPdf=/\.pdf$/i.test(file.name||"")||file.type==="application/pdf";
+  tmsg("Leyendo Artículos Totales…");
+  try{
+    var buf=await file.arrayBuffer(),r;
+    if(esPdf){var P=await cargarPDF();r=await leerPDFTot(P,buf)}else{var X=await cargarXLSX();r=leerLibroTot(X,buf)}
+    if(r.n<50){tmsg("No Parece El Informe De Artículos Totales (Solo Encontré "+r.n+" SKU). Revisa El Archivo.","err");return}
+    var o={f:r.fecha||new Date().toLocaleDateString("es-MX",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"America/Mexico_City"}),a:file.name,t:new Date().toISOString(),s:Object.keys(r.s).sort().join(",")};
+    ponerTot(o);try{localStorage.setItem(TKEY,JSON.stringify(o))}catch(e){}
+    if(PREC)pintarPrec();else pintarPromo();
+    var pb="Listo: "+r.n.toLocaleString("es-MX")+" SKU En Artículos Totales. Finalización Y Cambio De Precios Ya Solo Muestran Esos.";
+    tmsg(pb+" Publicando Para Todos…","ok");
+    if(fbAuth.currentUser){try{await fbSet("totales",o);tmsg(pb+" Publicado: Se Ve Al Instante En Todos Los Dispositivos.","ok")}catch(e2){tmsg(pb+textoPublicar(e2),"err")}}
+    else tmsg(pb+" Solo En Este Dispositivo: Toca «Entrar Con Google» Y Vuelve A Subirlo Para Publicarlo.","ok")
+  }catch(err){var em=err&&err.message;tmsg(em==="xl"||em==="pdf"?"No Se Pudo Cargar El Lector. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea El PDF De Artículos Totales.","err")}}
+document.querySelectorAll("[data-tot]").forEach(function(b){b.onclick=function(){var f=$id("t-file");f.value="";f.click()}});
+$id("t-file").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)subirTot(f)});
+pintarTot();
 /* ===== Firebase (Para Que Se Vea En Todos Los Dispositivos) ===== */
 var FB_CFG={apiKey:"AIzaSyDYYzsFDaBvcp356FUlDjphP2jyYa1_Rz4",authDomain:"tienda-106.firebaseapp.com",databaseURL:"https://tienda-106-default-rtdb.firebaseio.com",projectId:"tienda-106",storageBucket:"tienda-106.firebasestorage.app",messagingSenderId:"221177568260",appId:"1:221177568260:web:1eb191d5f3880982482951"};
 /* Firebase carga en paralelo (defer): la página se dibuja sin esperarlo y se sincroniza cuando llega */
@@ -2933,6 +2994,9 @@ $id("ex-file").addEventListener("change",function(e){var f=e.target.files&&e.tar
     var hv={};if(PD&&PD.h&&PD.f===pn.f)hv=PD.h;
     PD={f:pn.f,a:pn.a,t:pn.t,i:pn.i,h:hv};try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(e){}
     if(PROMO)pintarPromo();else if(INICIO)pintar(false)}
+  var tn=await fbGet("totales");
+  if(tn&&tn.s&&(!TT||String(tn.t)>String(TT.t||""))){ponerTot(tn);try{localStorage.setItem(TKEY,JSON.stringify(tn))}catch(e){}
+    if(PROMO)pintarPromo();else if(PREC)pintarPrec();else if(INICIO)pintar(false)}
   var cn=await fbGet("precios");
   if(cn&&cn.i&&esDeHoy(cn.t)&&(!PC||String(cn.t)>String(PC.t||""))){
     var hc={};if(PC&&PC.h&&PC.f===cn.f)hc=PC.h;
