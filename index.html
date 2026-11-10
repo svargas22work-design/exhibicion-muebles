@@ -122,6 +122,7 @@ body.no-mueb .datos{grid-template-columns:minmax(0,1fr);max-width:50%}
 /* ---------- Barra de existencias ---------- */
 .ex-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:-2px 0 14px}
 .ex-bar .fecha{margin:0}
+#ex-llave{display:inline-flex;align-items:center;gap:6px}#ex-llave[hidden]{display:none}.ico-persona{width:16px;height:16px;fill:currentColor;flex:none}
 .ex-btn{font:600 13px var(--sans);padding:8px 16px;min-height:40px;border:1.5px solid var(--rojo);border-radius:99px;background:var(--rojo);color:#fff;cursor:pointer;transition:transform .15s var(--suave),box-shadow .2s,background .2s}
 .ex-btn:hover{opacity:.88}
 .ex-btn.sec{background:var(--blanco);color:var(--marino);border-color:var(--linea)}
@@ -2597,7 +2598,7 @@ document.addEventListener("DOMContentLoaded",function(){
   try{if(window.firebase&&firebase.auth&&firebase.database){firebase.initializeApp(FB_CFG);fbAuth=firebase.auth();fbDb=firebase.database();fbOk=true;
     fbAuth.onAuthStateChanged(function(user){pintarLlave(user)})}}catch(e){}
   _fbRes(fbOk)});
-function pintarLlave(user){esAdmin=!!user;var b=$id("ex-llave");b.hidden=false;b.textContent=user?"✓ "+(user.displayName||user.email).split(" ")[0]+" (Salir)":"Entrar Con Google";pintar(false)}
+function pintarLlave(user){esAdmin=!!user;var b=$id("ex-llave");b.hidden=false;if(user){var nm=String(user.displayName||user.email).split(" ")[0].replace(/[<>&"]/g,"");b.innerHTML='<svg class="ico-persona" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c.8-4 4-6.5 8-6.5s7.2 2.5 8 6.5z"/></svg>'+nm+" (Salir)"}else b.textContent="Entrar Con Google";pintar(false)}
 $id("ex-llave").onclick=function(){
   if(!fbOk){exmsg("Aún Conectando Con Google. Intenta De Nuevo En Un Momento.","err");return}
   if(fbAuth.currentUser){if(confirm("¿Cerrar Sesión De Google En Este Dispositivo? Lo Que Subas Ya No Se Publicará Para Todos."))fbAuth.signOut();return}
