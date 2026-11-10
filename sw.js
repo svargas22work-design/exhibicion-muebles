@@ -1,6 +1,6 @@
 /* Service worker: la página siempre se pide primero a la red (para ver cambios al instante)
    y, si no hay conexión, se abre la última copia guardada. Las miniaturas se guardan al verlas. */
-const V="v2",PAG="pagina-"+V,FOT="fotos-"+V;
+const V="v3",PAG="pagina-"+V,FOT="fotos-"+V;
 self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(PAG).then(c=>c.addAll(["./","icon-192.png"])).catch(()=>{}))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n!==PAG&&n!==FOT).map(n=>caches.delete(n)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{
