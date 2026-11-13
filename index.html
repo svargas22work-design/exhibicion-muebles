@@ -615,7 +615,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
   <p class="esc-txt" id="esc-txt">Apunta Al Código De Barras O QR</p>
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 13/11 · 01:30</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 13/11 · 01:35</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -8830,12 +8830,12 @@ async function subirImg(file){
     var lineas=lineasDe(r.data).map(function(l){return {words:(l.words||[]).map(function(z){return {text:z.text,x0:z.bbox.x0,x1:z.bbox.x1}})}});
     var rows=leerLineasOCR(lineas,c.width);
     if(!rows.length){imsg("No Encontré Ningún SKU En La Imagen. Prueba Con Una Foto Más De Cerca, Derecha Y Con Buena Luz.","err");return}
-    var nuevos=0,act=0;
-    rows.forEach(function(o){var ex=null;ID.forEach(function(z){if(z.s===o.s)ex=z});
-      if(ex){act++;if(o.q!=null)ex.q=o.q;if(o.d&&!ex.d)ex.d=o.d}else{nuevos++;ID.push({s:o.s,q:o.q,d:o.d,u:o.u,h:0})}});
+    /* Un Pedido Nuevo Reemplaza Al Anterior (Solo Si La Lectura Salió Bien) */
+    var habia=ID.length;
+    ID=rows.map(function(o){return {s:o.s,q:o.q,d:o.d,u:o.u,h:0}});
     guardarImg();
     var sq=rows.filter(function(o){return o.q==null}).length,sc=rows.filter(function(o){return o.u}).length;
-    imsg("Leí "+rows.length+" Artículos ("+nuevos+" Nuevos"+(act?", "+act+" Ya Estaban":"")+")."+(sq?" "+sq+" Sin Cantidad: Escríbela Tú.":"")+(sc?" "+sc+" No Están En El Catálogo: Revisa La Descripción.":"")+" Revisa Los Datos Antes De Usarlos.","ok");
+    imsg("Leí "+rows.length+" Artículos."+(habia?" Se Reemplazó El Pedido Anterior.":"")+(sq?" "+sq+" Sin Cantidad: Escríbela Tú.":"")+(sc?" "+sc+" No Están En El Catálogo: Revisa La Descripción.":"")+" Revisa Los Datos Antes De Usarlos.","ok");
     pintarImg()
   }catch(e){
     imsg(/tess/.test(String(e&&e.message))||!window.Tesseract?"No Pude Descargar El Lector De Texto. Revisa Tu Internet E Inténtalo De Nuevo.":"No Pude Leer La Imagen. Prueba Con Otra Foto.","err")
@@ -8845,7 +8845,7 @@ function pintarImg(){
   if(OJO.i)filas=filas.filter(function(f){return !f.z.h});
   var fu=ID.filter(function(z){return z.u}).length;
   $id("i-sub").textContent=ID.length?(ID.length+" Artículos · "+ID.filter(function(z){return z.h}).length+" Surtidos"+(fu?" · "+fu+" Fuera Del Catálogo":"")):"Sube Una Foto O Captura Del Pedido Y Detecto SKU, Cantidad Y Descripción.";
-  $id("i-copiar").hidden=!ID.length;$id("i-borrar").hidden=!ID.length;
+  $id("i-copiar").hidden=!ID.length;$id("i-borrar").hidden=!ID.length;$id("i-subir").textContent=ID.length?"Subir Otro Pedido":"Subir Imagen";
   filas.sort(function(a,b){var ga=a.c<0?1e3:CDEP[a.c]*100+a.c,gb=b.c<0?1e3:CDEP[b.c]*100+b.c;return ga-gb||a.i-b.i});
   var depAnt=null,catAnt=null;
   filas.forEach(function(f){
