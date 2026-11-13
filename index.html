@@ -346,6 +346,18 @@ body.en-img .modo,body.en-img .datos,body.en-img .progreso,body.en-img .pct,body
 .p-tabla tr.pdesc.otros td{color:var(--gris)}
 .p-tabla tr.pdesc .cc{float:right;font-size:12px;font-weight:500;opacity:.85}
 .im-tabla td.ck{text-align:center}
+/* ---------- Cantidad De Stoppers (Descuentos Enteros) ---------- */
+.stop{background:var(--blanco);border:1px solid var(--linea);border-radius:18px;padding:14px 16px 12px;margin:0 0 14px;box-shadow:var(--sombra);position:relative;overflow:hidden}
+.stop::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--naranja)}
+.stop-cab{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 10px}
+.stop-t{font:600 14px var(--sans);color:var(--gris)}
+.stop-n{font:700 34px/1 var(--sans);color:var(--naranja-texto);font-variant-numeric:tabular-nums}
+.stop-ch{display:flex;flex-wrap:wrap;gap:8px}
+.stop-ch button{font:600 14px var(--sans);padding:8px 14px;min-height:40px;border:1.5px solid var(--pex-btn-borde);border-radius:99px;background:var(--blanco);color:var(--tinta);cursor:pointer;font-variant-numeric:tabular-nums}
+.stop-ch button b{font-weight:700;color:var(--naranja-texto);margin-left:6px}
+.stop-ch button[aria-pressed="true"]{background:var(--naranja);border-color:var(--naranja);color:#fff}
+.stop-ch button[aria-pressed="true"] b{color:#fff}
+.stop-ch button:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
 
 /* ---------- Cambio De Precios ---------- */
 .prec{display:none}
@@ -551,6 +563,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
     <p class="p-sub" id="c-sub"></p>
     <p class="p-tot" data-tot-et="1"></p>
     <p class="p-msg" id="c-msg" role="status" aria-live="polite" hidden></p>
+    <div class="stop" id="c-stop" hidden></div>
     <div class="p-bus"><input id="c-q" type="search" enterkeyhint="search" placeholder="Buscar SKU O Artículo" aria-label="Buscar SKU O Artículo" autocomplete="off"></div>
     <div class="p-scroll">
       <table class="p-tabla">
@@ -602,7 +615,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
   <p class="esc-txt" id="esc-txt">Apunta Al Código De Barras O QR</p>
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 13/11 · 01:30</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 13/11 · 01:25</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -8292,7 +8305,7 @@ $id("p-filas").addEventListener("change",function(e){var t=e.target;if(!t.classL
 $id("promo").addEventListener("dragover",function(e){e.preventDefault()});
 $id("promo").addEventListener("drop",function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)subirPromo(f)});
 /* ===== Cambio De Precios ===== */
-var PC=null,CKEY="precios-dia",CQ="",CENT=false;
+var PC=null,CKEY="precios-dia",CQ="",CENT=false,CPCT=null;
 function aLista(v){return Array.isArray(v)?v.filter(Boolean):Object.keys(v||{}).sort(function(a,b){return a-b}).map(function(k){return v[k]}).filter(Boolean)}
 try{PC=JSON.parse(localStorage.getItem(CKEY)||"null");if(!PC||!PC.i||!esDeHoy(PC.t))PC=null;else PC.i=aLista(PC.i)}catch(e){PC=null}
 function aNum(s){if(typeof s==="number")return s;var t=String(s==null?"":s).replace(/[$\s]/g,"");
@@ -8421,10 +8434,12 @@ function pintarPrec(){
   var its=cItems(),q2=normT(CQ),h="",n=0,HH=(PC&&PC.h)||{},nr=cRes();
   if(PC)cSub();else $id("c-sub").textContent="";
   var bt=$id("c-ent");bt.hidden=!nr;if(!nr)CENT=false;bt.setAttribute("aria-pressed",CENT);bt.textContent="Solo Descuentos Enteros ("+nr+")";
+  pintarStop(its);
   var grupos={},orden=[];
   its.forEach(function(x){
     var sku=x.s,r=IDX[sku],desc=r?r[1]:titulo(x.d||"Sin Descripción");
     if(CENT&&!resaltar(x))return;
+    if(CPCT!=null&&!(esEntero(x)&&Math.round(x.p)===CPCT))return;
     if(OJO.c&&HH[sku])return;
     if(q2&&normT(desc).indexOf(q2)<0&&sku.indexOf(q2)<0&&!(/^\d+$/.test(q2)&&sinCeros(sku).indexOf(sinCeros(q2))>-1))return;
     var c=catDe(r,desc);if(!grupos[c]){grupos[c]=[];orden.push(c)}grupos[c].push([x,desc])});
@@ -8450,8 +8465,19 @@ function pintarPrec(){
         +'<span class="sku">'+sku+'</span></td><td class="d"><span class="t">'+esc(z[1])+'</span><br>'+etiqueta(x)
         +(rs?'<br><span class="ent-tag">Descuento Entero · '+pctTxt(x.p)+'</span>':'')+'</td>'
         +'<td class="q"><input class="chk" type="checkbox" data-s="'+sku+'" aria-label="Marcar '+sku+'"'+(HH[sku]?" checked":"")+'></td></tr>'})})});
-  if(!n)h='<tr class="vacia"><td colspan="4">'+(PC&&OJO.c&&!CQ&&!CENT?'Ya No Hay Pendientes. Toca El Ojito Para Mostrar Todos.':PC?'Sin Resultados'+(CQ?' Para «'+esc(CQ)+'»':'')+'.':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Cambio De Precios.')+'</td></tr>';
+  if(!n)h='<tr class="vacia"><td colspan="4">'+(PC&&OJO.c&&!CQ&&!CENT&&CPCT==null?'Ya No Hay Pendientes. Toca El Ojito Para Mostrar Todos.':PC?'Sin Resultados'+(CQ?' Para «'+esc(CQ)+'»':'')+'.':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Cambio De Precios.')+'</td></tr>';
   $id("c-filas").innerHTML=h}
+function pintarStop(its){
+  var el=$id("c-stop"),ct={},ks=[],tot=0;
+  its.forEach(function(x){if(!esEntero(x))return;var k=Math.round(x.p);if(!ct[k]){ct[k]=0;ks.push(k)}ct[k]++;tot++});
+  if(CPCT!=null&&!ct[CPCT])CPCT=null;
+  el.hidden=!tot;if(!tot){el.innerHTML="";return}
+  ks.sort(function(a,b){return b-a});
+  var h='<div class="stop-cab"><span class="stop-t">Cantidad De Stoppers</span><span class="stop-n">'+tot+'</span></div><div class="stop-ch" role="group" aria-label="Filtrar Por Descuento">'
+    +'<button type="button" data-pc="" aria-pressed="'+(CPCT==null)+'">Todos<b>'+its.length+'</b></button>';
+  ks.forEach(function(k){h+='<button type="button" data-pc="'+k+'" aria-pressed="'+(CPCT===k)+'">'+k+' %<b>'+ct[k]+'</b></button>'});
+  el.innerHTML=h+'</div>'}
+$id("c-stop").addEventListener("click",function(e){var b=e.target.closest("button[data-pc]");if(!b)return;var v=b.getAttribute("data-pc");CPCT=v===""?null:+v;pintarPrec()});
 function abrirPrec(){PREC=true;PROMO=false;IMG=false;INICIO=false;pintar(true);window.scrollTo(0,0)}
 async function subirPrec(file){
   var esPdf=/\.pdf$/i.test(file.name||"")||file.type==="application/pdf";
@@ -8464,7 +8490,7 @@ async function subirPrec(file){
     var hv={};if(PC&&PC.h&&PC.f&&PC.f===r.fecha){r.items.forEach(function(x){if(PC.h[x.s])hv[x.s]=1})}
     PC={f:r.fecha,a:file.name,t:new Date().toISOString(),i:r.items,h:hv};
     try{localStorage.setItem(CKEY,JSON.stringify(PC))}catch(e){}
-    CQ="";CENT=false;$id("c-q").value="";pintarPrec();
+    CQ="";CENT=false;CPCT=null;$id("c-q").value="";pintarPrec();
     var np=r.items.filter(function(x){return x.n!=null||x.a!=null||x.p!=null}).length;
     var fu=fueraTot(r.items.map(function(x){return x.s}));
     var pb="Listo: "+r.items.length+" Artículos Leídos · "+cItems().length+" En Artículos Totales · "+cConFoto()+" Con Imagen · "+cRes()+" Con Descuento Entero Resaltado."+avisoTot(fu)+(np<r.items.length?" "+(r.items.length-np)+" Sin Precio Leído (Si Faltan Precios, Mándale El PDF A Claude).":"");
@@ -8757,7 +8783,7 @@ try{ID=JSON.parse(localStorage.getItem(IKEY)||"[]")||[]}catch(e){ID=[]}
 function guardarImg(){try{localStorage.setItem(IKEY,JSON.stringify(ID))}catch(e){}}
 function tarjetaImg(){
   var hc=ID.filter(function(z){return z.h}).length;
-  return '<button type="button" class="ini-card ini-img" data-img="1"><span class="logos-ped" aria-hidden="true"><img src="logo-didi.png" alt="" width="42" height="34"><img src="logo-ubereats.png" alt="" width="45" height="34"></span><span class="ini-n">Realizar Pedido</span><span class="ini-c">'
+  return '<button type="button" class="ini-card ini-img" data-img="1"><span class="ini-n">Realizar Pedido</span><span class="ini-c">'
     +(ID.length?ID.length+' Artículos En El Pedido · '+hc+' Surtidos':'Sube Una Foto O Captura Del Pedido')+'</span><span class="ini-s">Detecta SKU, Cantidad Y Descripción</span></button>'}
 function imsg(html,tipo){var m=$id("i-msg");m.hidden=!html;m.className="p-msg"+(tipo?" "+tipo:"");m.innerHTML=html||""}
 function cargarTess(){if(window.Tesseract)return Promise.resolve(window.Tesseract);if(tsP)return tsP;
