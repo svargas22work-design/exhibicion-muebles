@@ -231,6 +231,11 @@ tr.pex .th{border-color:var(--pex-th)}
 body.en-inicio .inicio{display:block;animation:aparece .5s 1.3s both}
 body.en-inicio .no-inicio,body.en-inicio .scroll{display:none}
 .ini-txt{color:var(--gris);font-size:14px;margin:4px 0 14px}
+.ini-tot{margin:-8px 0 28px;padding:16px 18px;border:1px dashed var(--linea);border-radius:18px}
+.ini-tot .p-tot{margin:0 0 12px}
+.ini-tot-b{display:flex;flex-wrap:wrap;gap:8px 10px}
+.ini-tot .p-msg{margin:12px 0 0}
+body.dep-todo #ex-subir{display:none}
 .ini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-bottom:28px}
 .ini-card{--c:var(--rojo);position:relative;overflow:hidden;display:flex;flex-direction:column;gap:5px;text-align:left;font-family:var(--sans);padding:22px 18px 18px;border:1px solid var(--linea);border-radius:18px;background:var(--blanco);color:var(--tinta);cursor:pointer;box-shadow:var(--sombra);
   transition:transform .25s var(--suave),box-shadow .25s,border-color .25s}
@@ -8149,10 +8154,14 @@ function pintarInicio(){var el=document.getElementById("inicio"),h='<p class="in
   DEPTOS.forEach(function(dn,di){var its=D.filter(function(r){return CDEP[r[3]]===di});if(!its.length)return;
     var subs=CATS.filter(function(c,ci){return CDEP[ci]===di&&D.some(function(r){return r[3]===ci})});
     h+='<button type="button" class="ini-card" data-d="'+di+'"><span class="ini-n">'+dn+'</span><span class="ini-c">'+its.length+' Artículos · '+subs.length+' Subcategorías</span><span class="ini-s">'+subs.slice(0,4).join(" · ")+(subs.length>4?" …":"")+'</span></button>'});
-  h+='<button type="button" class="ini-card ini-todo" data-d="-1"><span class="ini-n">Ver Todo</span><span class="ini-c">'+D.length+' Artículos</span></button>'+tarjetaImg()+'</div>';
-  el.innerHTML=h}
+  h+='<button type="button" class="ini-card ini-todo" data-d="-1"><span class="ini-n">Ver Todo</span><span class="ini-c">'+D.length+' Artículos</span></button>'+tarjetaImg()+'</div>'+tarjetaTot();
+  el.innerHTML=h;pintarTot();pintarTMsg()}
+var TMSG=null;
+function tarjetaTot(){var u=(typeof fbAuth!=="undefined"&&fbAuth&&fbAuth.currentUser)||null,nm=u?String(u.displayName||u.email||"").split(" ")[0].replace(/[<>&"]/g,"")+" (Salir)":"Entrar Con Google";
+  return '<div class="ini-tot"><p class="p-tot" data-tot-et="1"></p><div class="ini-tot-b"><button type="button" class="ex-btn" id="t-subir">Subir Artículos Totales</button><button type="button" class="ex-btn sec" id="t-llave">'+nm+'</button></div><p class="p-msg" id="t-msg" role="status" aria-live="polite" hidden></p></div>'}
+function pintarTMsg(){var m=$id("t-msg");if(!m)return;m.hidden=!TMSG;m.className="p-msg"+(TMSG&&TMSG.t?" "+TMSG.t:"");m.innerHTML=TMSG?TMSG.h:""}
 function irInicio(){PROMO=false;PREC=false;IMG=false;INICIO=true;porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);document.getElementById("f-todos").setAttribute("aria-pressed",true);depSel=-1;subSel=-1;pintar(true);window.scrollTo({top:0,behavior:quieto?"auto":"smooth"})}
-document.getElementById("inicio").addEventListener("click",function(e){var b=e.target.closest(".ini-card");if(!b)return;if(b.hasAttribute("data-img")){abrirImg();return}if(b.hasAttribute("data-promo")){abrirPromo();return}if(b.hasAttribute("data-prec")){abrirPrec();return}INICIO=false;depSel=+b.getAttribute("data-d");subSel=-1;if(depSel!==0){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);}pintar(true);
+document.getElementById("inicio").addEventListener("click",function(e){if(e.target.closest("#t-subir")){var tf=$id("t-file");tf.value="";tf.click();return}if(e.target.closest("#t-llave")){$id("ex-llave").click();return}var b=e.target.closest(".ini-card");if(!b)return;if(b.hasAttribute("data-img")){abrirImg();return}if(b.hasAttribute("data-promo")){abrirPromo();return}if(b.hasAttribute("data-prec")){abrirPrec();return}INICIO=false;depSel=+b.getAttribute("data-d");subSel=-1;if(depSel!==0){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);}pintar(true);
   var t=document.getElementById("subs");if(t)setTimeout(function(){t.scrollIntoView({behavior:quieto?"auto":"smooth",block:"start"})},60)});
 (function(){var m="";try{m=localStorage.getItem("modo-rev")||""}catch(e){}if(m!=="toma"&&m!=="precio")m="";MODO=m;document.body.classList.toggle("sin-rev",!m);if(m){KEY=SETS[m].key;hechos=SETS[m].h}document.getElementById("r-toma").setAttribute("aria-pressed",m==="toma");document.getElementById("r-precio").setAttribute("aria-pressed",m==="precio");document.getElementById("rev-et").textContent=m==="precio"?"Precios Revisados":"Toma Uno Revisados"})();
 /* ===== Finalización De Promociones Del Día ===== */
@@ -8531,9 +8540,9 @@ function fueraTot(skus){return TOT?skus.filter(function(s){return !TOT[s]}).leng
 function avisoTot(n){return n<0?" Aún No Hay Artículos Totales: Se Muestran Todos (Toca «Subir Artículos Totales»).":(n?" "+n+" No Están En Artículos Totales Y No Se Muestran.":"")}
 function pintarTot(){document.querySelectorAll("[data-tot-et]").forEach(function(e){
   if(TT){e.className="p-tot";e.innerHTML="Artículos Totales: <b>"+Object.keys(TOT).length.toLocaleString("es-MX")+" SKU</b>"+(TT.f?" · Del "+esc(TT.f):"")+" · Solo Se Muestran Los Que Estén Ahí."}
-  else{e.className="p-tot falta";e.textContent="Falta Subir Artículos Totales En «Ver Todo»: Por Ahora Se Muestran Todos Los SKU."}});
-  var ft=$id("fecha-tot");if(ft)ft.textContent=TT?"Artículos Totales Del "+(TT.f||"")+" · "+Object.keys(TOT).length.toLocaleString("es-MX")+" SKU":"Sube Aquí El PDF De Artículos Totales (Papelería Y Tecnología)"}
-function tmsg(h,t){exmsg(h,t)}
+  else{e.className="p-tot falta";e.textContent="Falta Subir Artículos Totales (Botón En El Inicio): Por Ahora Se Muestran Todos Los SKU."}});
+  var ft=$id("fecha-tot");if(ft)ft.textContent=TT?"Artículos Totales Del "+(TT.f||"")+" · "+Object.keys(TOT).length.toLocaleString("es-MX")+" SKU":"Artículos Totales Se Sube En La Pantalla De Inicio"}
+function tmsg(h,t){exmsg(h,t);TMSG=h?{h:h,t:t}:null;pintarTMsg()}
 /* Estatus: "D" = Descontinuado, "A" = Activo (solo celdas que sean exactamente esa palabra) */
 function estTot(cells){var r="";cells.forEach(function(c){var z=normT(c);if(/^(descontinuad[oa]|discontinued|discountinued|discontinuado)$/.test(z))r="D";else if(!r&&/^(activ[eo]|active)$/.test(z))r="A"});return r}
 async function leerPDFTot(P,buf){
@@ -8601,7 +8610,7 @@ function textoPublicar(err){return " No Se Publicó Para Todos ("+(err&&err.mess
 
 /* ===== Subir Excel De Existencias (Muebles) ===== */
 var EKEY="existencias-local";
-function exmsg(html,tipo){var m=$id("ex-msg");m.hidden=!html;m.className="ex-msg"+(tipo?" "+tipo:"");m.innerHTML=html||""}
+function exmsg(html,tipo){var m=$id("ex-msg");m.hidden=!html;m.className="ex-msg"+(tipo?" "+tipo:"");m.innerHTML=html||"";if(INICIO){TMSG=html?{h:html,t:tipo}:null;pintarTMsg()}}
 function leerExistencias(X,buf){
   var wb=X.read(buf,{type:"array",cellDates:true,raw:true}),cant={},dsc={},n=0;
   wb.SheetNames.forEach(function(nm){
