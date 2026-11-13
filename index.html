@@ -231,6 +231,10 @@ tr.pex .th{border-color:var(--pex-th)}
 body.en-inicio .inicio{display:block;animation:aparece .5s 1.3s both}
 body.en-inicio .no-inicio,body.en-inicio .scroll{display:none}
 .ini-txt{color:var(--gris);font-size:14px;margin:4px 0 14px}
+.cta{display:none;position:absolute;right:16px;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:1.5px solid var(--linea);background:var(--fondo);color:var(--tinta);font-size:24px;line-height:1;align-items:center;justify-content:center;padding:0;cursor:pointer;overflow:hidden}
+.cta img{width:100%;height:100%;object-fit:cover;display:block}
+.cta svg{width:26px;height:26px;fill:currentColor}
+body.en-inicio .cta{display:flex}
 .ini-tot{margin:-8px 0 28px;padding:16px 18px;border:1px dashed var(--linea);border-radius:18px}
 .ini-tot .p-tot{margin:0 0 12px}
 .ini-tot-b{display:flex;flex-wrap:wrap;gap:8px 10px}
@@ -513,7 +517,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
     <h1>Tienda 106</h1>
   </div>
   <div class="datos">
-    <div class="caja"><div class="et">Artículos</div><div class="cif" id="tot">0</div></div>
+    <div class="caja"><div class="et">Artículos</div><div class="cif" id="tot">0</div><button type="button" class="cta" id="cta" aria-label="Cuenta De Google: Sin Sesión" title="Cuenta De Google: Sin Sesión">🚫</button></div>
     <div class="caja ult solo-mueb"><div class="et">Última Pieza</div><div class="cif" id="ult">0</div></div>
     <div class="caja solo-rev"><div class="et" id="rev-et">Revisados</div><div class="cif"><span id="rev">0</span><span class="de" id="rev-de"></span></div></div>
   </div>
@@ -8157,11 +8161,10 @@ function pintarInicio(){var el=document.getElementById("inicio"),h='<p class="in
   h+='<button type="button" class="ini-card ini-todo" data-d="-1"><span class="ini-n">Ver Todo</span><span class="ini-c">'+D.length+' Artículos</span></button>'+tarjetaImg()+'</div>'+tarjetaTot();
   el.innerHTML=h;pintarTot();pintarTMsg()}
 var TMSG=null;
-function tarjetaTot(){var u=(typeof fbAuth!=="undefined"&&fbAuth&&fbAuth.currentUser)||null,nm=u?String(u.displayName||u.email||"").split(" ")[0].replace(/[<>&"]/g,"")+" (Salir)":"Entrar Con Google";
-  return '<div class="ini-tot"><p class="p-tot" data-tot-et="1"></p><div class="ini-tot-b"><button type="button" class="ex-btn" id="t-subir">Subir Artículos Totales</button><button type="button" class="ex-btn sec" id="t-llave">'+nm+'</button></div><p class="p-msg" id="t-msg" role="status" aria-live="polite" hidden></p></div>'}
+function tarjetaTot(){return '<div class="ini-tot"><p class="p-tot" data-tot-et="1"></p><div class="ini-tot-b"><button type="button" class="ex-btn" id="t-subir">Subir Artículos Totales</button></div><p class="p-msg" id="t-msg" role="status" aria-live="polite" hidden></p></div>'}
 function pintarTMsg(){var m=$id("t-msg");if(!m)return;m.hidden=!TMSG;m.className="p-msg"+(TMSG&&TMSG.t?" "+TMSG.t:"");m.innerHTML=TMSG?TMSG.h:""}
 function irInicio(){PROMO=false;PREC=false;IMG=false;INICIO=true;porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);document.getElementById("f-todos").setAttribute("aria-pressed",true);depSel=-1;subSel=-1;pintar(true);window.scrollTo({top:0,behavior:quieto?"auto":"smooth"})}
-document.getElementById("inicio").addEventListener("click",function(e){if(e.target.closest("#t-subir")){var tf=$id("t-file");tf.value="";tf.click();return}if(e.target.closest("#t-llave")){$id("ex-llave").click();return}var b=e.target.closest(".ini-card");if(!b)return;if(b.hasAttribute("data-img")){abrirImg();return}if(b.hasAttribute("data-promo")){abrirPromo();return}if(b.hasAttribute("data-prec")){abrirPrec();return}INICIO=false;depSel=+b.getAttribute("data-d");subSel=-1;if(depSel!==0){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);}pintar(true);
+document.getElementById("inicio").addEventListener("click",function(e){if(e.target.closest("#t-subir")){var tf=$id("t-file");tf.value="";tf.click();return}var b=e.target.closest(".ini-card");if(!b)return;if(b.hasAttribute("data-img")){abrirImg();return}if(b.hasAttribute("data-promo")){abrirPromo();return}if(b.hasAttribute("data-prec")){abrirPrec();return}INICIO=false;depSel=+b.getAttribute("data-d");subSel=-1;if(depSel!==0){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);}pintar(true);
   var t=document.getElementById("subs");if(t)setTimeout(function(){t.scrollIntoView({behavior:quieto?"auto":"smooth",block:"start"})},60)});
 (function(){var m="";try{m=localStorage.getItem("modo-rev")||""}catch(e){}if(m!=="toma"&&m!=="precio")m="";MODO=m;document.body.classList.toggle("sin-rev",!m);if(m){KEY=SETS[m].key;hechos=SETS[m].h}document.getElementById("r-toma").setAttribute("aria-pressed",m==="toma");document.getElementById("r-precio").setAttribute("aria-pressed",m==="precio");document.getElementById("rev-et").textContent=m==="precio"?"Precios Revisados":"Toma Uno Revisados"})();
 /* ===== Finalización De Promociones Del Día ===== */
@@ -8599,7 +8602,12 @@ document.addEventListener("DOMContentLoaded",function(){
   try{if(window.firebase&&firebase.auth&&firebase.database){firebase.initializeApp(FB_CFG);fbAuth=firebase.auth();fbDb=firebase.database();fbOk=true;
     fbAuth.onAuthStateChanged(function(user){pintarLlave(user)})}}catch(e){}
   _fbRes(fbOk)});
-function pintarLlave(user){esAdmin=!!user;var b=$id("ex-llave");b.hidden=false;if(user){var nm=String(user.displayName||user.email).split(" ")[0].replace(/[<>&"]/g,"");b.innerHTML='<svg class="ico-persona" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c.8-4 4-6.5 8-6.5s7.2 2.5 8 6.5z"/></svg>'+nm+" (Salir)"}else b.textContent="Entrar Con Google";pintar(false)}
+function pintarLlave(user){esAdmin=!!user;var b=$id("ex-llave");b.hidden=false;if(user){var nm=String(user.displayName||user.email).split(" ")[0].replace(/[<>&"]/g,"");b.innerHTML='<svg class="ico-persona" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c.8-4 4-6.5 8-6.5s7.2 2.5 8 6.5z"/></svg>'+nm+" (Salir)"}else b.textContent="Entrar Con Google";pintarCta(user);pintar(false)}
+function pintarCta(user){var c=$id("cta");if(!c)return;if(user){var nm=String(user.displayName||user.email||"Cuenta").replace(/[<>&"]/g,"");c.title=c.ariaLabel="Cuenta De Google: "+nm+" (Toca Para Salir)";c.setAttribute("aria-label",c.title);
+  if(user.photoURL){c.innerHTML="";var im=new Image();im.referrerPolicy="no-referrer";im.alt="";im.onerror=function(){c.innerHTML=PERS};im.src=user.photoURL;c.appendChild(im)}else c.innerHTML=PERS}
+  else{c.title="Cuenta De Google: Sin Sesión (Toca Para Entrar)";c.setAttribute("aria-label",c.title);c.textContent="🚫"}}
+var PERS='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c.8-4 4-6.5 8-6.5s7.2 2.5 8 6.5z"/></svg>';
+$id("cta").onclick=function(){$id("ex-llave").click()};
 $id("ex-llave").onclick=function(){
   if(!fbOk){exmsg("Aún Conectando Con Google. Intenta De Nuevo En Un Momento.","err");return}
   if(fbAuth.currentUser){if(confirm("¿Cerrar Sesión De Google En Este Dispositivo? Lo Que Subas Ya No Se Publicará Para Todos."))fbAuth.signOut();return}
