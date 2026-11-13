@@ -312,7 +312,7 @@ body.en-promo .modo,body.en-promo .datos,body.en-promo .progreso,body.en-promo .
 .p-tabla tr.dep td,.p-tabla tr.cat td{text-align:left}
 @media(max-width:520px){.p-tabla .th{width:64px}}
 
-/* ---------- Leer Imagen ---------- */
+/* ---------- Realizar Pedido (Antes Leer Imagen) ---------- */
 .img{display:none}
 body.en-img .img{display:block;animation:aparece .35s both}
 body.en-img .modo,body.en-img .datos,body.en-img .progreso,body.en-img .pct,body.en-img .busca,body.en-img .scan-msg,body.en-img .fecha,body.en-img .ex-bar,body.en-img .tools,body.en-img .subs,body.en-img .scroll,body.en-img .inicio,body.en-img .marco-rep,body.en-img .promo,body.en-img .prec{display:none!important}
@@ -332,6 +332,20 @@ body.en-img .modo,body.en-img .datos,body.en-img .progreso,body.en-img .pct,body
 .im-desc{width:100%;box-sizing:border-box;font:400 14px var(--sans);padding:6px 8px;border:1.5px dashed var(--linea);border-radius:8px;background:var(--fondo);color:var(--tinta)}
 :root[data-theme="dark"] .ini-img{background:linear-gradient(160deg,#2F7FD1,#1E5A9C)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .ini-img{background:linear-gradient(160deg,#2F7FD1,#1E5A9C)}}
+.logos-ped{display:flex;align-items:center;gap:14px;margin:0 0 4px}
+.logos-ped img{display:block;height:34px;width:auto;filter:drop-shadow(0 0 1px rgba(255,255,255,.95)) drop-shadow(0 1px 2px rgba(0,0,0,.25))}
+.p-tit .logos-ped{display:inline-flex;vertical-align:middle;margin:0 0 0 12px;gap:10px}
+.p-tit .logos-ped img{height:26px;filter:none}
+/* ---------- Ojito: Mostrar Todos / Mostrar Pendientes ---------- */
+.ojo{display:inline-flex;align-items:center;gap:8px}
+.ojo svg{width:20px;height:20px;flex:0 0 20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ojo .ojo-c,.ojo[aria-pressed="true"] .ojo-a{display:none}
+.ojo[aria-pressed="true"] .ojo-c{display:inline}
+.ojo[aria-pressed="true"]{background:var(--marino)!important;border-color:var(--marino)!important;color:#fff!important}
+.p-tabla tr.pdesc td{text-align:left;font:700 13.5px var(--sans);color:var(--naranja-texto);padding:8px 14px 6px 22px;border-bottom:1.5px dashed var(--pex-linea)}
+.p-tabla tr.pdesc.otros td{color:var(--gris)}
+.p-tabla tr.pdesc .cc{float:right;font-size:12px;font-weight:500;opacity:.85}
+.im-tabla td.ck{text-align:center}
 
 /* ---------- Cambio De Precios ---------- */
 .prec{display:none}
@@ -509,6 +523,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
     <div class="p-top">
       <button type="button" class="p-btn" id="p-volver">← Inicio</button>
       <button type="button" class="p-btn pri" id="p-subir">Subir PDF</button>
+      <button type="button" class="p-btn ojo" id="p-ojo" aria-pressed="false" title="Cambia Entre Mostrar Todos Y Mostrar Pendientes"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ojo-a"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g><g class="ojo-c"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></svg><span class="ojo-t">Mostrar Todos</span></button>
       <input type="file" id="p-file" class="oculto" accept=".pdf,application/pdf,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
     </div>
     <h2 class="p-tit">Finalización De Promociones Del Día</h2>
@@ -528,6 +543,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
       <button type="button" class="p-btn" id="c-volver">← Inicio</button>
       <button type="button" class="p-btn pri" id="c-subir">Subir PDF</button>
       <button type="button" class="p-btn fil" id="c-ent" aria-pressed="false" hidden>Solo Descuentos Enteros</button>
+      <button type="button" class="p-btn ojo" id="c-ojo" aria-pressed="false" title="Cambia Entre Mostrar Todos Y Mostrar Pendientes"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ojo-a"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g><g class="ojo-c"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></svg><span class="ojo-t">Mostrar Todos</span></button>
       <input type="file" id="c-file" class="oculto" accept=".pdf,application/pdf,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
     </div>
     <input type="file" id="t-file" class="oculto" accept=".pdf,application/pdf,.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
@@ -547,18 +563,19 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
     <div class="p-top">
       <button type="button" class="p-btn" id="i-volver">← Inicio</button>
       <button type="button" class="p-btn pri" id="i-subir">Subir Imagen</button>
+      <button type="button" class="p-btn ojo" id="i-ojo" aria-pressed="false" title="Cambia Entre Mostrar Todos Y Mostrar Pendientes"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ojo-a"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g><g class="ojo-c"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></svg><span class="ojo-t">Mostrar Todos</span></button>
       <button type="button" class="p-btn" id="i-copiar" hidden>Copiar Lista</button>
       <button type="button" class="p-btn" id="i-borrar" hidden>Borrar Todo</button>
       <input type="file" id="i-file" class="oculto" accept="image/*">
     </div>
-    <h2 class="p-tit">Leer Imagen</h2>
-    <p class="p-sub" id="i-sub">Sube Una Foto O Captura Y Detecto SKU, Cantidad Y Descripción.</p>
+    <h2 class="p-tit">Realizar Pedido<span class="logos-ped" aria-hidden="true"><img src="logo-didi.png" alt="" width="42" height="34"><img src="logo-ubereats.png" alt="" width="45" height="34"></span></h2>
+    <p class="p-sub" id="i-sub">Sube Una Foto O Captura Del Pedido Y Detecto SKU, Cantidad Y Descripción.</p>
     <p class="p-msg" id="i-msg" role="status" aria-live="polite" hidden></p>
     <div class="im-bar" id="i-bar" hidden><i id="i-bar-i"></i></div>
     <img class="im-prev" id="i-prev" alt="Imagen Subida" hidden>
     <div class="p-scroll">
-      <table class="p-tabla">
-        <thead><tr><th></th><th>Artículo</th><th>Descripción</th><th class="n">Cant.</th><th></th></tr></thead>
+      <table class="p-tabla im-tabla">
+        <thead><tr><th></th><th>Artículo</th><th>Descripción</th><th class="n">Cant.</th><th class="n"><span class="lg">Hecho</span><span class="sm">✓</span></th><th></th></tr></thead>
         <tbody id="i-filas"></tbody>
       </table>
     </div>
@@ -568,6 +585,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
     <button type="button" id="f-pex" class="solo-mueb" aria-pressed="false">Sin Exhibir</button>
     <button type="button" id="m-todo" class="solo-rev">Marcar Todo</button>
     <button type="button" id="m-nada" class="solo-rev">Desmarcar Todo</button>
+    <button type="button" class="ojo solo-rev" id="m-ojo" aria-pressed="false" title="Cambia Entre Mostrar Todos Y Mostrar Pendientes"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ojo-a"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g><g class="ojo-c"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></svg><span class="ojo-t">Mostrar Todos</span></button>
   </div>
   <div class="subs no-inicio" id="subs" role="group" aria-label="Subcategorías"></div>
   <div class="scroll">
@@ -584,7 +602,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
   <p class="esc-txt" id="esc-txt">Apunta Al Código De Barras O QR</p>
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 12/11 · 14:39</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 13/11 · 01:30</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -597,6 +615,10 @@ var PEX=["100270235","100260184","100301572"];
 var PEX_KEY="pex-local",UPC_EKEY="upc-ext-local",UPC_EXT={},esAdmin=false;
 try{var _pl=JSON.parse(localStorage.getItem("pex-local")||"null");if(_pl&&Array.isArray(_pl.list))PEX=_pl.list;else if(Array.isArray(_pl))PEX=_pl}catch(_e){}
 try{var _ul=JSON.parse(localStorage.getItem("upc-ext-local")||"null");if(_ul&&typeof _ul==="object")UPC_EXT=_ul}catch(_e){}
+var OJO={};try{OJO=JSON.parse(localStorage.getItem("ojo")||"{}")||{}}catch(_e){OJO={}}
+function ojoPoner(k){var b=document.getElementById(k+"-ojo");if(!b)return;var v=!!OJO[k];b.setAttribute("aria-pressed",v);b.querySelector(".ojo-t").textContent=v?"Mostrar Pendientes":"Mostrar Todos";b.setAttribute("aria-label",v?"Mostrando Pendientes. Toca Para Mostrar Todos":"Mostrando Todos. Toca Para Mostrar Pendientes")}
+function ojoTog(k,f){OJO[k]=!OJO[k];try{localStorage.setItem("ojo",JSON.stringify(OJO))}catch(_e){}ojoPoner(k);f()}
+function ojoQuita(f){setTimeout(f,380)}
 var REP=["100223826","000024504","100175035","100104894","100186092","100284565","100176847"];
 var D=[
 ["100156871","Gabinete De Acero 2 Puertas Ng",6,1,0],
@@ -7882,7 +7904,7 @@ function pintar(cascada){
    var nu=its.filter(function(p){return p[0][2]===0}).length,hc="",shown=0;
    its.forEach(function(p){var r=p[0],i=p[1];
     var z=r[2]===0;
-    if(porEx&&PEX.indexOf(r[0])<0)return; if(!coincide(r))return; shown++;
+    if(porEx&&PEX.indexOf(r[0])<0)return; if(OJO.m&&MODO&&di===0&&hechos[r[0]])return; if(!coincide(r))return; shown++;
     var h0=h;h="";
     h+='<tr data-s="'+r[0]+'" class="fila '+(z?"ult ":"")+(PEX.indexOf(r[0])>-1?"pex ":"")+(MODO&&di===0&&hechos[r[0]]?"hecho":"")+anim()+'>'
      +'<td class="num-fila">'+(++nn)+'</td>'
@@ -7929,6 +7951,7 @@ document.getElementById("filas").addEventListener("change",function(e){
   var s=e.target.getAttribute("data-s"); if(!s)return;
   if(e.target.checked)hechos[s]=1; else delete hechos[s];
   ultimo=s; guardar();
+  if(OJO.m&&MODO&&e.target.checked)ojoQuita(function(){pintar(false)});
   var tr=e.target.closest("tr");
   if(tr){tr.classList.toggle("hecho",e.target.checked);tr.classList.remove("marcada","ent","ent2");void tr.offsetWidth;tr.classList.add("marcada")}
   var rev=Object.keys(hechos).filter(function(k){return D.some(function(r){return r[0]===k})}).length,pc=D.length?Math.round(rev*100/D.length):0;
@@ -7942,6 +7965,7 @@ function visibles(){return [].map.call(document.querySelectorAll("#filas tr.fila
 function confirmar(btn,txt,accion){if(btn.dataset.ok){clearTimeout(btn._t);delete btn.dataset.ok;btn.textContent=txt;accion();return}
   btn.dataset.ok=1;var n=visibles().length;btn.textContent="¿"+txt+" ("+n+")? Toca Otra Vez";btn._t=setTimeout(function(){delete btn.dataset.ok;btn.textContent=txt},3500)}
 document.getElementById("m-todo").onclick=function(){confirmar(this,"Marcar Todo",function(){visibles().forEach(function(s){hechos[s]=1});guardar();pintar(false)})};
+document.getElementById("m-ojo").onclick=function(){ojoTog("m",function(){pintar(false)})};
 document.getElementById("m-nada").onclick=function(){confirmar(this,"Desmarcar Todo",function(){visibles().forEach(function(s){delete hechos[s]});guardar();pintar(false)})};
 function buscar(){var n=document.getElementById("q").value.trim();document.getElementById("b-limpiar").hidden=!n;if(n===q)return;q=n;pintar(true);}
 function alEscribir(){var n=document.getElementById("q").value.trim();document.getElementById("b-limpiar").hidden=!n;if(!n&&q)buscar();}
@@ -8212,6 +8236,7 @@ function pintarPromo(){
   var grupos={},orden=[];
   its.forEach(function(x){
     var sku=x[0],r=IDX[sku],desc=r?r[1]:titulo(x[1]||"Sin Descripción");
+    if(OJO.p&&HH[sku])return;
     if(q2&&normT(desc).indexOf(q2)<0&&sku.indexOf(q2)<0&&!(/^\d+$/.test(q2)&&sinCeros(sku).indexOf(sinCeros(q2))>-1))return;
     var c=catDe(r,desc);if(!grupos[c]){grupos[c]=[];orden.push(c)}grupos[c].push([sku,desc])});
   orden.sort(function(a,b){if(a<0)return 1;if(b<0)return -1;return CDEP[a]-CDEP[b]||a-b});
@@ -8221,13 +8246,13 @@ function pintarPromo(){
     if(dp!==depAnt){depAnt=dp;
       var nd=0;orden.forEach(function(c2){if((c2<0?-1:CDEP[c2])===dp)nd+=grupos[c2].length});
       h+='<tr class="dep"><td colspan="4">'+(dp<0?'Sin Categoría En La Página':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
-    if(c>=0)h+='<tr class="cat"><td colspan="4">'+CATS[c]+'<span class="cc">'+g.length+' Artículos · '+hg+' Marcados</span></td></tr>';
+    if(c>=0)h+='<tr class="cat"><td colspan="4">'+CATS[c]+'<span class="cc">'+(OJO.p?g.length+' Pendientes':g.length+' Artículos · '+hg+' Marcados')+'</span></td></tr>';
     g.forEach(function(z){var sku=z[0];n++;
       h+='<tr data-s="'+sku+'" class="fila'+(HH[sku]?" hecho":"")+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
         +(FOTOS[sku]?'<img class="th" data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+sku+'.jpg">':'<div class="th sin" role="img" aria-label="Sin Imagen">Sin Imagen</div>')
         +'<span class="sku">'+sku+'</span></td><td class="d"><span class="t">'+esc(z[1])+'</span></td>'
         +'<td class="q"><input class="chk" type="checkbox" data-s="'+sku+'" aria-label="Marcar '+sku+'"'+(HH[sku]?" checked":"")+'></td></tr>'})});
-  if(!n)h='<tr class="vacia"><td colspan="4">'+(PD?'Sin Resultados Para «'+esc(PQ)+'».':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Finalización De Promociones.')+'</td></tr>';
+  if(!n)h='<tr class="vacia"><td colspan="4">'+(PD&&OJO.p&&!PQ?'Ya No Hay Pendientes. Toca El Ojito Para Mostrar Todos.':PD?'Sin Resultados Para «'+esc(PQ)+'».':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Finalización De Promociones.')+'</td></tr>';
   $id("p-filas").innerHTML=h}
 function abrirPromo(){PROMO=true;PREC=false;IMG=false;INICIO=false;pintar(true);window.scrollTo(0,0)}
 async function subirPromo(file){
@@ -8250,6 +8275,7 @@ async function subirPromo(file){
   }catch(err){var em=err&&err.message;pmsg(em==="xl"||em==="pdf"?"No Se Pudo Cargar El Lector. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un PDF (O Excel).","err")}
 }
 $id("p-volver").onclick=irInicio;
+$id("p-ojo").onclick=function(){ojoTog("p",pintarPromo)};
 $id("p-subir").onclick=function(){var f=$id("p-file");f.value="";f.click()};
 $id("p-file").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)subirPromo(f)});
 $id("p-q").addEventListener("input",function(){PQ=this.value.trim();pintarPromo()});
@@ -8259,7 +8285,8 @@ $id("p-filas").addEventListener("change",function(e){var t=e.target;if(!t.classL
   try{localStorage.setItem(PKEY,JSON.stringify(PD))}catch(err){}
   var tr=t.closest("tr");if(tr){tr.classList.toggle("hecho",t.checked);tr.classList.remove("marcada");void tr.offsetWidth;tr.classList.add("marcada")}
   var cr=tr&&tr.previousElementSibling;while(cr&&!cr.classList.contains("cat")&&!cr.classList.contains("dep"))cr=cr.previousElementSibling;
-  if(cr&&cr.classList.contains("cat")){var cc=cr.querySelector(".cc"),tt=0,mk=0,nx=cr.nextElementSibling;while(nx&&nx.classList.contains("fila")){tt++;if(nx.classList.contains("hecho"))mk++;nx=nx.nextElementSibling}if(cc)cc.textContent=tt+" Artículos · "+mk+" Marcados"}
+  if(cr&&cr.classList.contains("cat")){var cc=cr.querySelector(".cc"),tt=0,mk=0,nx=cr.nextElementSibling;while(nx&&!nx.classList.contains("cat")&&!nx.classList.contains("dep")){if(nx.classList.contains("fila")){tt++;if(nx.classList.contains("hecho"))mk++}nx=nx.nextElementSibling}if(cc&&!OJO.p)cc.textContent=tt+" Artículos · "+mk+" Marcados"}
+  if(OJO.p&&t.checked)ojoQuita(pintarPromo);
   var n=pItems().filter(function(x){return PD.h[x[0]]}).length;
   $id("p-sub").textContent=(PD.f?"Reporte Del "+PD.f+" · ":"")+pItems().length+" Artículos · "+conFoto()+" Con Imagen · "+n+" Marcados"});
 $id("promo").addEventListener("dragover",function(e){e.preventDefault()});
@@ -8398,6 +8425,7 @@ function pintarPrec(){
   its.forEach(function(x){
     var sku=x.s,r=IDX[sku],desc=r?r[1]:titulo(x.d||"Sin Descripción");
     if(CENT&&!resaltar(x))return;
+    if(OJO.c&&HH[sku])return;
     if(q2&&normT(desc).indexOf(q2)<0&&sku.indexOf(q2)<0&&!(/^\d+$/.test(q2)&&sinCeros(sku).indexOf(sinCeros(q2))>-1))return;
     var c=catDe(r,desc);if(!grupos[c]){grupos[c]=[];orden.push(c)}grupos[c].push([x,desc])});
   orden.sort(function(a,b){if(a<0)return 1;if(b<0)return -1;return CDEP[a]-CDEP[b]||a-b});
@@ -8407,14 +8435,22 @@ function pintarPrec(){
     if(dp!==depAnt){depAnt=dp;
       var nd=0;orden.forEach(function(c2){if((c2<0?-1:CDEP[c2])===dp)nd+=grupos[c2].length});
       h+='<tr class="dep"><td colspan="4">'+(dp<0?'Sin Categoría En La Página':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
-    if(c>=0)h+='<tr class="cat"><td colspan="4">'+CATS[c]+'<span class="cc">'+g.length+' Artículos · '+hg+' Marcados</span></td></tr>';
-    g.forEach(function(z){var x=z[0],sku=x.s,rs=resaltar(x);n++;
+    h+='<tr class="cat"><td colspan="4">'+(c>=0?CATS[c]:'Sin Categoría')+'<span class="cc">'+(OJO.c?g.length+' Pendientes':g.length+' Artículos · '+hg+' Marcados')+'</span></td></tr>';
+    /* Dentro De La Categoría: Primero Los Descuentos Enteros, Agrupados Por Porcentaje (Mayor A Menor) */
+    var pg={},po=[],otros=[];
+    g.forEach(function(z){if(esEntero(z[0])){var k=Math.round(z[0].p);if(!pg[k]){pg[k]=[];po.push(k)}pg[k].push(z)}else otros.push(z)});
+    po.sort(function(a,b){return b-a});
+    var bloques=po.map(function(k){return {t:k+' % De Descuento',z:pg[k],o:0}});
+    if(otros.length)bloques.push({t:po.length?'Otros Descuentos':'',z:otros,o:1});
+    bloques.forEach(function(bq){
+    if(bq.t)h+='<tr class="pdesc'+(bq.o?' otros':'')+'"><td colspan="4">'+bq.t+'<span class="cc">'+bq.z.length+(bq.z.length===1?' Artículo':' Artículos')+'</span></td></tr>';
+    bq.z.forEach(function(z){var x=z[0],sku=x.s,rs=resaltar(x);n++;
       h+='<tr data-s="'+sku+'" class="fila'+(HH[sku]?" hecho":"")+(rs?" ent":"")+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
         +(FOTOS[sku]?'<img class="th" data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+sku+'.jpg">':'<div class="th sin" role="img" aria-label="Sin Imagen">Sin Imagen</div>')
         +'<span class="sku">'+sku+'</span></td><td class="d"><span class="t">'+esc(z[1])+'</span><br>'+etiqueta(x)
         +(rs?'<br><span class="ent-tag">Descuento Entero · '+pctTxt(x.p)+'</span>':'')+'</td>'
-        +'<td class="q"><input class="chk" type="checkbox" data-s="'+sku+'" aria-label="Marcar '+sku+'"'+(HH[sku]?" checked":"")+'></td></tr>'})});
-  if(!n)h='<tr class="vacia"><td colspan="4">'+(PC?'Sin Resultados'+(CQ?' Para «'+esc(CQ)+'»':'')+'.':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Cambio De Precios.')+'</td></tr>';
+        +'<td class="q"><input class="chk" type="checkbox" data-s="'+sku+'" aria-label="Marcar '+sku+'"'+(HH[sku]?" checked":"")+'></td></tr>'})})});
+  if(!n)h='<tr class="vacia"><td colspan="4">'+(PC&&OJO.c&&!CQ&&!CENT?'Ya No Hay Pendientes. Toca El Ojito Para Mostrar Todos.':PC?'Sin Resultados'+(CQ?' Para «'+esc(CQ)+'»':'')+'.':'Aún No Hay Reporte. Toca «Subir PDF» Y Elige El Archivo De Cambio De Precios.')+'</td></tr>';
   $id("c-filas").innerHTML=h}
 function abrirPrec(){PREC=true;PROMO=false;IMG=false;INICIO=false;pintar(true);window.scrollTo(0,0)}
 async function subirPrec(file){
@@ -8441,6 +8477,7 @@ $id("c-volver").onclick=irInicio;
 $id("c-subir").onclick=function(){var f=$id("c-file");f.value="";f.click()};
 $id("c-file").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)subirPrec(f)});
 $id("c-ent").onclick=function(){CENT=!CENT;pintarPrec()};
+$id("c-ojo").onclick=function(){ojoTog("c",pintarPrec)};
 $id("c-q").addEventListener("input",function(){CQ=this.value.trim();pintarPrec()});
 $id("c-filas").addEventListener("click",function(e){var t=e.target;if(t.getAttribute&&t.getAttribute("data-g"))foto(t)});
 $id("c-filas").addEventListener("change",function(e){var t=e.target;if(!t.classList||!t.classList.contains("chk")||!PC)return;
@@ -8448,7 +8485,8 @@ $id("c-filas").addEventListener("change",function(e){var t=e.target;if(!t.classL
   try{localStorage.setItem(CKEY,JSON.stringify(PC))}catch(err){}
   var tr=t.closest("tr");if(tr){tr.classList.toggle("hecho",t.checked);tr.classList.remove("marcada");void tr.offsetWidth;tr.classList.add("marcada")}
   var cr=tr&&tr.previousElementSibling;while(cr&&!cr.classList.contains("cat")&&!cr.classList.contains("dep"))cr=cr.previousElementSibling;
-  if(cr&&cr.classList.contains("cat")){var cc=cr.querySelector(".cc"),tt=0,mk=0,nx=cr.nextElementSibling;while(nx&&nx.classList.contains("fila")){tt++;if(nx.classList.contains("hecho"))mk++;nx=nx.nextElementSibling}if(cc)cc.textContent=tt+" Artículos · "+mk+" Marcados"}
+  if(cr&&cr.classList.contains("cat")){var cc=cr.querySelector(".cc"),tt=0,mk=0,nx=cr.nextElementSibling;while(nx&&!nx.classList.contains("cat")&&!nx.classList.contains("dep")){if(nx.classList.contains("fila")){tt++;if(nx.classList.contains("hecho"))mk++}nx=nx.nextElementSibling}if(cc&&!OJO.c)cc.textContent=tt+" Artículos · "+mk+" Marcados"}
+  if(OJO.c&&t.checked)ojoQuita(pintarPrec);
   cSub()});
 $id("precios").addEventListener("dragover",function(e){e.preventDefault()});
 $id("precios").addEventListener("drop",function(e){e.preventDefault();var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)subirPrec(f)});
@@ -8659,11 +8697,15 @@ var REVUPC=null;
 function revUPC(){if(REVUPC)return REVUPC;REVUPC={};if(typeof UPC==="undefined")return REVUPC;
   for(var k in UPC){var v=String(UPC[k]);REVUPC[v]=k;REVUPC[v.replace(/^0+/,"")]=k}return REVUPC}
 function numOCR(s){var d=String(s).replace(/[Oo]/g,"0").replace(/[Il|]/g,"1");return /^\d+$/.test(d)?d:null}
+var RE_PROD=/^pr[o0]d[uv]c[t1l][o0]?[_\-.,:;]*$/i;
 function skuDeToken(tok){
-  var s=String(tok).replace(/^[^0-9A-Za-z|]+|[^0-9A-Za-z|]+$/g,"");
+  var s=String(tok).replace(/^[^0-9A-Za-z|]+|[^0-9A-Za-z|]+$/g,""),forz=false;
+  /* En Los Pedidos (Uber Eats / DiDi) El SKU Viene Como «product_100129896» */
+  var mp=s.match(/^pr[o0]d[uv]c[t1l][o0]?[_\-.,:;]*([0-9OoIl|]{4,9})$/i);if(mp){s=mp[1];forz=true}
   if((s.match(/\d/g)||[]).length<4)return null;
   var d=numOCR(s);if(!d)return null;var L=d.length;
   if(L===9)return d;
+  if(forz&&L>=4&&L<9)return ("000000000"+d).slice(-9);
   if(L>=6&&L<9){var p=("000000000"+d).slice(-9);return IDX[p]?p:null}
   if(L===12||L===13){var r=revUPC();return r[d]||r[d.replace(/^0+/,"")]||null}
   return null}
@@ -8671,7 +8713,7 @@ function tokNorm(t){return String(t).normalize("NFD").replace(/[̀-ͯ]/g,"").toL
 var Q_PRI=/^(cantidad|cant|qty|cantidades|pedido|surtir|solicitada|solicitado|pzas|pza|piezas|unidades|uds|surtido|conteo)$/,Q_SEC=/^(existencia|existencias|stock|disp|disponible|onhand)$/;
 function etiquetaEnc(t){var n=tokNorm(t);if(/^(sku|articulo|codigo|item|material|clave)$/.test(n))return "s";if(/^descrip/.test(n))return "d";if(Q_PRI.test(n))return "q";if(Q_SEC.test(n))return "q2";return null}
 var RE_QPZ=/^\d{1,4}(pz|pzs|pza|pzas|u|uds|ud|pieza|piezas)$/;
-function esQ(tok){var s=String(tok).replace(/^[^0-9A-Za-z]+|[^0-9A-Za-z]+$/g,"");return /^\d{1,4}([.,]0+)?$/.test(s)||RE_QPZ.test(s.toLowerCase())}
+function esQ(tok,dec){if(/\$/.test(String(tok)))return false;var s=String(tok).replace(/^[^0-9A-Za-z]+|[^0-9A-Za-z]+$/g,"");return (dec?/^\d{1,4}([.,]0+)?$/:/^\d{1,4}$/).test(s)||RE_QPZ.test(s.toLowerCase())}
 function valQ(tok){var s=String(tok).replace(/^[^0-9A-Za-z]+|[^0-9A-Za-z]+$/g,"").toLowerCase().replace(/(pz|pzs|pza|pzas|u|uds|ud|pieza|piezas)$/,"").replace(/[.,]0+$/,"");var n=parseInt(s,10);return isNaN(n)?null:n}
 /* lineas: [{words:[{text,x0,x1}]}], ancho: ancho de la imagen en px */
 function leerLineasOCR(lineas,ancho){
@@ -8679,7 +8721,9 @@ function leerLineasOCR(lineas,ancho){
   lineas.forEach(function(l){
     var w=(l.words||[]).filter(function(z){return String(z.text).trim()});if(!w.length)return;
     var skIdx=-1,sku=null;
-    for(j=0;j<w.length;j++){var k=skuDeToken(w[j].text);if(k){skIdx=j;sku=k;break}}
+    for(j=0;j<w.length;j++){var k=skuDeToken(w[j].text);
+      if(!k&&j+1<w.length&&RE_PROD.test(String(w[j].text).replace(/^[^A-Za-z]+/,""))){k=skuDeToken("product_"+String(w[j+1].text).replace(/^[^0-9A-Za-z|]+/,""));if(k){skIdx=j+1;sku=k;break}}
+      if(k){skIdx=j;sku=k;break}}
     if(skIdx<0){
       var enc={},ne=0;w.forEach(function(z){var e=etiquetaEnc(z.text);if(e&&enc[e]==null){enc[e]=(z.x0+z.x1)/2;ne++}});
       if(ne>=2||(ne===1&&enc.q!=null)){hx={};for(var e in enc)hx[e]=enc[e];return}
@@ -8688,16 +8732,21 @@ function leerLineasOCR(lineas,ancho){
       return}
     var cat=IDX[sku],q=null,rest=w.filter(function(z,idx){return idx!==skIdx});
     var tol=Math.max(60,(ancho||1200)*0.07),qc=hx.q!=null?hx.q:hx.q2;
-    if(qc!=null){var bd=1e9;rest.forEach(function(z){if(!esQ(z.text))return;if(RE_QPZ.test(String(z.text).toLowerCase())&&hx.q==null&&false)return;var d=Math.abs((z.x0+z.x1)/2-qc);if(d<bd&&d<=tol){bd=d;q=valQ(z.text)}})}
+    var qz=null;
+    if(qc!=null){var bd=1e9;rest.forEach(function(z){if(!esQ(z.text,1))return;var d=Math.abs((z.x0+z.x1)/2-qc);if(d<bd&&d<=tol){bd=d;q=valQ(z.text);qz=z}})}
     if(q==null){
       /* sin columna: números chicos sueltos. Se descartan los que ya son parte de la descripción del catálogo */
       var dtoks=cat?cat[1].split(/\s+/).map(tokNorm):[],cand=[];
       w.forEach(function(z,idx){if(idx===skIdx||!esQ(z.text))return;
         var tn=tokNorm(z.text),p=dtoks.indexOf(tn);if(p>-1){dtoks.splice(p,1);return}
         cand.push({v:valQ(z.text),i:idx,pz:RE_QPZ.test(String(z.text).toLowerCase())})});
-      if(cand.length){var desp=cand.filter(function(c){return c.i>skIdx});q=(desp.length?desp[desp.length-1]:cand[cand.length-1]).v}}
+      if(cand.length){var desp=cand.filter(function(c){return c.i>skIdx}),el=desp.length?desp[desp.length-1]:cand[cand.length-1];q=el.v;qz=w[el.i]}}
     var d="";
-    if(!cat){var ds=[];w.forEach(function(z,idx){if(idx<=skIdx)return;if(esQ(z.text)&&/^\d{1,4}$/.test(String(z.text).replace(/[^0-9A-Za-z]/g,"")))return;if(/^(pz|pzs|pza|pzas|piezas|u|uds)$/i.test(String(z.text).replace(/[^A-Za-z]/g,"")))return;ds.push(z.text)});
+    if(!cat){var ds=[];w.forEach(function(z,idx){if(idx<=skIdx||z===qz)return;var tz=String(z.text);
+        /* Fuera De La Descripción: La Cantidad Y Los Precios ($57.00, 114.00) */
+        if(/\$/.test(tz)||/^\$?\d{1,3}([,.]\d{3})*[.,]\d{2}$/.test(tz.replace(/[^0-9$.,]/g,""))&&/\d[.,]\d{2}$/.test(tz))return;
+        if(qz&&idx>w.indexOf(qz))return;
+        if(/^(pz|pzs|pza|pzas|piezas|u|uds)$/i.test(tz.replace(/[^A-Za-z]/g,"")))return;ds.push(tz)});
       d=ds.join(" ").replace(/\s+/g," ").trim()}
     var ex=null;rows.forEach(function(r){if(r.s===sku)ex=r});
     if(ex){if(q!=null)ex.q=(ex.q||0)+q;ult=ex;return}
@@ -8707,8 +8756,9 @@ var TS_URL="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.j
 try{ID=JSON.parse(localStorage.getItem(IKEY)||"[]")||[]}catch(e){ID=[]}
 function guardarImg(){try{localStorage.setItem(IKEY,JSON.stringify(ID))}catch(e){}}
 function tarjetaImg(){
-  return '<button type="button" class="ini-card ini-img" data-img="1"><span class="ini-n">Leer Imagen</span><span class="ini-c">'
-    +(ID.length?ID.length+' Artículos Leídos':'Sube Una Foto O Captura')+'</span><span class="ini-s">Detecta SKU, Cantidad Y Descripción</span></button>'}
+  var hc=ID.filter(function(z){return z.h}).length;
+  return '<button type="button" class="ini-card ini-img" data-img="1"><span class="logos-ped" aria-hidden="true"><img src="logo-didi.png" alt="" width="42" height="34"><img src="logo-ubereats.png" alt="" width="45" height="34"></span><span class="ini-n">Realizar Pedido</span><span class="ini-c">'
+    +(ID.length?ID.length+' Artículos En El Pedido · '+hc+' Surtidos':'Sube Una Foto O Captura Del Pedido')+'</span><span class="ini-s">Detecta SKU, Cantidad Y Descripción</span></button>'}
 function imsg(html,tipo){var m=$id("i-msg");m.hidden=!html;m.className="p-msg"+(tipo?" "+tipo:"");m.innerHTML=html||""}
 function cargarTess(){if(window.Tesseract)return Promise.resolve(window.Tesseract);if(tsP)return tsP;
   tsP=new Promise(function(ok,no){var s=document.createElement("script");s.src=TS_URL;s.onload=function(){ok(window.Tesseract)};s.onerror=function(){tsP=null;no(new Error("tess"))};document.head.appendChild(s)});return tsP}
@@ -8751,7 +8801,7 @@ async function subirImg(file){
     if(!rows.length){imsg("No Encontré Ningún SKU En La Imagen. Prueba Con Una Foto Más De Cerca, Derecha Y Con Buena Luz.","err");return}
     var nuevos=0,act=0;
     rows.forEach(function(o){var ex=null;ID.forEach(function(z){if(z.s===o.s)ex=z});
-      if(ex){act++;if(o.q!=null)ex.q=o.q;if(o.d&&!ex.d)ex.d=o.d}else{nuevos++;ID.push({s:o.s,q:o.q,d:o.d,u:o.u})}});
+      if(ex){act++;if(o.q!=null)ex.q=o.q;if(o.d&&!ex.d)ex.d=o.d}else{nuevos++;ID.push({s:o.s,q:o.q,d:o.d,u:o.u,h:0})}});
     guardarImg();
     var sq=rows.filter(function(o){return o.q==null}).length,sc=rows.filter(function(o){return o.u}).length;
     imsg("Leí "+rows.length+" Artículos ("+nuevos+" Nuevos"+(act?", "+act+" Ya Estaban":"")+")."+(sq?" "+sq+" Sin Cantidad: Escríbela Tú.":"")+(sc?" "+sc+" No Están En El Catálogo: Revisa La Descripción.":"")+" Revisa Los Datos Antes De Usarlos.","ok");
@@ -8761,7 +8811,9 @@ async function subirImg(file){
   }finally{tsBar=null;bar.hidden=true;$id("i-subir").disabled=false}}
 function pintarImg(){
   var h="",n=0,filas=ID.map(function(z,i){var r=IDX[z.s],d=r?r[1]:(z.d?titulo(z.d):"Sin Descripción");return {i:i,z:z,r:r,d:d,c:catDe(r,d)}});
-  $id("i-sub").textContent=ID.length?(ID.length+" Artículos · "+ID.filter(function(z){return z.u}).length+" Fuera Del Catálogo"):"Sube Una Foto O Captura Y Detecto SKU, Cantidad Y Descripción.";
+  if(OJO.i)filas=filas.filter(function(f){return !f.z.h});
+  var fu=ID.filter(function(z){return z.u}).length;
+  $id("i-sub").textContent=ID.length?(ID.length+" Artículos · "+ID.filter(function(z){return z.h}).length+" Surtidos"+(fu?" · "+fu+" Fuera Del Catálogo":"")):"Sube Una Foto O Captura Del Pedido Y Detecto SKU, Cantidad Y Descripción.";
   $id("i-copiar").hidden=!ID.length;$id("i-borrar").hidden=!ID.length;
   filas.sort(function(a,b){var ga=a.c<0?1e3:CDEP[a.c]*100+a.c,gb=b.c<0?1e3:CDEP[b.c]*100+b.c;return ga-gb||a.i-b.i});
   var depAnt=null,catAnt=null;
@@ -8769,17 +8821,18 @@ function pintarImg(){
     var dp=f.c<0?-1:CDEP[f.c];
     if(dp!==depAnt){depAnt=dp;catAnt=null;
       var nd=filas.filter(function(g){return (g.c<0?-1:CDEP[g.c])===dp}).length;
-      h+='<tr class="dep"><td colspan="5">'+(dp<0||dp===3?'Sin Categoría':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
+      h+='<tr class="dep"><td colspan="6">'+(dp<0||dp===3?'Sin Categoría':DEPTOS[dp])+'<span class="cc">'+nd+' Artículos</span></td></tr>'}
     if(f.c!==catAnt){catAnt=f.c;
-      if(f.c>=0&&f.c!==37)h+='<tr class="cat"><td colspan="5">'+CATS[f.c]+'<span class="cc">'+filas.filter(function(g){return g.c===f.c}).length+' Artículos</span></td></tr>'}
+      if(f.c>=0&&f.c!==37)h+='<tr class="cat"><td colspan="6">'+CATS[f.c]+'<span class="cc">'+filas.filter(function(g){return g.c===f.c}).length+' Artículos</span></td></tr>'}
     var sku=f.z.s;n++;
-    h+='<tr class="im-fila" data-i="'+f.i+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
+    h+='<tr class="im-fila fila'+(f.z.h?' hecho':'')+'" data-i="'+f.i+'"><td class="num-fila">'+n+'</td><td class="td-foto">'
       +(FOTOS[sku]?'<img class="th" data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" width="56" height="56" src="img/'+sku+'.jpg">':'<div class="th sin" role="img" aria-label="Sin Imagen">Sin Imagen</div>')
       +'<span class="sku">'+sku+'</span></td><td class="d">'
       +(f.r?'<span class="t">'+esc(f.d)+'</span>':'<input class="im-desc" type="text" data-d="'+f.i+'" value="'+esc(f.z.d||"")+'" placeholder="Descripción" aria-label="Descripción de '+sku+'"><span class="im-nuevo">Fuera Del Catálogo</span>')
       +'</td><td class="q"><input class="im-q" type="number" inputmode="numeric" min="0" data-q="'+f.i+'" value="'+(f.z.q==null?"":f.z.q)+'" placeholder="—" aria-label="Cantidad de '+sku+'"></td>'
+      +'<td class="q ck"><input class="chk" type="checkbox" data-h="'+f.i+'" aria-label="Surtido '+sku+'"'+(f.z.h?' checked':'')+'></td>'
       +'<td><button type="button" class="im-x" data-x="'+f.i+'" aria-label="Quitar '+sku+'">×</button></td></tr>'});
-  if(!n)h='<tr class="vacia"><td colspan="5">Aún No Hay Lectura. Toca «Subir Imagen» Y Elige Una Foto O Captura Con SKU Y Cantidades.</td></tr>';
+  if(!n)h='<tr class="vacia"><td colspan="6">'+(ID.length&&OJO.i?'Ya No Hay Pendientes. Toca El Ojito Para Mostrar Todos.':'Aún No Hay Pedido. Toca «Subir Imagen» Y Elige Una Foto O Captura Con SKU Y Cantidades.')+'</td></tr>';
   $id("i-filas").innerHTML=h}
 function abrirImg(){IMG=true;PROMO=false;PREC=false;INICIO=false;pintar(true);window.scrollTo(0,0)}
 $id("i-volver").onclick=irInicio;
@@ -8788,7 +8841,13 @@ $id("i-file").onchange=function(){var f=this.files&&this.files[0];this.value="";
 $id("i-filas").addEventListener("input",function(e){var t=e.target,i;
   if(t.hasAttribute("data-q")){i=+t.getAttribute("data-q");if(ID[i]){var v=parseInt(t.value,10);ID[i].q=isNaN(v)?null:v;guardarImg()}}
   else if(t.hasAttribute("data-d")){i=+t.getAttribute("data-d");if(ID[i]){ID[i].d=t.value;guardarImg()}}});
-$id("i-filas").addEventListener("change",function(e){if(e.target.hasAttribute("data-d"))pintarImg()});
+$id("i-filas").addEventListener("change",function(e){var t=e.target;
+  if(t.hasAttribute("data-h")){var i=+t.getAttribute("data-h");if(ID[i]){ID[i].h=t.checked?1:0;guardarImg()}
+    var tr=t.closest("tr");if(tr){tr.classList.toggle("hecho",t.checked);tr.classList.remove("marcada");void tr.offsetWidth;tr.classList.add("marcada")}
+    if(OJO.i&&t.checked)ojoQuita(pintarImg);else{var fu=ID.filter(function(z){return z.u}).length;$id("i-sub").textContent=ID.length+" Artículos · "+ID.filter(function(z){return z.h}).length+" Surtidos"+(fu?" · "+fu+" Fuera Del Catálogo":"")}
+    return}
+  if(t.hasAttribute("data-d"))pintarImg()});
+$id("i-ojo").onclick=function(){ojoTog("i",pintarImg)};
 $id("i-filas").addEventListener("click",function(e){var b=e.target.closest(".im-x");if(!b)return;var i=+b.getAttribute("data-x");ID.splice(i,1);guardarImg();pintarImg()});
 $id("i-copiar").onclick=function(){
   var tx="SKU\tCantidad\tDescripción\n"+ID.map(function(z){var r=IDX[z.s];return z.s+"\t"+(z.q==null?"":z.q)+"\t"+(r?r[1]:(z.d||""))}).join("\n");
@@ -8800,6 +8859,7 @@ $id("i-borrar").onclick=function(){var b=this;
   if(!iBorr){b.textContent="¿Seguro? Toca Otra Vez";iBorr=setTimeout(function(){iBorr=null;b.textContent="Borrar Todo"},3500);return}
   clearTimeout(iBorr);iBorr=null;b.textContent="Borrar Todo";ID=[];guardarImg();$id("i-prev").hidden=true;imsg("");pintarImg()};
 
+["p","c","i","m"].forEach(ojoPoner);
 pintar(true);
 </script>
 <script>
@@ -8831,7 +8891,7 @@ var P=[
  {v:aInicio,t:function(){return $(".ini-card[data-d]:not(.ini-todo)")&&$(".ini-grid")},c:'var(--azul)',i:'area',tit:'Elige Un Área',x:'<p>Toca <b>Muebles</b>, <b>Papelería</b> o <b>Tecnología</b>, o <b>Ver Todo</b> para ver la tienda completa.</p>'},
  {v:aInicio,t:function(){return $(".ini-promo")},c:'var(--rojo)',i:'promo',tit:'Promociones Del Día',x:'<p>Esta tarjeta abre la <b>Finalización De Promociones Del Día</b>: se sube el PDF del día y vas marcando cada artículo conforme lo terminas.</p>'},
  {v:aInicio,t:function(){return $(".ini-prec")},c:'var(--marino)',i:'etiqueta',tit:'Cambio De Precios',x:'<p>Aquí subes el PDF de <b>Cambio De Precios</b>. Cada artículo trae su foto, su <b>etiqueta</b> con el precio nuevo y un check para marcarlo.</p><p>En <b>muebles, ventiladores, carpetas y cajas de plástico o de archivo</b>, los descuentos enteros (10 %, 20 %, 30 %…) salen <span class="tour-et" style="background:var(--naranja);color:#fff">Resaltados</span>.</p>'},
- {v:aInicio,t:function(){return $(".ini-img")},c:'var(--azul)',i:'tabla',tit:'Leer Imagen',x:'<p>Al final del menú está <b>Leer Imagen</b>: subes una foto o captura y la página detecta el <b>SKU</b>, la <b>cantidad</b> y la <b>descripción</b> de cada renglón. Puedes corregir los datos y copiar la lista.</p>'},
+ {v:aInicio,t:function(){return $(".ini-img")},c:'var(--azul)',i:'tabla',tit:'Realizar Pedido',x:'<p>Al final del menú está <b>Realizar Pedido</b> (pedidos de DiDi Food y Uber Eats): subes una foto o captura del pedido y la página detecta el <b>SKU</b>, la <b>cantidad</b> y la <b>descripción</b> de cada renglón. Marca con el check lo que ya surtiste.</p><p>En cada revisión, el <b>ojito</b> cambia entre <b>Mostrar Todos</b> y <b>Mostrar Pendientes</b>.</p>'},
  {v:aMuebles,t:function(){return $("#subs")},c:'var(--azul)',i:'chips',tit:'Muévete Entre Secciones',x:'<p>Ya dentro de un área, <b>← Inicio</b> te regresa al principio. Abajo están las subcategorías (Archiveros, Escritorios…) para ver solo una parte.</p>'},
  {v:aMuebles,t:function(){var e=$(".tools");return e&&e.offsetParent?e:null},c:'var(--naranja)',i:'filtro',tit:'Lo Que Falta Exhibir',x:'<p><b>Sin Exhibir</b> muestra solo los muebles con la etiqueta naranja <b>Por Exhibir</b>. <b>Todos</b> regresa a la lista completa.</p><p>Si ya no falta ninguno, el botón desaparece solo.</p>'},
  {v:aMuebles,t:function(){return fila("tr.fila td")},c:'var(--rojo)',i:'tabla',tit:'Lee Cada Fila',x:'<p>Cada fila muestra la <b>foto</b>, el <b>SKU</b>, la <b>descripción</b> y las piezas <b>disponibles</b>. Toca la foto para verla en grande.</p>'},
