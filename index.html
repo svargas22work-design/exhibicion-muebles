@@ -408,6 +408,9 @@ body.en-plano .modo,body.en-plano .datos,body.en-plano .progreso,body.en-plano .
 .pg-et.ch{font-size:11.5px;padding:2px 3px}
 .pg-q{position:absolute;top:4px;right:4px;z-index:2;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:99px;background:var(--rojo);color:#fff;font:700 11.5px/20px var(--sans);text-align:center;pointer-events:none}
 .pg-q.ct{top:auto;right:auto;bottom:6px;left:calc(50% + 52px)}
+.pg-ck{position:absolute;top:6px;left:6px;z-index:3;margin:0;background:#fff}
+.pg-it.hecho .pg-fr,.pg-it.hecho .pg-et,.pg-it.hecho .pg-q{opacity:.4}
+.pg-it.hecho .pg-et{text-decoration:line-through}
 .pg-rep{height:16px;margin:0 0 0 -4px;background:linear-gradient(#a8b0b8,#7f8892);clip-path:polygon(0 0,100% 0,99.4% 100%,.6% 100%);box-shadow:0 6px 8px -6px rgba(0,0,0,.4)}
 /* ---------- Cantidad De Stoppers (Descuentos Enteros) ---------- */
 .stop{background:var(--blanco);border:1px solid var(--linea);border-radius:18px;padding:14px 16px 12px;margin:0 0 14px;box-shadow:var(--sombra);position:relative;overflow:hidden}
@@ -661,6 +664,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
       <button type="button" class="p-btn" id="l-volver">← Inicio</button>
       <button type="button" class="p-btn" id="l-atras" hidden>← Planogramas</button>
       <button type="button" class="p-btn" id="l-orig" hidden>Ver Planograma Original</button>
+      <button type="button" class="p-btn ojo" id="l-ojo" hidden aria-pressed="false" title="Cambia Entre Mostrar Todos Y Mostrar Pendientes"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ojo-a"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g><g class="ojo-c"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></svg><span class="ojo-t">Mostrar Todos</span></button>
     </div>
     <h2 class="p-tit" id="l-tit">Planogramas</h2>
     <p class="p-sub" id="l-sub"></p>
@@ -690,7 +694,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
   <p class="esc-txt" id="esc-txt">Apunta Al Código De Barras O QR</p>
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 15/11 · 13:35</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 15/11 · 13:50</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -8990,7 +8994,10 @@ $id("i-borrar").onclick=function(){var b=this;
 
 /* ===== Planogramas (Pasillo 6 Y 8) =====
    Cada planograma: charolas de arriba hacia abajo; cada artículo [SKU, piezas que muestra el planograma], en el mismo orden (izquierda a derecha) */
-var PLANO=false,PLSEL=-1,PLPAS=6;
+var PLANO=false,PLSEL=-1,PLPAS=6,PLH={};try{PLH=JSON.parse(localStorage.getItem("plano-hechos")||"{}")||{}}catch(e){PLH={}}
+function plGuarda(){try{localStorage.setItem("plano-hechos",JSON.stringify(PLH))}catch(e){}}
+function plKey(pl,sku){return pl.t+"|"+sku}
+function plMarcados(pl){var u={};pl.ch.forEach(function(c){c.forEach(function(a){if(PLH[plKey(pl,a[0])])u[a[0]]=1})});return Object.keys(u).length}
 var PLANOS=[
  {p:6,t:"Carpetas Panorámicas",f:"16/01/2026",img:"img/plano/carpetas-panoramicas.jpg",ch:[
   [["100011680",3,205],["100018398",3,220],["100035956",2,115],["100035921",2,110],["100007285",3,220],["100159086",1,52],["100018371",2,100],["100035833",3,160],["100011401",3,140],["100011532",2,92],["100007226",3,135],["100007091",4,178],["100159043",2,82],["100159174",2,80]],
@@ -9034,7 +9041,7 @@ function tarjetaPlano(){var L=PLANOS||[],n=L.length;
     +(n?n+(n===1?' Planograma':' Planogramas')+' · '+L.map(function(p){return p.t}).join(" · "):'Aún No Hay Planogramas')+'</span></button>'}
 function pintarPlano(){
   var cont=$id("l-cont"),h="",pl=PLSEL>=0?PLANOS[PLSEL]:null;
-  $id("l-atras").hidden=!pl;$id("l-orig").hidden=!pl||!pl.img;$id("l-tabs").hidden=!!pl;
+  $id("l-atras").hidden=!pl;$id("l-ojo").hidden=!pl;ojoPoner("l");$id("l-orig").hidden=!pl||!pl.img;$id("l-tabs").hidden=!!pl;
   var oi=$id("l-img");if(!pl){oi.hidden=true;oi.removeAttribute("src")}
   $id("l-orig").textContent=oi.hidden?"Ver Planograma Original":"Ocultar Planograma Original";
   [].forEach.call($id("l-tabs").querySelectorAll("button"),function(b){b.setAttribute("aria-pressed",+b.getAttribute("data-pas")===PLPAS)});
@@ -9049,7 +9056,7 @@ function pintarPlano(){
     cont.innerHTML=h;return}
   var c=plCuenta(pl);
   $id("l-tit").textContent=pl.t;
-  $id("l-sub").textContent="Pasillo "+pl.p+" · "+c.k+" SKU · "+c.s+" Piezas · Desliza De Lado A Lado";
+  $id("l-sub").textContent="Pasillo "+pl.p+" · "+c.k+" SKU · "+c.s+" Piezas · "+plMarcados(pl)+" Marcados · Desliza De Lado A Lado";
   /* Todas Las Charolas Miden Lo Mismo (Como En La Hoja); Cada Artículo Ocupa El Ancho Que Tiene En El Planograma */
   var CW=128,ANCHO=Math.max.apply(null,pl.ch.map(function(ch){return ch.length}))*CW+46;
   h='<div class="pg-hoja"><div class="pg-cab"><span class="pg-tt">'+esc(pl.t)+'</span>'+(pl.f?'<span class="pg-fe">'+esc(pl.f)+'</span>':'')+'</div>'
@@ -9057,9 +9064,9 @@ function pintarPlano(){
    +'<div class="pg-vista" id="l-vista"><div class="pg-gond" style="width:'+ANCHO+'px">';
   pl.ch.forEach(function(ch,ci){
     h+='<div class="pg-fila"><span class="pg-num" aria-label="Charola '+(ci+1)+'">'+(ci+1)+'</span>';
-    ch.forEach(function(a){var sku=a[0],r=IDX[sku],src=FOTOS[sku]?"img/"+sku+".jpg":PLFOTO[sku],w=CW,k;
+    ch.forEach(function(a){var sku=a[0],hk=!!PLH[plKey(pl,sku)];if(OJO.l&&hk)return;var r=IDX[sku],src=FOTOS[sku]?"img/"+sku+".jpg":PLFOTO[sku],w=CW,k;
       var pf=!FOTOS[sku]&&PLFOTO[sku];
-      h+='<div class="pg-it" data-s="'+sku+'" style="width:'+w.toFixed(1)+'px"><div class="pg-st"><div class="pg-fr">';
+      h+='<div class="pg-it'+(hk?' hecho':'')+'" data-s="'+sku+'" style="width:'+w.toFixed(1)+'px"><div class="pg-st"><input class="chk pg-ck" type="checkbox" data-k="'+esc(plKey(pl,sku))+'" aria-label="Marcar '+sku+'"'+(hk?' checked':'')+'><div class="pg-fr">';
       for(k=0;k<1;k++)h+=src?'<img data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" src="'+src+'">':'<i></i>';
       h+='</div><span class="pg-et ch">'+sku+'</span><span class="pg-q" title="Piezas">'+a[1]+'</span></div>'
         +'<span class="pl-d">'+(r?r[1]:"Sin Descripción En El Catálogo")+' · '+a[1]+(a[1]===1?' Pieza':' Piezas')+'</span></div>'});
@@ -9073,6 +9080,13 @@ function pintarPlano(){
 function abrirPlano(){PLANO=true;PLSEL=-1;IMG=false;PROMO=false;PREC=false;INICIO=false;pintar(true);window.scrollTo(0,0)}
 $id("l-volver").onclick=irInicio;
 $id("l-atras").onclick=function(){PLSEL=-1;pintar(false);window.scrollTo(0,0)};
+$id("l-ojo").onclick=function(){ojoTog("l",pintarPlano)};
+$id("l-cont").addEventListener("change",function(e){var t=e.target;if(!t.classList||!t.classList.contains("pg-ck"))return;
+  var k=t.getAttribute("data-k"),sku=k.split("|")[1],pl=PLANOS[PLSEL];if(!pl)return;
+  if(t.checked)PLH[k]=1;else delete PLH[k];plGuarda();
+  [].forEach.call($id("l-cont").querySelectorAll('.pg-it[data-s="'+sku+'"]'),function(it){it.classList.toggle("hecho",t.checked);var c=it.querySelector(".pg-ck");if(c)c.checked=t.checked});
+  var c2=plCuenta(pl);$id("l-sub").textContent="Pasillo "+pl.p+(pl.f?" · Del "+pl.f:"")+" · "+c2.k+" SKU · "+c2.s+" Piezas · "+plMarcados(pl)+" Marcados · Desliza De Lado A Lado";
+  if(OJO.l&&t.checked)ojoQuita(pintarPlano)});
 $id("l-orig").onclick=function(){var pl=PLANOS[PLSEL],oi=$id("l-img");if(!pl)return;
   if(oi.hidden){oi.src=pl.img;oi.hidden=false;this.textContent="Ocultar Planograma Original"}else{oi.hidden=true;this.textContent="Ver Planograma Original"}};
 $id("l-tabs").addEventListener("click",function(e){var b=e.target.closest("button[data-pas]");if(!b)return;PLPAS=+b.getAttribute("data-pas");pintar(false)});
