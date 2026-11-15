@@ -399,11 +399,11 @@ body.en-plano .modo,body.en-plano .datos,body.en-plano .progreso,body.en-plano .
 .pg-num{position:sticky;left:4px;z-index:3;align-self:center;flex:0 0 26px;width:26px;height:26px;margin:0 4px 0 -30px;border-radius:50%;background:var(--marino);color:#fff;font:700 12px/26px var(--sans);text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.25)}
 .pg-it{position:relative;flex:0 0 auto;height:100%;box-sizing:border-box}
 .pg-fr{display:flex;height:100%;border-left:1px solid #e3e3e3}
-.pg-fr img,.pg-fr i{flex:1 1 0;min-width:0;height:100%;object-fit:contain;object-position:center bottom;background:#fff;border-right:1px solid #e3e3e3;cursor:zoom-in}
-.pg-fr.del img{object-fit:cover;object-position:center}
+.pg-fr img,.pg-fr i{flex:1 1 0;min-width:0;height:100%;padding:10px 4px 34px;box-sizing:border-box;object-fit:contain;object-position:center bottom;background:#fff;border-right:1px solid #e3e3e3;cursor:zoom-in}
+.pg-fr.del img{object-fit:cover;object-position:center;padding:0}
 .pg-fr i{background:repeating-linear-gradient(90deg,#f1f1f1 0 6px,#fff 6px 12px)}
-.pg-et{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:2;background:#fff;border:1px solid #333;padding:2px 4px;font:500 13px/1.1 var(--mono);color:#111;white-space:nowrap;pointer-events:none}
-.pg-et.vert{transform:translate(-50%,-50%) rotate(-90deg)}
+.pg-et{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);z-index:2;background:#fff;border:1px solid #333;padding:2px 4px;font:500 13px/1.1 var(--mono);color:#111;white-space:nowrap;pointer-events:none}
+.pg-et.ch{font-size:11px;padding:2px 3px}
 .pg-q{position:absolute;top:4px;right:4px;z-index:2;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:99px;background:var(--rojo);color:#fff;font:700 11.5px/20px var(--sans);text-align:center;pointer-events:none}
 .pg-rep{height:16px;margin:0 0 0 -4px;background:linear-gradient(#a8b0b8,#7f8892);clip-path:polygon(0 0,100% 0,99.4% 100%,.6% 100%);box-shadow:0 6px 8px -6px rgba(0,0,0,.4)}
 /* ---------- Cantidad De Stoppers (Descuentos Enteros) ---------- */
@@ -9030,9 +9030,9 @@ function pintarPlano(){
     h+='<div class="pg-fila"><span class="pg-num" aria-label="Charola '+(ci+1)+'">'+(ci+1)+'</span>';
     ch.forEach(function(a){var sku=a[0],r=IDX[sku],src=FOTOS[sku]?"img/"+sku+".jpg":PLFOTO[sku],w=(a[2]||a[1]*40)/tot*ANCHO,sw=w/a[1],k;
       var pf=!FOTOS[sku]&&PLFOTO[sku];
-      h+='<div class="pg-it" data-s="'+sku+'" style="width:'+w.toFixed(1)+'px"><div class="pg-fr'+(sw<54||pf?' del':'')+'">';
-      for(k=0;k<(pf?1:a[1]);k++)h+=src?'<img data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" src="'+src+'">':'<i></i>';
-      h+='</div><span class="pg-et'+(w<92?' vert':'')+'">'+sku+'</span><span class="pg-q" title="Piezas">'+a[1]+'</span>'
+      h+='<div class="pg-it" data-s="'+sku+'" style="width:'+w.toFixed(1)+'px"><div class="pg-fr'+(pf?' del':'')+'">';
+      for(k=0;k<1;k++)h+=src?'<img data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" src="'+src+'">':'<i></i>';
+      h+='</div><span class="pg-et'+(w<100?' ch':'')+'">'+sku+'</span><span class="pg-q" title="Piezas">'+a[1]+'</span>'
         +'<span class="pl-d">'+(r?r[1]:"Sin Descripción En El Catálogo")+' · '+a[1]+(a[1]===1?' Pieza':' Piezas')+'</span></div>'});
     h+='</div><div class="pg-rep"></div>'});
   h+='</div></div><input type="range" class="pg-sl pg-sl-b" min="0" max="1000" value="0" aria-label="Deslizar El Planograma"></div>';
