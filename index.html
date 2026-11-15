@@ -385,6 +385,27 @@ body.en-plano .modo,body.en-plano .datos,body.en-plano .progreso,body.en-plano .
 .pl-d{display:none}
 .pl-orig{display:block;max-width:100%;margin:0 0 18px;border-radius:12px;border:1.5px solid var(--linea)}
 .pl-orig[hidden]{display:none}
+/* Planograma Con La Forma De La Hoja */
+.pg-hoja{border:2px solid #9a9a9a;border-radius:6px;background:#fff;color:#1E1E1E;margin:0 0 18px;overflow:hidden}
+.pg-cab{display:grid;grid-template-columns:1fr auto;align-items:stretch;border-bottom:2px solid #9a9a9a}
+.pg-tt{font:800 clamp(17px,4.4vw,26px) var(--sans);color:#4a4a52;text-align:center;padding:12px 10px;letter-spacing:.01em}
+.pg-fe{display:flex;align-items:center;font:700 13px var(--sans);color:#4a4a52;padding:0 12px;border-left:2px solid #9a9a9a}
+.pg-sl{display:block;width:calc(100% - 24px);margin:12px;accent-color:var(--rojo);height:28px;cursor:pointer}
+.pg-sl-b{position:sticky;bottom:0;z-index:4;width:100%;margin:0;padding:10px 70px 10px 12px;box-sizing:border-box;background:rgba(255,255,255,.94);border-top:1px solid #ddd}
+.pg-vista{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding:14px 0 6px;background:#fbfbfb}
+.pg-gond{position:relative;padding:0 12px 0 34px}
+.pg-fila{position:relative;display:flex;align-items:flex-end;height:150px;margin-top:22px}
+.pg-fila:first-child{margin-top:0}
+.pg-num{position:sticky;left:4px;z-index:3;align-self:center;flex:0 0 26px;width:26px;height:26px;margin:0 4px 0 -30px;border-radius:50%;background:var(--marino);color:#fff;font:700 12px/26px var(--sans);text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.pg-it{position:relative;flex:0 0 auto;height:100%;box-sizing:border-box}
+.pg-fr{display:flex;height:100%;border-left:1px solid #e3e3e3}
+.pg-fr img,.pg-fr i{flex:1 1 0;min-width:0;height:100%;object-fit:contain;object-position:center bottom;background:#fff;border-right:1px solid #e3e3e3;cursor:zoom-in}
+.pg-fr.del img{object-fit:cover;object-position:center}
+.pg-fr i{background:repeating-linear-gradient(90deg,#f1f1f1 0 6px,#fff 6px 12px)}
+.pg-et{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);z-index:2;background:#fff;border:1px solid #333;padding:2px 4px;font:500 13px/1.1 var(--mono);color:#111;white-space:nowrap;pointer-events:none}
+.pg-et.vert{transform:translate(-50%,-50%) rotate(-90deg)}
+.pg-q{position:absolute;top:4px;right:4px;z-index:2;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:99px;background:var(--rojo);color:#fff;font:700 11.5px/20px var(--sans);text-align:center;pointer-events:none}
+.pg-rep{height:16px;margin:0 0 0 -4px;background:linear-gradient(#a8b0b8,#7f8892);clip-path:polygon(0 0,100% 0,99.4% 100%,.6% 100%);box-shadow:0 6px 8px -6px rgba(0,0,0,.4)}
 /* ---------- Cantidad De Stoppers (Descuentos Enteros) ---------- */
 .stop{background:var(--blanco);border:1px solid var(--linea);border-radius:18px;padding:14px 16px 12px;margin:0 0 14px;box-shadow:var(--sombra);position:relative;overflow:hidden}
 .stop::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--naranja)}
@@ -8037,7 +8058,7 @@ document.getElementById("m-nada").onclick=function(){confirmar(this,"Desmarcar T
 function buscar(){var n=document.getElementById("q").value.trim();document.getElementById("b-limpiar").hidden=!n;if(n===q)return;q=n;pintar(true);}
 function alEscribir(){var n=document.getElementById("q").value.trim();document.getElementById("b-limpiar").hidden=!n;if(!n&&q)buscar();}
 function foto(img){if(document.querySelector(".zoom"))return;
-  var tr=img.closest("tr")||img.closest(".pl-it"),des=tr&&tr.querySelector("td.d .t,.pl-d"),sku=tr&&tr.getAttribute("data-s");
+  var tr=img.closest("tr")||img.closest(".pl-it,.pg-it"),des=tr&&tr.querySelector("td.d .t,.pl-d"),sku=tr&&tr.getAttribute("data-s");
   var z=document.createElement("div");z.className="zoom";z.setAttribute("role","dialog");z.setAttribute("aria-label",img.alt);
   z.innerHTML='<div class="zoom-fondo"></div>';
   var g=new Image();g.className="zoom-img";g.alt=img.alt;g.src=img.currentSrc||img.src;z.appendChild(g);
@@ -8969,10 +8990,10 @@ $id("i-borrar").onclick=function(){var b=this;
 var PLANO=false,PLSEL=-1,PLPAS=6;
 var PLANOS=[
  {p:6,t:"Carpetas Panorámicas",f:"16/01/2026",img:"img/plano/carpetas-panoramicas.jpg",ch:[
-  [["100011680",3],["100018398",3],["100035956",2],["100035921",2],["100007285",3],["100159086",1],["100018371",2],["100035833",3],["100011401",3],["100011532",2],["100007226",3],["100007091",4],["100159043",2],["100159174",2]],
-  [["100035913",3],["100007103",3],["100007277",4],["100159027",3],["100035817",3],["100007074",4],["100007218",4],["100011621",3],["100159166",4],["100035905",3],["100007251",3],["100007269",3],["100035930",2],["100035841",3],["100007200",3],["100007040",3],["100159140",3]],
-  [["100035884",6],["100035796",6],["100035892",8],["100007031",8],["100007162",8],["100007171",8],["100070292",3],["100070305",5],["100158999",8],["000041217",8],["100159131",8],["000041218",8],["100007306",7]],
-  [["100108511",12],["100157398",7],["100007189",5],["100007331",5],["000041214",12],["100007357",5],["100035876",12],["100007138",12],["100007146",12],["100007111",13],["100007023",14],["100159115",10]]
+  [["100011680",3,205],["100018398",3,220],["100035956",2,115],["100035921",2,110],["100007285",3,220],["100159086",1,52],["100018371",2,100],["100035833",3,160],["100011401",3,140],["100011532",2,92],["100007226",3,135],["100007091",4,178],["100159043",2,82],["100159174",2,80]],
+  [["100035913",3,120],["100007103",3,130],["100007277",4,165],["100159027",3,135],["100035817",3,120],["100007074",4,175],["100007218",4,175],["100011621",3,130],["100159166",4,172],["100035905",3,80],["100007251",3,80],["100007269",3,80],["100035930",2,50],["100035841",3,75],["100007200",3,72],["100007040",3,76],["100159140",3,97]],
+  [["100035884",6,137],["100035796",6,133],["100035892",8,170],["100007031",8,180],["100007162",8,185],["100007171",8,175],["100070292",3,87],["100070305",5,107],["100158999",8,168],["000041217",8,150],["100159131",8,165],["000041218",8,142],["100007306",7,138]],
+  [["100108511",12,258],["100157398",7,157],["100007189",5,108],["100007331",5,115],["000041214",12,267],["100007357",5,110],["100035876",12,130],["100007138",12,128],["100007146",12,120],["100007111",13,152],["100007023",14,188],["100159115",10,195]]
  ]}
 ];
 /* Fotos Tomadas Del Planograma Para Los SKU Que Aún No Tienen Foto En El Catálogo */
@@ -8996,19 +9017,30 @@ function pintarPlano(){
       h+='<button type="button" class="pl-card" data-pl="'+x[1]+'"><b>'+esc(x[0].t)+'</b><span>'+x[0].ch.length+' Charolas · '+c.k+' SKU · '+c.s+' Piezas</span>'+(x[0].f?'<span>Del '+esc(x[0].f)+'</span>':'')+'</button>'});
       h+='</div>'}
     cont.innerHTML=h;return}
-  var c=plCuenta(pl),n=0;
+  var c=plCuenta(pl);
   $id("l-tit").textContent=pl.t;
-  $id("l-sub").textContent="Pasillo "+pl.p+(pl.f?" · Del "+pl.f:"")+" · "+c.k+" SKU · "+c.s+" Piezas";
-  pl.ch.forEach(function(ch,ci){var pz=0;ch.forEach(function(a){pz+=a[1]});
-    h+='<section class="pl-ch"><h3>Charola '+(ci+1)+(ci===0?' · Arriba':ci===pl.ch.length-1?' · Abajo':'')+'<small>'+ch.length+' SKU · '+pz+' Piezas</small></h3><div class="pl-grid">';
-    ch.forEach(function(a){var sku=a[0],r=IDX[sku],src=FOTOS[sku]?"img/"+sku+".jpg":PLFOTO[sku];n++;
-      h+='<div class="pl-it" data-s="'+sku+'"><span class="pl-n">'+n+'</span>'
-        +(src?'<img class="th" data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" width="120" height="120" src="'+src+'">':'<div class="th sin" role="img" aria-label="Sin Imagen">Sin Imagen</div>')
-        +'<span class="sku">'+sku+'</span>'+(!FOTOS[sku]&&PLFOTO[sku]?'<span class="pl-fp">Foto Del Planograma</span>':'')
-        +'<span class="pl-q">'+a[1]+(a[1]===1?' Pieza':' Piezas')+'</span>'
-        +'<span class="pl-d">'+(r?r[1]:"Sin Descripción En El Catálogo")+'</span></div>'});
-    h+='</div></section>'});
-  cont.innerHTML=h}
+  $id("l-sub").textContent="Pasillo "+pl.p+" · "+c.k+" SKU · "+c.s+" Piezas · Desliza De Lado A Lado";
+  /* Todas Las Charolas Miden Lo Mismo (Como En La Hoja); Cada Artículo Ocupa El Ancho Que Tiene En El Planograma */
+  var ANCHO=Math.max(1500,Math.round(Math.max.apply(null,pl.ch.map(function(ch){return ch.reduce(function(t,a){return t+(a[2]||a[1]*40)},0)}))*1.5));
+  h='<div class="pg-hoja"><div class="pg-cab"><span class="pg-tt">'+esc(pl.t)+'</span>'+(pl.f?'<span class="pg-fe">'+esc(pl.f)+'</span>':'')+'</div>'
+   +'<input type="range" class="pg-sl" min="0" max="1000" value="0" aria-label="Deslizar El Planograma">'
+   +'<div class="pg-vista" id="l-vista"><div class="pg-gond" style="width:'+ANCHO+'px">';
+  pl.ch.forEach(function(ch,ci){
+    var tot=ch.reduce(function(t,a){return t+(a[2]||a[1]*40)},0);
+    h+='<div class="pg-fila"><span class="pg-num" aria-label="Charola '+(ci+1)+'">'+(ci+1)+'</span>';
+    ch.forEach(function(a){var sku=a[0],r=IDX[sku],src=FOTOS[sku]?"img/"+sku+".jpg":PLFOTO[sku],w=(a[2]||a[1]*40)/tot*ANCHO,sw=w/a[1],k;
+      var pf=!FOTOS[sku]&&PLFOTO[sku];
+      h+='<div class="pg-it" data-s="'+sku+'" style="width:'+w.toFixed(1)+'px"><div class="pg-fr'+(sw<54||pf?' del':'')+'">';
+      for(k=0;k<(pf?1:a[1]);k++)h+=src?'<img data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" src="'+src+'">':'<i></i>';
+      h+='</div><span class="pg-et'+(w<92?' vert':'')+'">'+sku+'</span><span class="pg-q" title="Piezas">'+a[1]+'</span>'
+        +'<span class="pl-d">'+(r?r[1]:"Sin Descripción En El Catálogo")+' · '+a[1]+(a[1]===1?' Pieza':' Piezas')+'</span></div>'});
+    h+='</div><div class="pg-rep"></div>'});
+  h+='</div></div><input type="range" class="pg-sl pg-sl-b" min="0" max="1000" value="0" aria-label="Deslizar El Planograma"></div>';
+  cont.innerHTML=h;
+  var v=$id("l-vista"),sls=cont.querySelectorAll(".pg-sl"),mov=false;
+  function maxX(){return Math.max(1,v.scrollWidth-v.clientWidth)}
+  [].forEach.call(sls,function(sl){sl.addEventListener("input",function(){mov=true;v.scrollLeft=this.value/1000*maxX();[].forEach.call(sls,function(o){if(o!==sl)o.value=sl.value});mov=false})});
+  v.addEventListener("scroll",function(){if(mov)return;var x=Math.round(v.scrollLeft/maxX()*1000);[].forEach.call(sls,function(o){o.value=x})},{passive:true})}
 function abrirPlano(){PLANO=true;PLSEL=-1;IMG=false;PROMO=false;PREC=false;INICIO=false;pintar(true);window.scrollTo(0,0)}
 $id("l-volver").onclick=irInicio;
 $id("l-atras").onclick=function(){PLSEL=-1;pintar(false);window.scrollTo(0,0)};
