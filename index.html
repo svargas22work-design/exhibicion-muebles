@@ -397,6 +397,7 @@ body.en-plano .modo,body.en-plano .datos,body.en-plano .progreso,body.en-plano .
 .pg-fila{position:relative;display:flex;align-items:flex-end;height:150px;margin-top:22px}
 .pg-fila:first-child{margin-top:0}
 .pg-num{position:sticky;left:4px;z-index:3;align-self:center;flex:0 0 26px;width:26px;height:26px;margin:0 4px 0 -30px;border-radius:50%;background:var(--marino);color:#fff;font:700 12px/26px var(--sans);text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.pg-prov{position:sticky;left:0;display:inline-block;margin:18px 0 -10px -26px;padding:3px 12px;border-radius:99px;background:var(--naranja);color:#fff;font:700 13px var(--sans)}
 .pg-num2{background:#8a8f98;font-size:15px}
 .pg-it{position:relative;flex:0 0 auto;height:100%;box-sizing:border-box}
 .pg-st{position:relative;width:100%;height:100%}
@@ -695,7 +696,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
   <p class="esc-txt" id="esc-txt">Apunta Al Código De Barras O QR</p>
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 16/11 · 14:40</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 16/11 · 14:55</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -9025,7 +9026,7 @@ var PLANOS=[
   [["100017846",1,240],["100017838",1,240],["100135842",1,240],["000001419",1,240],["100135703",1,240]],
   [["100135818",1,240],["000001424",1,240],["100135826",1,240],["000001416",1,240],["100135720",1,240]]
  ]},
- {p:2,t:"Agendas Frente A",dn:1,c0:1,ch:[
+ {p:2,t:"Agendas Frente A",dn:1,c0:1,prov:{1:"Danpex",7:"Impresora",13:"Cavalier",18:"Carvajal",19:"Hazel"},ch:[
   [["100311615",0],["100311666",0],["100311674",0],["100312415",0],["100311156",0],["100311703",0],["100311800",0]],
   [["100311623",0],["100311738",0],["100312407",0],["100311156",0],["100312301",0],["100312343",0],["100311041",0],["100311041",0],["100311631",0],["100312327",0]],
   [["100311527",0],["100311578",0],["100311607",0],["100311720",0],["100311050",0],["100311076",0],["100311113",0],["100311130",0],["100311172",0],["100311201",0]],
@@ -9051,7 +9052,7 @@ var PLANOS=[
   [["000085128",0],["000093867",0],["100052086",0],["000093868",0],["000040782",0]],
   [["000040781",0],["000040783",0],["000040784",0],["000093869",0]]
  ]},
- {p:2,t:"Agendas Frente B",dn:1,c0:25,ch:[
+ {p:2,t:"Agendas Frente B",dn:1,c0:25,prov:{25:"Finocam",37:"Moo-Vingo",42:"VR Editoras",43:"Kyma",47:"VR Editoras"},ch:[
   [["100310268",0],["100310321",0],["100310348",0],["100310364",0],["100310436",0],["100310452",0],["100310495",0],["100310612",0],["100310541",0],["100310567",0]],
   [["100310241",0],["100310284",0],["100310305",0],["100310428",0],["100310461",0],["100310516",0],["100310524",0],["100310604",0],["100310031",0],["100310073",0]],
   [["100310621",0],["100310583",0],["100310591",0],["100309638",0],["100309671",0],["100310057",0]],
@@ -9120,6 +9121,7 @@ function pintarPlano(){
     if(pl.dn){var m=Math.ceil(ch.length/2);filas.push({n:n,l:"",ch:ch.slice(0,m)});filas.push({n:n,l:"b",ch:ch.slice(m)})}
     else filas.push({n:n,l:"",ch:ch})});
   filas.forEach(function(fi){var ch=fi.ch;
+    if(pl.prov&&pl.prov[fi.n]&&!fi.l)h+='<div class="pg-prov">'+esc(pl.prov[fi.n])+'</div>';
     h+='<div class="pg-fila"><span class="pg-num'+(fi.l?' pg-num2':'')+'" aria-label="Charola '+fi.n+(pl.dn?(fi.l?' Nivel 2':' Nivel 1'):'')+'">'+(fi.l?'↳':fi.n)+'</span>';
     ch.forEach(function(a){var sku=a[0],hk=!!PLH[plKey(pl,sku)];if(OJO.l&&hk)return;var r=IDX[sku],src=FOTOS[sku]?"img/"+sku+".jpg":PLFOTO[sku],w=CW,k;
       var pf=!FOTOS[sku]&&PLFOTO[sku];
