@@ -355,7 +355,7 @@ body.en-img .modo,body.en-img .datos,body.en-img .progreso,body.en-img .pct,body
 .p-tabla tr.pdesc.otros td{color:var(--gris)}
 .p-tabla tr.pdesc .cc{float:right;font-size:12px;font-weight:500;opacity:.85}
 .im-tabla td.ck{text-align:center}
-/* ---------- Planogramas (Pasillo 6 Y 8) ---------- */
+/* ---------- Planogramas (Pasillo 2, 6 Y 8) ---------- */
 .plano{display:none}
 body.en-plano .plano{display:block;animation:aparece .35s both}
 body.en-plano .modo,body.en-plano .datos,body.en-plano .progreso,body.en-plano .pct,body.en-plano .busca,body.en-plano .scan-msg,body.en-plano .fecha,body.en-plano .ex-bar,body.en-plano .tools,body.en-plano .subs,body.en-plano .scroll,body.en-plano .inicio,body.en-plano .marco-rep,body.en-plano .promo,body.en-plano .prec,body.en-plano .img{display:none!important}
@@ -397,6 +397,7 @@ body.en-plano .modo,body.en-plano .datos,body.en-plano .progreso,body.en-plano .
 .pg-fila{position:relative;display:flex;align-items:flex-end;height:150px;margin-top:22px}
 .pg-fila:first-child{margin-top:0}
 .pg-num{position:sticky;left:4px;z-index:3;align-self:center;flex:0 0 26px;width:26px;height:26px;margin:0 4px 0 -30px;border-radius:50%;background:var(--marino);color:#fff;font:700 12px/26px var(--sans);text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.pg-num2{background:#8a8f98;font-size:15px}
 .pg-it{position:relative;flex:0 0 auto;height:100%;box-sizing:border-box}
 .pg-st{position:relative;width:100%;height:100%}
 .pg-it.an .pg-st{position:sticky;left:46px;width:230px}
@@ -668,7 +669,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
     </div>
     <h2 class="p-tit" id="l-tit">Planogramas</h2>
     <p class="p-sub" id="l-sub"></p>
-    <div class="pl-tabs" id="l-tabs" role="group" aria-label="Pasillo"><button type="button" data-pas="6" aria-pressed="true">Pasillo 6</button><button type="button" data-pas="8" aria-pressed="false">Pasillo 8</button></div>
+    <div class="pl-tabs" id="l-tabs" role="group" aria-label="Pasillo"><button type="button" data-pas="2" aria-pressed="false">Pasillo 2</button><button type="button" data-pas="6" aria-pressed="true">Pasillo 6</button><button type="button" data-pas="8" aria-pressed="false">Pasillo 8</button></div>
     <img class="pl-orig" id="l-img" alt="Planograma Original" hidden>
     <div id="l-cont"></div>
   </div>
@@ -694,7 +695,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
   <p class="esc-txt" id="esc-txt">Apunta Al Código De Barras O QR</p>
   <div class="esc-bot"><button type="button" id="esc-luz" aria-pressed="false" hidden>Linterna</button><label for="foto-cam" id="esc-foto">Usar Foto</label><button type="button" id="esc-cerrar">Cerrar</button></div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 15/11 · 18:40</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 16/11 · 14:40</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -8992,7 +8993,7 @@ $id("i-borrar").onclick=function(){var b=this;
   if(!iBorr){b.textContent="¿Seguro? Toca Otra Vez";iBorr=setTimeout(function(){iBorr=null;b.textContent="Borrar Todo"},3500);return}
   clearTimeout(iBorr);iBorr=null;b.textContent="Borrar Todo";ID=[];guardarImg();$id("i-prev").hidden=true;imsg("");pintarImg()};
 
-/* ===== Planogramas (Pasillo 6 Y 8) =====
+/* ===== Planogramas (Pasillo 2, 6 Y 8) =====
    Cada planograma: charolas de arriba hacia abajo; cada artículo [SKU, piezas que muestra el planograma], en el mismo orden (izquierda a derecha) */
 var PLANO=false,PLSEL=-1,PLPAS=6,PLH={};try{PLH=JSON.parse(localStorage.getItem("plano-hechos")||"{}")||{}}catch(e){PLH={}}
 function plGuarda(){try{localStorage.setItem("plano-hechos",JSON.stringify(PLH))}catch(e){}}
@@ -9024,6 +9025,58 @@ var PLANOS=[
   [["100017846",1,240],["100017838",1,240],["100135842",1,240],["000001419",1,240],["100135703",1,240]],
   [["100135818",1,240],["000001424",1,240],["100135826",1,240],["000001416",1,240],["100135720",1,240]]
  ]},
+ {p:2,t:"Agendas Frente A",dn:1,c0:1,ch:[
+  [["100311615",0],["100311666",0],["100311674",0],["100312415",0],["100311156",0],["100311703",0],["100311800",0]],
+  [["100311623",0],["100311738",0],["100312407",0],["100311156",0],["100312301",0],["100312343",0],["100311041",0],["100311041",0],["100311631",0],["100312327",0]],
+  [["100311527",0],["100311578",0],["100311607",0],["100311720",0],["100311050",0],["100311076",0],["100311113",0],["100311130",0],["100311172",0],["100311201",0]],
+  [["100311551",0],["100311691",0],["100311746",0],["100311754",0],["100311762",0],["100312394",0],["100311480",0],["100311818",0]],
+  [["100311519",0],["100311535",0],["100311543",0],["100311560",0],["100311586",0],["100311594",0],["100311640",0],["100311658",0],["100311711",0],["100311130",0],["100311463",0],["100311771",0],["100311789",0]],
+  [["100311068",0],["100311834",0],["100312423",0],["100312440",0],["100312466",0],["100312474",0],["100312360",0],["100311092",0],["100311682",0],["100311797",0],["100311826",0]],
+  [["100309531",0],["100309574",0],["100309582",0],["100309591",0],["100311261",0]],
+  [["100309540",0],["100309558",0],["100309566",0],["100311244",0]],
+  [["100311308",0],["100311341",0],["100311295",0],["100311316",0]],
+  [["100311228",0],["100311287",0],["100311324",0],["100311359",0],["100311375",0]],
+  [["100311391",0],["100311412",0],["100311439",0],["100311383",0]],
+  [["100311367",0],["100311404",0],["100311421",0],["100311447",0]],
+  [["100313979",0],["100313987",0],["100314040",0],["100314074",0]],
+  [["100314171",0],["100314058",0],["100314066",0],["100314082",0]],
+  [["100313995",0],["100314007",0],["100314015",0]],
+  [["100314023",0],["100314031",0]],
+  [["100314091",0],["100314103",0],["100314111",0],["100314120",0],["100314146",0],["100314154",0],["100314162",0]],
+  [["100308871",0],["100308942",0],["100308900",0]],
+  [["000005825",0],["000005832",0],["000005837",0],["000005843",0],["000005844",0]],
+  [["000005826",0],["000005833",0],["000005838",0],["000005843",0],["100155131",0]],
+  [["000005839",0],["000085129",0],["000093866",0]],
+  [["000005841",0],["000093865",0],["100052078",0],["000053626",0]],
+  [["000085128",0],["000093867",0],["100052086",0],["000093868",0],["000040782",0]],
+  [["000040781",0],["000040783",0],["000040784",0],["000093869",0]]
+ ]},
+ {p:2,t:"Agendas Frente B",dn:1,c0:25,ch:[
+  [["100310268",0],["100310321",0],["100310348",0],["100310364",0],["100310436",0],["100310452",0],["100310495",0],["100310612",0],["100310541",0],["100310567",0]],
+  [["100310241",0],["100310284",0],["100310305",0],["100310428",0],["100310461",0],["100310516",0],["100310524",0],["100310604",0],["100310031",0],["100310073",0]],
+  [["100310621",0],["100310583",0],["100310591",0],["100309638",0],["100309671",0],["100310057",0]],
+  [["100310276",0],["100310292",0],["100310559",0],["100310575",0],["100309603",0],["100309611",0],["100309620",0]],
+  [["100310225",0],["100309742",0],["100309953",0],["100309961",0],["100309970",0],["100309988",0],["100310081",0]],
+  [["100310196",0],["100309697",0],["100309700",0],["100309718",0],["100309726",0],["100309734",0]],
+  [["100310233",0],["100309646",0],["100309654",0],["100309662",0],["100309689",0]],
+  [["100310209",0],["100310250",0],["100310313",0],["100310330",0],["100310356",0]],
+  [["100310410",0],["100310049",0]],
+  [["100310014",0],["100310065",0]],
+  [["100310372",0],["100310381",0],["100310401",0],["100310022",0]],
+  [["100310217",0],["100310399",0],["100310006",0]],
+  [["100311084",0],["100311121",0],["100311164",0],["100311199",0],["100171860",0],["100171974",0],["100277023",0]],
+  [["100311105",0],["100311210",0],["100236256",0],["100276944",0],["100171982",0],["100172029",0],["100236141",0]],
+  [["100311148",0],["100311236",0],["100277517",0],["100236264",0],["100236230",0]],
+  [["100311181",0],["100311252",0],["100277138",0],["100277120",0],["100236248",0]],
+  [["100311279",0],["100277349",0],["100277357",0],["100236205",0],["100277365",0]],
+  [["100307851",0],["100303990",0],["100303877",0],["100308002",0],["100308011",0],["100303771",0],["100303789",0],["100303746",0],["100303738",0]],
+  [["100308791",0],["100308918",0],["100308934",0]],
+  [["100308811",0],["100308846",0],["100308854",0]],
+  [["100308951",0],["100308969",0],["100309064",0]],
+  [["100308862",0],["100308889",0],["100308977",0],["100309072",0]],
+  [["100308053",0],["100307878",0],["100308037",0],["100308061",0],["100303869",0],["100303893",0],["100303922",0],["100303957",0],["100303762",0],["100303842",0],["100303818",0],["100303800",0],["100303754",0]],
+  [["100307886",0],["100307907",0],["100307915",0],["100307923",0],["100307931",0],["100307940",0],["100307958",0],["100307974",0],["100307966",0],["100307982",0],["100307991",0],["100308029",0]]
+ ]},
  {p:6,t:"Protectores De Hojas",img:"img/plano/protectores-de-hojas.jpg",ch:[
   [["000041463",1,285],["000041450",1,260],["100174585",1,250],["100174497",1,310]],
   [["100268223",1,260],["000041467",2,520],["000005061",1,270]],
@@ -9037,7 +9090,7 @@ var PLFOTO={"100035956":"img/plano/100035956.jpg","100159027":"img/plano/1001590
 ["000065030","000065028","000065027","100174825","100281639","100152407","100152458","100282640"].forEach(function(k){PLFOTO[k]="img/plano/"+k+".jpg"});
 function plCuenta(pl){var s=0,u={};pl.ch.forEach(function(c){c.forEach(function(a){u[a[0]]=1;s+=a[1]})});return {k:Object.keys(u).length,s:s}}
 function tarjetaPlano(){var L=PLANOS||[],n=L.length;
-  return '<button type="button" class="ini-card ini-plano" data-plano="1"><span class="ini-n">Planogramas</span><span class="ini-c">Pasillo 6 Y 8</span><span class="ini-s">'
+  return '<button type="button" class="ini-card ini-plano" data-plano="1"><span class="ini-n">Planogramas</span><span class="ini-c">Pasillo 2, 6 Y 8</span><span class="ini-s">'
     +(n?n+(n===1?' Planograma':' Planogramas')+' · '+L.map(function(p){return p.t}).join(" · "):'Aún No Hay Planogramas')+'</span></button>'}
 function pintarPlano(){
   var cont=$id("l-cont"),h="",pl=PLSEL>=0?PLANOS[PLSEL]:null;
@@ -9051,25 +9104,29 @@ function pintarPlano(){
     $id("l-sub").textContent="Pasillo "+PLPAS+" · "+lst.length+(lst.length===1?" Planograma":" Planogramas");
     if(!lst.length)h='<p class="pl-vacio">Aún No Hay Planogramas En El Pasillo '+PLPAS+'.</p>';
     else{h='<div class="pl-lista">';lst.forEach(function(x){var c=plCuenta(x[0]);
-      h+='<button type="button" class="pl-card" data-pl="'+x[1]+'"><b>'+esc(x[0].t)+'</b><span>'+x[0].ch.length+' Charolas · '+c.k+' SKU · '+c.s+' Piezas</span>'+(x[0].f?'<span>Del '+esc(x[0].f)+'</span>':'')+'</button>'});
+      h+='<button type="button" class="pl-card" data-pl="'+x[1]+'"><b>'+esc(x[0].t)+'</b><span>'+x[0].ch.length+' Charolas · '+c.k+' SKU'+(c.s?' · '+c.s+' Piezas':'')+(x[0].dn?' · Doble Nivel':'')+'</span>'+(x[0].f?'<span>Del '+esc(x[0].f)+'</span>':'')+'</button>'});
       h+='</div>'}
     cont.innerHTML=h;return}
   var c=plCuenta(pl);
   $id("l-tit").textContent=pl.t;
-  $id("l-sub").textContent="Pasillo "+pl.p+" · "+c.k+" SKU · "+c.s+" Piezas · "+plMarcados(pl)+" Marcados · Desliza De Lado A Lado";
+  $id("l-sub").textContent="Pasillo "+pl.p+" · "+c.k+" SKU"+(c.s?" · "+c.s+" Piezas":"")+" · "+plMarcados(pl)+" Marcados · Desliza De Lado A Lado";
   /* Todas Las Charolas Miden Lo Mismo (Como En La Hoja); Cada Artículo Ocupa El Ancho Que Tiene En El Planograma */
-  var CW=128,ANCHO=Math.max.apply(null,pl.ch.map(function(ch){return ch.length}))*CW+46;
+  var CW=128,ANCHO=Math.max.apply(null,pl.ch.map(function(ch){return pl.dn?Math.ceil(ch.length/2):ch.length}))*CW+46;
   h='<div class="pg-hoja"><div class="pg-cab"><span class="pg-tt">'+esc(pl.t)+'</span>'+(pl.f?'<span class="pg-fe">'+esc(pl.f)+'</span>':'')+'</div>'
    +'<input type="range" class="pg-sl" min="0" max="1000" value="0" aria-label="Deslizar El Planograma">'
    +'<div class="pg-vista" id="l-vista"><div class="pg-gond" style="width:'+ANCHO+'px">';
-  pl.ch.forEach(function(ch,ci){
-    h+='<div class="pg-fila"><span class="pg-num" aria-label="Charola '+(ci+1)+'">'+(ci+1)+'</span>';
+  var filas=[];
+  pl.ch.forEach(function(ch,ci){var n=(pl.c0||1)+ci;
+    if(pl.dn){var m=Math.ceil(ch.length/2);filas.push({n:n,l:"",ch:ch.slice(0,m)});filas.push({n:n,l:"b",ch:ch.slice(m)})}
+    else filas.push({n:n,l:"",ch:ch})});
+  filas.forEach(function(fi){var ch=fi.ch;
+    h+='<div class="pg-fila"><span class="pg-num'+(fi.l?' pg-num2':'')+'" aria-label="Charola '+fi.n+(pl.dn?(fi.l?' Nivel 2':' Nivel 1'):'')+'">'+(fi.l?'↳':fi.n)+'</span>';
     ch.forEach(function(a){var sku=a[0],hk=!!PLH[plKey(pl,sku)];if(OJO.l&&hk)return;var r=IDX[sku],src=FOTOS[sku]?"img/"+sku+".jpg":PLFOTO[sku],w=CW,k;
       var pf=!FOTOS[sku]&&PLFOTO[sku];
       h+='<div class="pg-it'+(hk?' hecho':'')+'" data-s="'+sku+'" style="width:'+w.toFixed(1)+'px"><div class="pg-st"><input class="chk pg-ck" type="checkbox" data-k="'+esc(plKey(pl,sku))+'" aria-label="Marcar '+sku+'"'+(hk?' checked':'')+'><div class="pg-fr">';
       for(k=0;k<1;k++)h+=src?'<img data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" src="'+src+'">':'<i></i>';
-      h+='</div><span class="pg-et ch">'+sku+'</span><span class="pg-q" title="Piezas">'+a[1]+'</span></div>'
-        +'<span class="pl-d">'+(r?r[1]:"Sin Descripción En El Catálogo")+' · '+a[1]+(a[1]===1?' Pieza':' Piezas')+'</span></div>'});
+      h+='</div><span class="pg-et ch">'+sku+'</span>'+(a[1]?'<span class="pg-q" title="Piezas">'+a[1]+'</span>':'')+'</div>'
+        +'<span class="pl-d">'+(r?r[1]:"Sin Descripción En El Catálogo")+(a[1]?' · '+a[1]+(a[1]===1?' Pieza':' Piezas'):'')+'</span></div>'});
     h+='</div><div class="pg-rep" style="width:'+(ch.length*CW+10)+'px"></div>'});
   h+='</div></div><input type="range" class="pg-sl pg-sl-b" min="0" max="1000" value="0" aria-label="Deslizar El Planograma"></div>';
   cont.innerHTML=h;
@@ -9085,7 +9142,7 @@ $id("l-cont").addEventListener("change",function(e){var t=e.target;if(!t.classLi
   var k=t.getAttribute("data-k"),sku=k.split("|")[1],pl=PLANOS[PLSEL];if(!pl)return;
   if(t.checked)PLH[k]=1;else delete PLH[k];plGuarda();
   [].forEach.call($id("l-cont").querySelectorAll('.pg-it[data-s="'+sku+'"]'),function(it){it.classList.toggle("hecho",t.checked);var c=it.querySelector(".pg-ck");if(c)c.checked=t.checked});
-  var c2=plCuenta(pl);$id("l-sub").textContent="Pasillo "+pl.p+(pl.f?" · Del "+pl.f:"")+" · "+c2.k+" SKU · "+c2.s+" Piezas · "+plMarcados(pl)+" Marcados · Desliza De Lado A Lado";
+  var c2=plCuenta(pl);$id("l-sub").textContent="Pasillo "+pl.p+(pl.f?" · Del "+pl.f:"")+" · "+c2.k+" SKU"+(c2.s?" · "+c2.s+" Piezas":"")+" · "+plMarcados(pl)+" Marcados · Desliza De Lado A Lado";
   if(OJO.l&&t.checked)ojoQuita(pintarPlano)});
 $id("l-orig").onclick=function(){var pl=PLANOS[PLSEL],oi=$id("l-img");if(!pl)return;
   if(oi.hidden){oi.src=pl.img;oi.hidden=false;this.textContent="Ocultar Planograma Original"}else{oi.hidden=true;this.textContent="Ver Planograma Original"}};
@@ -9138,7 +9195,7 @@ var P=[
  {v:aInicio,t:function(){return $(".ini-promo")},c:'var(--rojo)',i:'promo',tit:'Promociones Del Día',x:'<p>Esta tarjeta abre la <b>Finalización De Promociones Del Día</b>: se sube el PDF del día y vas marcando cada artículo conforme lo terminas.</p>'},
  {v:aInicio,t:function(){return $(".ini-prec")},c:'var(--marino)',i:'etiqueta',tit:'Cambio De Precios',x:'<p>Aquí subes el PDF de <b>Cambio De Precios</b>. Cada artículo trae su foto, su <b>etiqueta</b> con el precio nuevo y un check para marcarlo.</p><p>En <b>muebles, ventiladores, carpetas y cajas de plástico o de archivo</b>, los descuentos enteros (10 %, 20 %, 30 %…) salen <span class="tour-et" style="background:var(--naranja);color:#fff">Resaltados</span>.</p>'},
  {v:aInicio,t:function(){return $(".ini-img")},c:'var(--azul)',i:'tabla',tit:'Realizar Pedido',x:'<p>Al final del menú está <b>Realizar Pedido</b> (pedidos de DiDi Food y Uber Eats): subes una foto o captura del pedido y la página detecta el <b>SKU</b>, la <b>cantidad</b> y la <b>descripción</b> de cada renglón. Marca con el check lo que ya surtiste.</p><p>En cada revisión, el <b>ojito</b> cambia entre <b>Mostrar Todos</b> y <b>Mostrar Pendientes</b>.</p>'},
- {v:function(){if(!PLANO){abrirPlano();return true}return false},t:function(){return $("#l-tabs")},c:'var(--naranja)',i:'area',tit:'Planogramas',x:'<p>En <b>Planogramas</b> eliges el <b>Pasillo 6</b> o el <b>Pasillo 8</b> y abres un planograma: cada charola muestra la <b>foto</b>, el <b>SKU</b> y cuántas <b>piezas</b> lleva, en el mismo orden que el planograma (de izquierda a derecha).</p><p><b>Ver Planograma Original</b> enseña la hoja tal cual.</p>'},
+ {v:function(){if(!PLANO){abrirPlano();return true}return false},t:function(){return $("#l-tabs")},c:'var(--naranja)',i:'area',tit:'Planogramas',x:'<p>En <b>Planogramas</b> eliges el <b>Pasillo 2</b>, el <b>Pasillo 6</b> o el <b>Pasillo 8</b> y abres un planograma: cada charola muestra la <b>foto</b>, el <b>SKU</b> y cuántas <b>piezas</b> lleva, en el mismo orden que el planograma (de izquierda a derecha).</p><p><b>Ver Planograma Original</b> enseña la hoja tal cual.</p>'},
  {v:aMuebles,t:function(){return $("#subs")},c:'var(--azul)',i:'chips',tit:'Muévete Entre Secciones',x:'<p>Ya dentro de un área, <b>← Inicio</b> te regresa al principio. Abajo están las subcategorías (Archiveros, Escritorios…) para ver solo una parte.</p>'},
  {v:aMuebles,t:function(){var e=$(".tools");return e&&e.offsetParent?e:null},c:'var(--naranja)',i:'filtro',tit:'Lo Que Falta Exhibir',x:'<p><b>Sin Exhibir</b> muestra solo los muebles con la etiqueta naranja <b>Por Exhibir</b>. <b>Todos</b> regresa a la lista completa.</p><p>Si ya no falta ninguno, el botón desaparece solo.</p>'},
  {v:aMuebles,t:function(){return fila("tr.fila td")},c:'var(--rojo)',i:'tabla',tit:'Lee Cada Fila',x:'<p>Cada fila muestra la <b>foto</b>, el <b>SKU</b>, la <b>descripción</b> y las piezas <b>disponibles</b>. Toca la foto para verla en grande.</p>'},
