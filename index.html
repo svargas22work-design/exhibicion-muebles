@@ -9112,13 +9112,13 @@ function pintarPlano(){
   $id("l-tit").textContent=pl.t;
   $id("l-sub").textContent="Pasillo "+pl.p+" · "+c.k+" SKU"+(c.s?" · "+c.s+" Piezas":"")+" · "+plMarcados(pl)+" Marcados · Desliza De Lado A Lado";
   /* Todas Las Charolas Miden Lo Mismo (Como En La Hoja); Cada Artículo Ocupa El Ancho Que Tiene En El Planograma */
-  var CW=128,ANCHO=Math.max.apply(null,pl.ch.map(function(ch){return pl.dn?Math.ceil(ch.length/2):ch.length}))*CW+46;
+  var CW=128,NV=5,ANCHO=(pl.dn?NV:Math.max.apply(null,pl.ch.map(function(ch){return ch.length})))*CW+46;
   h='<div class="pg-hoja"><div class="pg-cab"><span class="pg-tt">'+esc(pl.t)+'</span>'+(pl.f?'<span class="pg-fe">'+esc(pl.f)+'</span>':'')+'</div>'
    +'<input type="range" class="pg-sl" min="0" max="1000" value="0" aria-label="Deslizar El Planograma">'
    +'<div class="pg-vista" id="l-vista"><div class="pg-gond" style="width:'+ANCHO+'px">';
   var filas=[];
   pl.ch.forEach(function(ch,ci){var n=(pl.c0||1)+ci;
-    if(pl.dn){var m=Math.ceil(ch.length/2);filas.push({n:n,l:"",ch:ch.slice(0,m)});filas.push({n:n,l:"b",ch:ch.slice(m)})}
+    if(pl.dn){/* Doble Nivel: Cinco Artículos Por Nivel (Principal Y Secundario) */var j=0;do{filas.push({n:n,l:j?"b":"",ch:ch.slice(j*NV,(j+1)*NV)});j++}while(j<2||j*NV<ch.length)}
     else filas.push({n:n,l:"",ch:ch})});
   filas.forEach(function(fi){var ch=fi.ch;
     if(pl.prov&&pl.prov[fi.n]&&!fi.l)h+='<div class="pg-prov">'+esc(pl.prov[fi.n])+'</div>';
