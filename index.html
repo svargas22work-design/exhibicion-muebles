@@ -254,6 +254,8 @@ body.dep-todo #ex-subir{display:none}
 .ini-c{font-size:13.5px;color:var(--c);font-weight:600}
 .ini-card[data-d="2"] .ini-c{color:var(--naranja-texto)}
 .ini-s{font-size:13px;color:var(--gris);line-height:1.45}
+.ini-inv{--c:var(--marino)}
+.ini-inv::before{background:linear-gradient(90deg,var(--marino) 0 50%,var(--naranja) 50%)}
 .ini-todo{--c:var(--marino);border-style:dashed;border-color:var(--gris-cl);box-shadow:none}
 .ini-todo .ini-c{color:var(--gris)}
 .ini-promo{--c:#fff;background:var(--rojo);border-color:var(--rojo);color:#fff}
@@ -8285,7 +8287,7 @@ document.getElementById("subs").addEventListener("click",function(e){var b=e.tar
   if(b.getAttribute("data-d")==="inicio"){irInicio();return}
   if(b.hasAttribute("data-d")){depSel=+b.getAttribute("data-d");subSel=-1;INICIO=false;if(depSel!==0&&porEx){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false)}}else subSel=+b.getAttribute("data-c");pintar(true)});
 
-function pintarInicio(){var el=document.getElementById("inicio"),h='<p class="ini-txt">Busca Por SKU, UPC O Nombre, Escanea El Código, O Elige Un Área:</p><div class="ini-grid">'+tarjetaPromo()+tarjetaPrec();
+function pintarInicio(){var el=document.getElementById("inicio"),h='<p class="ini-txt">Busca Por SKU, UPC O Nombre, Escanea El Código, O Elige Un Área:</p><div class="ini-grid">'+tarjetaPromo()+tarjetaPrec()+tarjetaInv();
   DEPTOS.forEach(function(dn,di){var its=D.filter(function(r){return CDEP[r[3]]===di});if(!its.length)return;
     var subs=CATS.filter(function(c,ci){return CDEP[ci]===di&&D.some(function(r){return r[3]===ci})});
     h+='<button type="button" class="ini-card" data-d="'+di+'"><span class="ini-n">'+dn+'</span><span class="ini-c">'+its.length+' Artículos · '+subs.length+' Subcategorías</span><span class="ini-s">'+subs.slice(0,4).join(" · ")+(subs.length>4?" …":"")+'</span></button>'});
@@ -8295,7 +8297,7 @@ var TMSG=null;
 function tarjetaTot(){return '<div class="ini-tot"><p class="p-tot" data-tot-et="1"></p><div class="ini-tot-b"><button type="button" class="ex-btn" id="t-subir">Subir Artículos Totales</button></div><p class="p-msg" id="t-msg" role="status" aria-live="polite" hidden></p></div>'}
 function pintarTMsg(){var m=$id("t-msg");if(!m)return;m.hidden=!TMSG;m.className="p-msg"+(TMSG&&TMSG.t?" "+TMSG.t:"");m.innerHTML=TMSG?TMSG.h:""}
 function irInicio(){PROMO=false;PREC=false;IMG=false;PLANO=false;INICIO=true;porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);document.getElementById("f-todos").setAttribute("aria-pressed",true);depSel=-1;subSel=-1;pintar(true);window.scrollTo({top:0,behavior:quieto?"auto":"smooth"})}
-document.getElementById("inicio").addEventListener("click",function(e){if(e.target.closest("#t-subir")){var tf=$id("t-file");tf.value="";tf.click();return}var b=e.target.closest(".ini-card");if(!b)return;if(b.hasAttribute("data-img")){abrirImg();return}if(b.hasAttribute("data-plano")){abrirPlano();return}if(b.hasAttribute("data-promo")){abrirPromo();return}if(b.hasAttribute("data-prec")){abrirPrec();return}INICIO=false;depSel=+b.getAttribute("data-d");subSel=-1;if(depSel!==0){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);}pintar(true);
+document.getElementById("inicio").addEventListener("click",function(e){if(e.target.closest("#t-subir")){var tf=$id("t-file");tf.value="";tf.click();return}var b=e.target.closest(".ini-card");if(!b)return;if(b.hasAttribute("data-img")){abrirImg();return}if(b.hasAttribute("data-plano")){abrirPlano();return}if(b.hasAttribute("data-promo")){abrirPromo();return}if(b.hasAttribute("data-prec")){abrirPrec();return}if(b.hasAttribute("data-inv")){$id("inv-abrir").click();return}INICIO=false;depSel=+b.getAttribute("data-d");subSel=-1;if(depSel!==0){porEx=false;document.getElementById("f-pex").setAttribute("aria-pressed",false);}pintar(true);
   var t=document.getElementById("subs");if(t)setTimeout(function(){t.scrollIntoView({behavior:quieto?"auto":"smooth",block:"start"})},60)});
 (function(){var m="";try{m=localStorage.getItem("modo-rev")||""}catch(e){}if(m!=="toma"&&m!=="precio")m="";MODO=m;document.body.classList.toggle("sin-rev",!m);if(m){KEY=SETS[m].key;hechos=SETS[m].h}document.getElementById("r-toma").setAttribute("aria-pressed",m==="toma");document.getElementById("r-precio").setAttribute("aria-pressed",m==="precio");document.getElementById("rev-et").textContent=m==="precio"?"Precios Revisados":"Toma Uno Revisados"})();
 /* ===== Finalización De Promociones Del Día ===== */
@@ -8947,6 +8949,8 @@ try{var _iv=JSON.parse(localStorage.getItem(IKEY)||"null");
   if(Array.isArray(_iv))ID=_iv;else if(_iv&&Array.isArray(_iv.i)&&_iv.d===IDIA)ID=_iv.i;else ID=[]}catch(e){ID=[]}
 function guardarImg(){try{localStorage.setItem(IKEY,JSON.stringify({d:hoyMX(),i:ID}))}catch(e){}}
 guardarImg();
+function tarjetaInv(){
+  return '<button type="button" class="ini-card ini-inv" data-inv="1"><span class="ini-n">Inventario</span><span class="ini-c">Stock, Precio Y Pérdidas</span><span class="ini-s">Sube El Excel De Inventario Y Anota Lo Que Encuentras</span></button>'}
 function tarjetaImg(){
   var hc=ID.filter(function(z){return z.h}).length;
   return '<button type="button" class="ini-card ini-img" data-img="1"><span class="ini-n">Realizar Pedido</span><span class="ini-c">'
