@@ -584,6 +584,8 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
 .inv-tabla td.n{text-align:center}
 .inv-tabla .inv-c{display:none}
 .inv.contando .inv-tabla .inv-c{display:table-cell}
+.inv-tabla td.inv-foto{width:1%;padding:6px 8px}
+.inv-tabla .inv-th{display:block;width:36px;height:36px;object-fit:contain;background:#fff;border:1px solid var(--linea);border-radius:8px;cursor:zoom-in}
 .inv-tabla .inv-in{width:96px;max-width:100%;font:600 16px var(--sans);padding:8px 10px;border:1.5px solid var(--linea);border-radius:10px;background:var(--fondo);color:var(--tinta);text-align:center;font-variant-numeric:tabular-nums}
 .inv-tabla .inv-in:focus{outline:none;border-color:var(--rojo);background:var(--blanco);box-shadow:0 0 0 4px rgba(213,44,51,.12)}
 .inv-neg{color:var(--rojo-texto);font-weight:700}
@@ -749,7 +751,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
   <div class="p-bus"><input id="inv-q" type="search" enterkeyhint="search" placeholder="Buscar SKU O Artículo" aria-label="Buscar SKU O Artículo" autocomplete="off"></div>
   <div class="p-scroll">
    <table class="p-tabla inv-tabla">
-    <thead><tr><th>SKU</th><th>Artículo</th><th class="n">Stock</th><th class="n">Precio</th><th class="n inv-c">Encontrada</th><th class="n inv-c">Diferencia</th><th class="n inv-c">Pérdida</th></tr></thead>
+    <thead><tr><th>Foto</th><th>SKU</th><th>Artículo</th><th class="n">Stock</th><th class="n">Precio</th><th class="n inv-c">Encontrada</th><th class="n inv-c">Diferencia</th><th class="n inv-c">Pérdida</th></tr></thead>
     <tbody id="inv-filas"></tbody>
    </table>
   </div>
@@ -9371,7 +9373,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
   }
   function fila(sk){
     var it=CAT.items[sk],cv=CNT.c[sk],ce=celdas(sk),ds=it.d||DESC[sk]||"";
-    return '<tr class="fila" data-sku="'+sk+'"><td><span class="sku">'+sk+'</span></td><td class="d inv-d">'+esc(ds)+'</td>'+
+    return '<tr class="fila" data-sku="'+sk+'" data-s="'+sk+'"><td class="inv-foto">'+(FOTOS[sk]?'<img class="inv-th" data-g="1" alt="Foto '+sk+'" loading="lazy" decoding="async" src="img/'+sk+'.jpg">':'')+'</td><td><span class="sku">'+sk+'</span></td><td class="d inv-d"><span class="t">'+esc(ds)+'</span></td>'+
       '<td class="n">'+it.s+'</td><td class="n">'+MON.format(it.p)+'</td>'+
       '<td class="n inv-c"><input class="inv-in" type="number" inputmode="numeric" min="0" step="1" aria-label="Cantidad Encontrada De '+sk+'" value="'+(cv==null?"":cv)+'"></td>'+
       '<td class="n inv-c dif">'+ce[0]+'</td><td class="n inv-c per">'+ce[1]+'</td></tr>';
@@ -9390,13 +9392,13 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
   }
   function pintar(){
     var h="",txt=q("inv-q").value.trim().toLowerCase(),tb=q("inv-filas");
-    if(!CAT){tb.innerHTML='<tr class="vacia"><td colspan="7">Sube El Excel De Inventario Para Empezar.</td></tr>';q("inv-sub").textContent="Sube El Excel Con SKU, Stock Y Precio.";resumen();return}
+    if(!CAT){tb.innerHTML='<tr class="vacia"><td colspan="8">Sube El Excel De Inventario Para Empezar.</td></tr>';q("inv-sub").textContent="Sube El Excel Con SKU, Stock Y Precio.";resumen();return}
     Object.keys(CAT.items).forEach(function(sk){
       var it=CAT.items[sk],ds=it.d||DESC[sk]||"";
       if(txt&&sk.indexOf(txt)<0&&ds.toLowerCase().indexOf(txt)<0)return;
       h+=fila(sk);
     });
-    tb.innerHTML=h||'<tr class="vacia"><td colspan="7">Sin Coincidencias.</td></tr>';
+    tb.innerHTML=h||'<tr class="vacia"><td colspan="8">Sin Coincidencias.</td></tr>';
     q("inv-sub").textContent="Archivo: "+CAT.archivo+" · "+Object.keys(CAT.items).length+" Artículos · Subido "+fechaTxt(CAT.fecha)+
       (fbAuth.currentUser?"":". Solo En Este Dispositivo: Entra Con Google Para Publicarlo.");
     resumen();
@@ -9469,6 +9471,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
     tr.querySelector(".dif").innerHTML=ce[0];tr.querySelector(".per").innerHTML=ce[1];
     resumen();guardarCnt();
   });
+  q("inv-filas").addEventListener("click",function(e){var t=e.target;if(t.getAttribute&&t.getAttribute("data-g"))foto(t)});
   q("inv-filas").addEventListener("keydown",function(e){
     if(e.key!=="Enter"||!e.target.classList||!e.target.classList.contains("inv-in"))return;
     e.preventDefault();
