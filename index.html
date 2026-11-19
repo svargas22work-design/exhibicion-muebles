@@ -604,6 +604,13 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
 .inv-rep th,.inv-rep td{padding:6px 4px;border-bottom:1px solid var(--linea);text-align:left}
 .inv-rep th.n,.inv-rep td.n{text-align:right;font-variant-numeric:tabular-nums}
 .inv-rep .acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.inv-rep-bar{display:flex;gap:4px;height:8px;margin:-14px -16px 14px;border-radius:16px 16px 0 0;overflow:hidden}
+.inv-rep-bar i{flex:1;display:block}
+.inv-rep-bar i:nth-child(1){background:var(--rojo)}.inv-rep-bar i:nth-child(2){background:var(--azul)}.inv-rep-bar i:nth-child(3){background:var(--naranja)}.inv-rep-bar i:nth-child(4){background:var(--marino)}
+.inv-res-rep{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 12px}
+@media(min-width:620px){.inv-res-rep{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.inv-card.cont{border-top-color:var(--azul)}
+.inv-card.neto{border-top-color:var(--naranja)}
 </style>
 <div class="bar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="wrap">
@@ -9412,44 +9419,133 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
     q("inv-sob").textContent=MON.format(r.sobV);
     q("inv-neto").textContent=(r.neto<0?"−":"")+MON.format(Math.abs(r.neto));
   }
-  var REP_TXT="";
+  var REP=null;
+  function sg(x){return (x<0?"−":"")+MON.format(Math.abs(x))}
+  function tarjeta(etq,val,cls){return '<div class="inv-card '+cls+'"><div class="et">'+etq+'</div><div class="cif">'+val+'</div></div>'}
+  function reporteDatos(){
+    var r=calcular(),n=Object.keys(CAT.items).length,iso=new Date().toISOString();
+    return {archivo:CAT.archivo,ahora:fechaTxt(iso),dia:iso.slice(0,10),n:n,r:r,
+      fal:r.lista.filter(function(x){return x.d<0}).sort(function(a,b){return a.v-b.v}).slice(0,10),
+      sob:r.lista.filter(function(x){return x.d>0}).sort(function(a,b){return b.v-a.v}).slice(0,5)};
+  }
+  function tablaHtml(rows,titulo){
+    if(!rows.length)return '';
+    var h='<h4>'+titulo+'</h4><table><thead><tr><th>SKU</th><th>Artículo</th><th class="n">Diferencia</th><th class="n">Valor</th></tr></thead><tbody>';
+    rows.forEach(function(x){
+      var dif=(x.d>0?"+":"")+x.d;
+      h+='<tr><td>'+x.sk+'</td><td>'+esc(x.ds)+'</td><td class="n">'+dif+'</td><td class="n">'+sg(x.v)+'</td></tr>';
+    });
+    return h+'</tbody></table>';
+  }
+  function textoReporte(D){
+    var R=D.r,t="Resumen De Inventario · "+D.ahora+"\n"+"Archivo: "+D.archivo+"\n"+
+      "Artículos Contados: "+R.cont+" de "+D.n+" ("+(D.n-R.cont)+" Sin Contar)\n"+
+      "Pérdida (Faltantes): "+MON.format(R.perd)+" · Piezas: "+R.falt+"\n"+
+      "Sobrantes (Se Suman): "+MON.format(R.sobV)+" · Piezas: "+R.sobPz+"\n"+
+      "Balance Neto: "+sg(R.neto)+"\n";
+    var lista=function(rows,titulo){
+      if(!rows.length)return "";
+      return "\n"+titulo+":\n"+rows.map(function(x){return "  "+x.sk+" "+x.ds+": "+(x.d>0?"+":"")+x.d+" pzas · "+sg(x.v)}).join("\n")+"\n";
+    };
+    return t+lista(D.fal,"Mayores Faltantes")+lista(D.sob,"Mayores Sobrantes");
+  }
   function hacerResumen(){
     var box=q("inv-rep");
-    if(!CAT){box.innerHTML='<h3>Resumen De Inventario</h3><p class="p-sub">Primero Sube El Excel De Inventario.</p>';box.hidden=false;REP_TXT="";return}
-    var r=calcular(),n=Object.keys(CAT.items).length,ahora=fechaTxt(new Date().toISOString());
-    var fal=r.lista.filter(function(x){return x.d<0}).sort(function(a,b){return a.v-b.v}).slice(0,10);
-    var sob=r.lista.filter(function(x){return x.d>0}).sort(function(a,b){return b.v-a.v}).slice(0,5);
-    var sg=function(x){return (x<0?"−":"")+MON.format(Math.abs(x))};
-    var resLin=[
-      "Artículos Contados: "+r.cont+" de "+n+" ("+(n-r.cont)+" Sin Contar)",
-      "Piezas Faltantes: "+r.falt+" · Pérdida: "+MON.format(r.perd),
-      "Piezas Sobrantes: "+r.sobPz+" · Sobrante (Se Suma): "+MON.format(r.sobV),
-      "Balance Neto: "+sg(r.neto)
-    ];
-    var tabla=function(rows,titulo){
-      if(!rows.length)return {html:"",txt:""};
-      var h='<h4>'+titulo+'</h4><table><thead><tr><th>SKU</th><th>Artículo</th><th class="n">Diferencia</th><th class="n">Valor</th></tr></thead><tbody>',t="\n"+titulo+":\n";
-      rows.forEach(function(x){
-        var dif=(x.d>0?"+":"")+x.d;
-        h+='<tr><td>'+x.sk+'</td><td>'+esc(x.ds)+'</td><td class="n">'+dif+'</td><td class="n">'+sg(x.v)+'</td></tr>';
-        t+="  "+x.sk+" "+x.ds+": "+dif+" pzas · "+sg(x.v)+"\n";
+    var barra='<div class="inv-rep-bar"><i></i><i></i><i></i><i></i></div>';
+    if(!CAT){box.innerHTML=barra+'<h3>Resumen De Inventario</h3><p class="p-sub">Primero Sube El Excel De Inventario.</p>';box.hidden=false;REP=null;return}
+    REP=reporteDatos();
+    var R=REP.r;
+    var h=barra+'<h3>Resumen De Inventario</h3><p class="p-sub">'+esc(REP.archivo)+' · '+esc(REP.ahora)+'</p>'+
+      '<div class="inv-res-rep">'+
+        tarjeta("Artículos Contados",R.cont+" de "+REP.n,"cont")+
+        tarjeta("Pérdida (Faltantes)",MON.format(R.perd),"perd")+
+        tarjeta("Sobrantes (Se Suman)",MON.format(R.sobV),"pos")+
+        tarjeta("Balance Neto",sg(R.neto),"neto")+
+      '</div>'+
+      '<p class="p-sub">Piezas Faltantes: '+R.falt+' · Piezas Sobrantes: '+R.sobPz+' · Sin Contar: '+(REP.n-R.cont)+'</p>';
+    h+=R.cont?tablaHtml(REP.fal,"Mayores Faltantes")+tablaHtml(REP.sob,"Mayores Sobrantes"):'<p class="p-sub">Todavía No Hay Artículos Contados.</p>';
+    h+='<div class="acc"><button type="button" class="p-btn pri" id="inv-rep-png">Descargar PNG</button><button type="button" class="p-btn" id="inv-rep-copiar">Copiar Resumen</button><button type="button" class="p-btn" id="inv-rep-cerrar">Cerrar Resumen</button></div>';
+    box.innerHTML=h;box.hidden=false;
+    if(box.scrollIntoView)box.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  /* PNG con los mismos colores y tipografía de Odemás */
+  async function descargarPNG(){
+    if(!REP)return;
+    try{await document.fonts.load('700 40px Poppins');await document.fonts.load('600 16px Poppins');await document.fonts.load('400 18px Poppins')}catch(e){}
+    var C={rojo:"#D52C33",rojoT:"#C4232B",azul:"#1868C8",naranja:"#FE6F01",marino:"#2A4E7A",tinta:"#1E1E1E",gris:"#6B6B6B",linea:"#E6E6E8",fondo:"#F6F6F7",blanco:"#FFFFFF"};
+    var W=1000,P=48,R=REP.r;
+    function altoTabla(rows){return rows.length?82+34*rows.length:66}
+    var alto=286+altoTabla(REP.fal)+altoTabla(REP.sob)+90;
+    var cv=document.createElement("canvas");cv.width=W*2;cv.height=alto*2;
+    var x=cv.getContext("2d");x.scale(2,2);
+    x.fillStyle=C.blanco;x.fillRect(0,0,W,alto);
+    var bandas=[C.rojo,C.azul,C.naranja,C.marino];
+    bandas.forEach(function(c,i){x.fillStyle=c;x.fillRect(i*W/4,0,W/4,8)});
+    function rr(a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
+    function txt(s,a,b,font,color,align){x.font=font;x.fillStyle=color;x.textAlign=align||"left";x.textBaseline="alphabetic";x.fillText(s,a,b)}
+    function corta(s,max,font){x.font=font;if(x.measureText(s).width<=max)return s;while(s.length>1&&x.measureText(s+"…").width>max)s=s.slice(0,-1);return s+"…"}
+    var y=8+ 58;
+    txt("Resumen De Inventario",P,y,"700 36px Poppins",C.tinta);
+    y+=30;
+    txt(REP.archivo+" · "+REP.ahora,P,y,"400 17px Poppins",C.gris);
+    // Tarjetas
+    var cards=[["Artículos Contados",R.cont+" de "+REP.n,C.azul,C.tinta],["Pérdida (Faltantes)",MON.format(R.perd),C.rojo,C.rojoT],["Sobrantes (Se Suman)",MON.format(R.sobV),C.marino,C.marino],["Balance Neto",sg(R.neto),C.naranja,R.neto<0?C.rojoT:C.marino]];
+    var cw=(W-2*P-3*16)/4,cy=y+22,ch=104;
+    cards.forEach(function(c,i){
+      var cx=P+i*(cw+16);
+      x.fillStyle=C.blanco;rr(cx,cy,cw,ch,14);x.fill();
+      x.strokeStyle=C.linea;x.lineWidth=1;rr(cx+.5,cy+.5,cw-1,ch-1,14);x.stroke();
+      x.fillStyle=c[2];x.fillRect(cx+16,cy,cw-32,4);
+      txt(c[0],cx+16,cy+34,"400 14px Poppins",C.gris);
+      txt(corta(c[1],cw-32,"700 22px Poppins"),cx+16,cy+70,"700 22px Poppins",c[3]);
+    });
+    y=cy+ch+30;
+    txt("Piezas Faltantes: "+R.falt+" · Piezas Sobrantes: "+R.sobPz+" · Sin Contar: "+(REP.n-R.cont),P,y,"400 16px Poppins",C.gris);
+    y+=34;
+    function tabla(rows,titulo){
+      txt(titulo,P,y,"700 20px Poppins",C.tinta);
+      y+=16;
+      if(!rows.length){txt("Sin Registros",P,y+24,"400 15px Poppins",C.gris);y+=50;return}
+      var xs={sku:P+16,art:P+130,dif:W-P-200,val:W-P-16};
+      x.fillStyle=C.marino;rr(P,y,W-2*P,38,10);x.fill();
+      x.fillStyle=C.marino;x.fillRect(P,y+20,W-2*P,18);
+      txt("SKU",xs.sku,y+25,"600 14px Poppins",C.blanco);
+      txt("Artículo",xs.art,y+25,"600 14px Poppins",C.blanco);
+      txt("Diferencia",xs.dif,y+25,"600 14px Poppins",C.blanco,"right");
+      txt("Valor",xs.val,y+25,"600 14px Poppins",C.blanco,"right");
+      y+=38;
+      rows.forEach(function(f,i){
+        if(i%2===1){x.fillStyle=C.fondo;x.fillRect(P,y,W-2*P,34)}
+        var cy2=y+22;
+        txt(f.sk,xs.sku,cy2,"400 15px Poppins",C.tinta);
+        txt(corta(f.ds,xs.dif-xs.art-150,"400 15px Poppins"),xs.art,cy2,"400 15px Poppins",C.tinta);
+        txt((f.d>0?"+":"")+f.d,xs.dif,cy2,"600 15px Poppins",f.d<0?C.rojoT:C.marino,"right");
+        txt(sg(f.v),xs.val,cy2,"600 15px Poppins",f.v<0?C.rojoT:C.marino,"right");
+        y+=34;
       });
-      return {html:h+'</tbody></table>',txt:t};
-    };
-    var a=tabla(fal,"Mayores Faltantes"),b=tabla(sob,"Mayores Sobrantes");
-    REP_TXT="Resumen De Inventario · "+ahora+"\nArchivo: "+CAT.archivo+"\n"+resLin.join("\n")+"\n"+a.txt+b.txt;
-    box.innerHTML='<h3>Resumen De Inventario</h3><p class="p-sub">'+esc(CAT.archivo)+' · '+esc(ahora)+'</p><ul>'+resLin.map(function(l){return '<li>'+esc(l)+'</li>'}).join("")+'</ul>'+
-      (r.cont?a.html+b.html:'<p class="p-sub">Todavía No Hay Artículos Contados.</p>')+
-      '<div class="acc"><button type="button" class="p-btn pri" id="inv-rep-copiar">Copiar Resumen</button><button type="button" class="p-btn" id="inv-rep-cerrar">Cerrar Resumen</button></div>';
-    box.hidden=false;
-    box.scrollIntoView({behavior:"smooth",block:"start"});
+      y+=28;
+    }
+    tabla(REP.fal,"Mayores Faltantes");
+    tabla(REP.sob,"Mayores Sobrantes");
+    txt("odemás · Tienda 106",P,alto-34,"600 16px Poppins",C.tinta);
+    bandas.forEach(function(c,i){x.fillStyle=c;x.fillRect(i*W/4,alto-8,W/4,8)});
+    cv.toBlob(function(blob){
+      if(!blob){aviso("No Se Pudo Generar La Imagen.","err");return}
+      var a=document.createElement("a");a.href=URL.createObjectURL(blob);
+      a.download="resumen-inventario-"+REP.dia+".png";
+      document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
+    },"image/png");
   }
   q("inv-resumen").addEventListener("click",hacerResumen);
   q("inv-rep").addEventListener("click",function(e){
     var t=e.target;
     if(t.id==="inv-rep-cerrar"){q("inv-rep").hidden=true;return}
+    if(t.id==="inv-rep-png"){descargarPNG();return}
     if(t.id==="inv-rep-copiar"){
-      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(REP_TXT).then(function(){aviso("Resumen Copiado.","ok")},function(){aviso("No Se Pudo Copiar. Selecciona El Texto Manualmente.","err")});
+      if(!REP)return;
+      var txt=textoReporte(REP);
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(function(){aviso("Resumen Copiado.","ok")},function(){aviso("No Se Pudo Copiar. Usa Descargar PNG.","err")});
       else aviso("Este Navegador No Permite Copiar Desde La Página.","err");
     }
   });
