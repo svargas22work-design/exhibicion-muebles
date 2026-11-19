@@ -593,6 +593,17 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
 .inv-perd{color:var(--rojo-texto);font-weight:700}
 .inv-sin{color:var(--gris-cl)}
 .inv .ex-msg{margin:0 0 12px}
+.inv-card.pos{border-top-color:var(--marino)}
+.inv-rep{background:var(--blanco);border:1px solid var(--linea);border-radius:16px;padding:14px 16px;margin:0 0 14px;box-shadow:var(--sombra)}
+.inv-rep[hidden]{display:none}
+.inv-rep h3{font:700 18px var(--sans);margin:0 0 4px}
+.inv-rep .p-sub{margin:0 0 10px}
+.inv-rep ul{margin:0 0 12px;padding-left:18px;font-size:15px;line-height:1.5}
+.inv-rep h4{font:700 15px var(--sans);margin:12px 0 6px}
+.inv-rep table{width:100%;border-collapse:collapse;font-size:14px}
+.inv-rep th,.inv-rep td{padding:6px 4px;border-bottom:1px solid var(--linea);text-align:left}
+.inv-rep th.n,.inv-rep td.n{text-align:right;font-variant-numeric:tabular-nums}
+.inv-rep .acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 </style>
 <div class="bar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="wrap">
@@ -737,21 +748,23 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
     <button type="button" class="p-btn pri" id="inv-subir">Subir Excel De Inventario</button>
     <label class="inv-chk"><input type="checkbox" id="inv-chk"> Ingresar Cantidad Encontrada</label>
     <button type="button" class="p-btn" id="inv-borrar" hidden>Borrar Conteo</button>
+    <button type="button" class="p-btn" id="inv-resumen">Hacer Resumen</button>
     <input type="file" id="inv-file" class="oculto" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
   </div>
   <h2 class="p-tit" id="inv-tit">Inventario</h2>
   <p class="p-sub" id="inv-sub">Sube El Excel Con SKU, Stock Y Precio.</p>
   <p class="ex-msg" id="inv-msg" role="status" aria-live="polite" hidden></p>
+  <div class="inv-rep" id="inv-rep" hidden></div>
   <div class="inv-res">
     <div class="inv-card"><div class="et">Artículos Contados</div><div class="cif" id="inv-cont">0</div></div>
-    <div class="inv-card"><div class="et">Piezas Faltantes</div><div class="cif" id="inv-falt">0</div></div>
-    <div class="inv-card perd"><div class="et">Pérdida Total</div><div class="cif" id="inv-perd">$0.00</div></div>
-    <div class="inv-card"><div class="et">Piezas Sobrantes</div><div class="cif" id="inv-sob">0</div></div>
+    <div class="inv-card perd"><div class="et">Pérdida (Faltantes)</div><div class="cif" id="inv-perd">$0.00</div></div>
+    <div class="inv-card pos"><div class="et">Sobrantes (Se Suman)</div><div class="cif" id="inv-sob">$0.00</div></div>
+    <div class="inv-card"><div class="et">Balance Neto</div><div class="cif" id="inv-neto">$0.00</div></div>
   </div>
   <div class="p-bus"><input id="inv-q" type="search" enterkeyhint="search" placeholder="Buscar SKU O Artículo" aria-label="Buscar SKU O Artículo" autocomplete="off"></div>
   <div class="p-scroll">
    <table class="p-tabla inv-tabla">
-    <thead><tr><th>Foto</th><th>SKU</th><th>Artículo</th><th class="n">Stock</th><th class="n">Precio</th><th class="n inv-c">Encontrada</th><th class="n inv-c">Diferencia</th><th class="n inv-c">Pérdida</th></tr></thead>
+    <thead><tr><th>Foto</th><th>SKU</th><th>Artículo</th><th class="n">Stock</th><th class="n">Precio</th><th class="n inv-c">Encontrada</th><th class="n inv-c">Diferencia</th><th class="n inv-c">Valor</th></tr></thead>
     <tbody id="inv-filas"></tbody>
    </table>
   </div>
@@ -9363,11 +9376,11 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
 
   /* Cifras y tabla */
   function celdas(sk){
-    var it=CAT.items[sk],cv=CNT.c[sk],d=cv==null?null:cv-it.s,pe=(d!=null&&d<0)?-d*it.p:0,dif,per;
+    var it=CAT.items[sk],cv=CNT.c[sk],d=cv==null?null:cv-it.s,v=d==null?0:d*it.p,dif,per;
     if(d==null){dif='<span class="inv-sin">—</span>';per='<span class="inv-sin">—</span>'}
     else{
       dif=d<0?'<span class="inv-neg">'+d+'</span>':d>0?'<span class="inv-pos">+'+d+'</span>':'0';
-      per=pe>0?'<span class="inv-perd">'+MON.format(pe)+'</span>':MON.format(0);
+      per=v<0?'<span class="inv-perd">−'+MON.format(-v)+'</span>':v>0?'<span class="inv-pos">+'+MON.format(v)+'</span>':MON.format(0);
     }
     return [dif,per];
   }
@@ -9378,88 +9391,67 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
       '<td class="n inv-c"><input class="inv-in" type="number" inputmode="numeric" min="0" step="1" aria-label="Cantidad Encontrada De '+sk+'" value="'+(cv==null?"":cv)+'"></td>'+
       '<td class="n inv-c dif">'+ce[0]+'</td><td class="n inv-c per">'+ce[1]+'</td></tr>';
   }
+  /* Sobrantes SUMAN al balance; faltantes RESTAN (valor = diferencia × precio) */
+  function calcular(){
+    var r={cont:0,falt:0,perd:0,sobPz:0,sobV:0,lista:[]};
+    if(!CAT)return r;
+    Object.keys(CNT.c).forEach(function(sk){
+      var it=CAT.items[sk];if(!it)return;
+      var d=CNT.c[sk]-it.s,v=d*it.p;
+      r.cont++;
+      r.lista.push({sk:sk,d:d,v:v,ds:it.d||DESC[sk]||""});
+      if(d<0){r.falt+=-d;r.perd+=-v}else{r.sobPz+=d;r.sobV+=v}
+    });
+    r.neto=r.sobV-r.perd;
+    return r;
+  }
   function resumen(){
-    var cont=0,falt=0,sob=0,perd=0;
-    if(CAT)Object.keys(CNT.c).forEach(function(sk){
-      if(!CAT.items[sk])return;
-      var it=CAT.items[sk],d=CNT.c[sk]-it.s;cont++;
-      if(d<0){falt+=-d;perd+=-d*it.p}else sob+=d;
-    });
-    q("inv-cont").textContent=cont+(CAT?" de "+Object.keys(CAT.items).length:"");
-    q("inv-falt").textContent=falt;
-    q("inv-sob").textContent=sob;
-    q("inv-perd").textContent=MON.format(perd);
+    var r=calcular();
+    q("inv-cont").textContent=r.cont+(CAT?" de "+Object.keys(CAT.items).length:"");
+    q("inv-perd").textContent=MON.format(r.perd);
+    q("inv-sob").textContent=MON.format(r.sobV);
+    q("inv-neto").textContent=(r.neto<0?"−":"")+MON.format(Math.abs(r.neto));
   }
-  function pintar(){
-    var h="",txt=q("inv-q").value.trim().toLowerCase(),tb=q("inv-filas");
-    if(!CAT){tb.innerHTML='<tr class="vacia"><td colspan="8">Sube El Excel De Inventario Para Empezar.</td></tr>';q("inv-sub").textContent="Sube El Excel Con SKU, Stock Y Precio.";resumen();return}
-    Object.keys(CAT.items).forEach(function(sk){
-      var it=CAT.items[sk],ds=it.d||DESC[sk]||"";
-      if(txt&&sk.indexOf(txt)<0&&ds.toLowerCase().indexOf(txt)<0)return;
-      h+=fila(sk);
-    });
-    tb.innerHTML=h||'<tr class="vacia"><td colspan="8">Sin Coincidencias.</td></tr>';
-    q("inv-sub").textContent="Archivo: "+CAT.archivo+" · "+Object.keys(CAT.items).length+" Artículos · Subido "+fechaTxt(CAT.fecha)+
-      (fbAuth.currentUser?"":". Solo En Este Dispositivo: Entra Con Google Para Publicarlo.");
-    resumen();
+  var REP_TXT="";
+  function hacerResumen(){
+    var box=q("inv-rep");
+    if(!CAT){box.innerHTML='<h3>Resumen De Inventario</h3><p class="p-sub">Primero Sube El Excel De Inventario.</p>';box.hidden=false;REP_TXT="";return}
+    var r=calcular(),n=Object.keys(CAT.items).length,ahora=fechaTxt(new Date().toISOString());
+    var fal=r.lista.filter(function(x){return x.d<0}).sort(function(a,b){return a.v-b.v}).slice(0,10);
+    var sob=r.lista.filter(function(x){return x.d>0}).sort(function(a,b){return b.v-a.v}).slice(0,5);
+    var sg=function(x){return (x<0?"−":"")+MON.format(Math.abs(x))};
+    var resLin=[
+      "Artículos Contados: "+r.cont+" de "+n+" ("+(n-r.cont)+" Sin Contar)",
+      "Piezas Faltantes: "+r.falt+" · Pérdida: "+MON.format(r.perd),
+      "Piezas Sobrantes: "+r.sobPz+" · Sobrante (Se Suma): "+MON.format(r.sobV),
+      "Balance Neto: "+sg(r.neto)
+    ];
+    var tabla=function(rows,titulo){
+      if(!rows.length)return {html:"",txt:""};
+      var h='<h4>'+titulo+'</h4><table><thead><tr><th>SKU</th><th>Artículo</th><th class="n">Diferencia</th><th class="n">Valor</th></tr></thead><tbody>',t="\n"+titulo+":\n";
+      rows.forEach(function(x){
+        var dif=(x.d>0?"+":"")+x.d;
+        h+='<tr><td>'+x.sk+'</td><td>'+esc(x.ds)+'</td><td class="n">'+dif+'</td><td class="n">'+sg(x.v)+'</td></tr>';
+        t+="  "+x.sk+" "+x.ds+": "+dif+" pzas · "+sg(x.v)+"\n";
+      });
+      return {html:h+'</tbody></table>',txt:t};
+    };
+    var a=tabla(fal,"Mayores Faltantes"),b=tabla(sob,"Mayores Sobrantes");
+    REP_TXT="Resumen De Inventario · "+ahora+"\nArchivo: "+CAT.archivo+"\n"+resLin.join("\n")+"\n"+a.txt+b.txt;
+    box.innerHTML='<h3>Resumen De Inventario</h3><p class="p-sub">'+esc(CAT.archivo)+' · '+esc(ahora)+'</p><ul>'+resLin.map(function(l){return '<li>'+esc(l)+'</li>'}).join("")+'</ul>'+
+      (r.cont?a.html+b.html:'<p class="p-sub">Todavía No Hay Artículos Contados.</p>')+
+      '<div class="acc"><button type="button" class="p-btn pri" id="inv-rep-copiar">Copiar Resumen</button><button type="button" class="p-btn" id="inv-rep-cerrar">Cerrar Resumen</button></div>';
+    box.hidden=false;
+    box.scrollIntoView({behavior:"smooth",block:"start"});
   }
-  function publicar(ruta,obj){
-    if(!fbAuth.currentUser)return;
-    fbSet(ruta,obj).catch(function(e){aviso("No Se Publicó Para Todos ("+(e&&e.message||"error")+"). Sigue Guardado En Este Dispositivo.","err")});
-  }
-  function guardarCnt(){
-    guardar(K_CNT,CNT);
-    clearTimeout(TMR);TMR=setTimeout(function(){publicar(ID_CNT,CNT)},1200);
-  }
-
-  /* Carga lo guardado en este dispositivo y lo publicado (lo más reciente gana) */
-  async function cargar(){
-    if(LISTO)return;LISTO=true;
-    CAT=leer(K_CAT);CNT=leer(K_CNT)||{t:"",c:{}};
-    var nube=await fbGet(ID_CAT),nc=await fbGet(ID_CNT);
-    if(nube&&nube.items&&(!CAT||String(nube.fecha)>String(CAT.fecha))){CAT=nube;guardar(K_CAT,CAT)}
-    if(nc&&nc.c&&(!CNT.t||String(nc.t)>String(CNT.t))){CNT=nc;guardar(K_CNT,CNT)}
-    pintar();
-  }
-
-  async function subirExcel(file){
-    aviso("Leyendo Excel…");
-    try{
-      var X=await cargarXLSX(),buf=await file.arrayBuffer(),r=leerInventario(X,buf);
-      if(!r.n){aviso("No Encontré Las Columnas «SKU», «Stock» Y «Precio» En El Excel. Revisa Que Los Encabezados Estén En La Hoja.","err");return}
-      CAT={fecha:new Date().toISOString(),archivo:file.name,items:r.items};
-      guardar(K_CAT,CAT);
-      pintar();
-      if(fbAuth.currentUser){
-        aviso(r.n+" Artículos Cargados. Publicando Para Todos…","ok");
-        try{await fbSet(ID_CAT,CAT);aviso(r.n+" Artículos Cargados Y Publicados Para Todos.","ok")}
-        catch(e){aviso(r.n+" Artículos Cargados. No Se Publicó Para Todos ("+(e&&e.message||"error")+").","err")}
-      }else aviso(r.n+" Artículos Cargados. Solo En Este Dispositivo.","ok");
-    }catch(err){
-      aviso(err&&err.message==="xl"?"No Se Pudo Cargar El Lector De Excel. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un Excel O CSV.","err");
+  q("inv-resumen").addEventListener("click",hacerResumen);
+  q("inv-rep").addEventListener("click",function(e){
+    var t=e.target;
+    if(t.id==="inv-rep-cerrar"){q("inv-rep").hidden=true;return}
+    if(t.id==="inv-rep-copiar"){
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(REP_TXT).then(function(){aviso("Resumen Copiado.","ok")},function(){aviso("No Se Pudo Copiar. Selecciona El Texto Manualmente.","err")});
+      else aviso("Este Navegador No Permite Copiar Desde La Página.","err");
     }
-  }
-
-  /* Eventos */
-  q("inv-abrir").addEventListener("click",function(){
-    var o=q("inv");o.hidden=false;o.scrollTop=0;
-    q("inv-chk").checked=o.classList.contains("contando");
-    q("inv-borrar").hidden=!q("inv-chk").checked;
-    cargar().catch(function(){});
-    pintar();
-  });
-  q("inv-volver").addEventListener("click",function(){q("inv").hidden=true});
-  q("inv-subir").addEventListener("click",function(){var f=q("inv-file");f.value="";f.click()});
-  q("inv-file").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)subirExcel(f)});
-  q("inv-chk").addEventListener("change",function(){
-    q("inv").classList.toggle("contando",this.checked);
-    q("inv-borrar").hidden=!this.checked;
-    if(this.checked)aviso("");
-    pintar();
-  });
-  q("inv-borrar").addEventListener("click",function(){
-    if(!confirm("¿Borrar Todo El Conteo?"))return;
-    CNT={t:new Date().toISOString(),c:{}};guardarCnt();pintar();
   });
   q("inv-q").addEventListener("input",pintar);
   q("inv-filas").addEventListener("input",function(e){
