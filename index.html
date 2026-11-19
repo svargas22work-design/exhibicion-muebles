@@ -9453,6 +9453,77 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
       else aviso("Este Navegador No Permite Copiar Desde La Página.","err");
     }
   });
+  function pintar(){
+    var h="",txt=q("inv-q").value.trim().toLowerCase(),tb=q("inv-filas");
+    if(!CAT){tb.innerHTML='<tr class="vacia"><td colspan="8">Sube El Excel De Inventario Para Empezar.</td></tr>';q("inv-sub").textContent="Sube El Excel Con SKU, Stock Y Precio.";resumen();return}
+    Object.keys(CAT.items).forEach(function(sk){
+      var it=CAT.items[sk],ds=it.d||DESC[sk]||"";
+      if(txt&&sk.indexOf(txt)<0&&ds.toLowerCase().indexOf(txt)<0)return;
+      h+=fila(sk);
+    });
+    tb.innerHTML=h||'<tr class="vacia"><td colspan="8">Sin Coincidencias.</td></tr>';
+    q("inv-sub").textContent="Archivo: "+CAT.archivo+" · "+Object.keys(CAT.items).length+" Artículos · Subido "+fechaTxt(CAT.fecha)+
+      (fbAuth.currentUser?"":". Solo En Este Dispositivo: Entra Con Google Para Publicarlo.");
+    resumen();
+  }
+  function publicar(ruta,obj){
+    if(!fbAuth.currentUser)return;
+    fbSet(ruta,obj).catch(function(e){aviso("No Se Publicó Para Todos ("+(e&&e.message||"error")+"). Sigue Guardado En Este Dispositivo.","err")});
+  }
+  function guardarCnt(){
+    guardar(K_CNT,CNT);
+    clearTimeout(TMR);TMR=setTimeout(function(){publicar(ID_CNT,CNT)},1200);
+  }
+
+  /* Carga lo guardado en este dispositivo y lo publicado (lo más reciente gana) */
+  async function cargar(){
+    if(LISTO)return;LISTO=true;
+    CAT=leer(K_CAT);CNT=leer(K_CNT)||{t:"",c:{}};
+    var nube=await fbGet(ID_CAT),nc=await fbGet(ID_CNT);
+    if(nube&&nube.items&&(!CAT||String(nube.fecha)>String(CAT.fecha))){CAT=nube;guardar(K_CAT,CAT)}
+    if(nc&&nc.c&&(!CNT.t||String(nc.t)>String(CNT.t))){CNT=nc;guardar(K_CNT,CNT)}
+    pintar();
+  }
+
+  async function subirExcel(file){
+    aviso("Leyendo Excel…");
+    try{
+      var X=await cargarXLSX(),buf=await file.arrayBuffer(),r=leerInventario(X,buf);
+      if(!r.n){aviso("No Encontré Las Columnas «SKU», «Stock» Y «Precio» En El Excel. Revisa Que Los Encabezados Estén En La Hoja.","err");return}
+      CAT={fecha:new Date().toISOString(),archivo:file.name,items:r.items};
+      guardar(K_CAT,CAT);
+      pintar();
+      if(fbAuth.currentUser){
+        aviso(r.n+" Artículos Cargados. Publicando Para Todos…","ok");
+        try{await fbSet(ID_CAT,CAT);aviso(r.n+" Artículos Cargados Y Publicados Para Todos.","ok")}
+        catch(e){aviso(r.n+" Artículos Cargados. No Se Publicó Para Todos ("+(e&&e.message||"error")+").","err")}
+      }else aviso(r.n+" Artículos Cargados. Solo En Este Dispositivo.","ok");
+    }catch(err){
+      aviso(err&&err.message==="xl"?"No Se Pudo Cargar El Lector De Excel. Revisa Tu Conexión A Internet.":"No Se Pudo Leer El Archivo. Revisa Que Sea Un Excel O CSV.","err");
+    }
+  }
+
+  /* Eventos */
+  q("inv-abrir").addEventListener("click",function(){
+    var o=q("inv");o.hidden=false;o.scrollTop=0;
+    q("inv-chk").checked=o.classList.contains("contando");
+    q("inv-borrar").hidden=!q("inv-chk").checked;
+    cargar().catch(function(){});
+    pintar();
+  });
+  q("inv-volver").addEventListener("click",function(){q("inv").hidden=true});
+  q("inv-subir").addEventListener("click",function(){var f=q("inv-file");f.value="";f.click()});
+  q("inv-file").addEventListener("change",function(e){var f=e.target.files&&e.target.files[0];if(f)subirExcel(f)});
+  q("inv-chk").addEventListener("change",function(){
+    q("inv").classList.toggle("contando",this.checked);
+    q("inv-borrar").hidden=!this.checked;
+    if(this.checked)aviso("");
+    pintar();
+  });
+  q("inv-borrar").addEventListener("click",function(){
+    if(!confirm("¿Borrar Todo El Conteo?"))return;
+    CNT={t:new Date().toISOString(),c:{}};guardarCnt();pintar();
+  });
   q("inv-q").addEventListener("input",pintar);
   q("inv-filas").addEventListener("input",function(e){
     var t=e.target;if(!t.classList||!t.classList.contains("inv-in")||!CAT)return;
