@@ -618,24 +618,26 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
 .sub,h1,.caja,.progreso,.pct,.tools,.nota,.subs,.modo,body.en-inicio .inicio{animation-delay:0s!important;animation-duration:.28s!important}
 .caja:nth-child(n){animation-delay:0s!important}
 
+.busca,.p-bus{background:var(--pagina)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 /* Barra inferior (zona del pulgar) */
 .nav106{position:fixed;left:0;right:0;bottom:0;z-index:62;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;
   padding:6px max(8px,env(safe-area-inset-left,0px)) calc(env(safe-area-inset-bottom,0px) + 6px) max(8px,env(safe-area-inset-right,0px));
-  background:var(--vidrio);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);border-top:1px solid var(--linea)}
+  background:var(--rojo);box-shadow:0 -6px 18px -12px rgba(0,0,0,.35)}
 .nav106 button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;padding:0;border:0;background:none;
-  color:var(--gris);font:600 11.5px var(--sans);letter-spacing:.01em;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  color:rgba(255,255,255,.82);font:600 11.5px var(--sans);letter-spacing:.01em;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .nav106 .ic{display:grid;place-items:center;width:58px;height:30px;border-radius:99px;transition:background .2s,color .2s,transform .15s var(--suave)}
 .nav106 svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.nav106 button[aria-current="page"]{color:var(--rojo-texto)}
-.nav106 button[aria-current="page"] .ic{background:var(--tinte)}
+.nav106 button[aria-current="page"]{color:#fff}
+.nav106 button[aria-current="page"] .ic{background:#fff;color:#B3232A;box-shadow:0 2px 6px -2px rgba(0,0,0,.3)}
 .nav106 button:active .ic{transform:scale(.92)}
-.nav106 button:focus-visible{outline:none}.nav106 button:focus-visible .ic{outline:3px solid var(--azul);outline-offset:2px}
-.nav106 .esc .ic{background:var(--rojo);color:#fff}
-.nav106 .esc{color:var(--rojo-texto)}
-@media(min-width:760px){.nav106{left:50%;right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);transform:translateX(-50%);width:440px;border:1px solid var(--linea);border-radius:99px;
+.nav106 button:focus-visible{outline:none}.nav106 button:focus-visible .ic{outline:2px solid #fff;outline-offset:2px}
+.nav106 .esc .ic{background:rgba(0,0,0,.18);color:#fff}
+.nav106 .esc{color:#fff}
+@media(min-width:760px){.nav106{left:50%;right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);transform:translateX(-50%);width:440px;border-radius:99px;
   padding:6px 10px;box-shadow:var(--sombra-alta)}}
 /* Espacio para que la barra no tape nada */
-.pie{padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--nav-h) + 30px)!important}
+.pie{padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--nav-h) + 84px)!important}
+@media(min-width:760px){.pie{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 96px)!important}}
 .inv{padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--nav-h) + 20px)}
 .info-btn{bottom:calc(env(safe-area-inset-bottom,0px) + var(--nav-h) + 16px)!important}
 @media(min-width:760px){.info-btn{bottom:calc(env(safe-area-inset-bottom,0px) + 24px)!important}}
@@ -799,7 +801,7 @@ body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106,body:has(.tour-
       <button type="button" class="p-btn" id="i-borrar" hidden>Borrar Todo</button>
       <input type="file" id="i-file" class="oculto" accept="image/*">
     </div>
-    <h2 class="p-tit">Realizar Pedido<span class="logos-ped" aria-hidden="true"><img src="logo-didi.png" alt="" width="42" height="34"><img src="logo-ubereats.png" alt="" width="45" height="34"></span></h2>
+    <h2 class="p-tit">Lectura De Imagen</h2>
     <p class="p-sub" id="i-sub">Sube Una Foto O Captura Del Pedido Y Detecto SKU, Cantidad Y Descripción.</p>
     <p class="p-msg" id="i-msg" role="status" aria-live="polite" hidden></p>
     <div class="im-bar" id="i-bar" hidden><i id="i-bar-i"></i></div>
@@ -851,7 +853,7 @@ body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106,body:has(.tour-
   <div class="inv-top">
     <button type="button" class="p-btn" id="inv-volver">← Muebles</button>
     <button type="button" class="p-btn pri" id="inv-subir">Subir Excel De Inventario</button>
-    <label class="inv-chk"><input type="checkbox" id="inv-chk"> Ingresar Cantidad Encontrada</label>
+    <label class="inv-chk"><input type="checkbox" id="inv-chk" checked> Ingresar Cantidad Encontrada</label>
     <button type="button" class="p-btn" id="inv-borrar" hidden>Borrar Conteo</button>
     <button type="button" class="p-btn" id="inv-resumen">Hacer Resumen</button>
     <input type="file" id="inv-file" class="oculto" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv">
@@ -875,7 +877,7 @@ body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106,body:has(.tour-
   </div>
  </div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 23/11 · 10:30</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 23/11 · 11:30</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -9436,7 +9438,7 @@ var P=[
  {v:aInicio,t:function(){return $(".ini-card[data-d]:not(.ini-todo)")&&$(".ini-grid")},c:'var(--azul)',i:'area',tit:'Elige Un Área',x:'<p>Toca <b>Muebles</b>, <b>Papelería</b> o <b>Tecnología</b>, o <b>Ver Todo</b> para ver la tienda completa.</p>'},
  {v:aInicio,t:function(){return $(".ini-promo")},c:'var(--rojo)',i:'promo',tit:'Promociones Del Día',x:'<p>Esta tarjeta abre la <b>Finalización De Promociones Del Día</b>: se sube el PDF del día y vas marcando cada artículo conforme lo terminas.</p>'},
  {v:aInicio,t:function(){return $(".ini-prec")},c:'var(--marino)',i:'etiqueta',tit:'Cambio De Precios',x:'<p>Aquí subes el PDF de <b>Cambio De Precios</b>. Cada artículo trae su foto, su <b>etiqueta</b> con el precio nuevo y un check para marcarlo.</p><p>En <b>muebles, ventiladores, carpetas y cajas de plástico o de archivo</b>, los descuentos enteros (10 %, 20 %, 30 %…) salen <span class="tour-et" style="background:var(--naranja);color:#fff">Resaltados</span>.</p>'},
- {v:aInicio,t:function(){return $(".ini-img")},c:'var(--azul)',i:'tabla',tit:'Realizar Pedido',x:'<p>Al final del menú está <b>Realizar Pedido</b> (pedidos de DiDi Food y Uber Eats): subes una foto o captura del pedido y la página detecta el <b>SKU</b>, la <b>cantidad</b> y la <b>descripción</b> de cada renglón. Marca con el check lo que ya surtiste.</p><p>En cada revisión, el <b>ojito</b> cambia entre <b>Mostrar Todos</b> y <b>Mostrar Pendientes</b>.</p>'},
+ {v:aInicio,t:function(){return $(".ini-calc")},c:'var(--azul)',i:'tabla',tit:'Calculadora De Extracobertura',x:'<p>Escribe el <b>precio del producto</b> y te da el precio de las dos <b>Extracoberturas</b> (1 Año y 2 Años) con su <b>SKU</b>. La lista de precios se sube una vez en PDF y se guarda solo en ese dispositivo.</p>'},
  {v:function(){if(!PLANO){abrirPlano();return true}return false},t:function(){return $("#l-tabs")},c:'var(--naranja)',i:'area',tit:'Planogramas',x:'<p>En <b>Planogramas</b> eliges el <b>Pasillo 2</b>, el <b>Pasillo 6</b> o el <b>Pasillo 8</b> y abres un planograma: cada charola muestra la <b>foto</b>, el <b>SKU</b> y cuántas <b>piezas</b> lleva, en el mismo orden que el planograma (de izquierda a derecha).</p><p><b>Ver Planograma Original</b> enseña la hoja tal cual.</p>'},
  {v:aMuebles,t:function(){return $("#subs")},c:'var(--azul)',i:'chips',tit:'Muévete Entre Secciones',x:'<p>Ya dentro de un área, <b>← Inicio</b> te regresa al principio. Abajo están las subcategorías (Archiveros, Escritorios…) para ver solo una parte.</p>'},
  {v:aMuebles,t:function(){var e=$(".tools");return e&&e.offsetParent?e:null},c:'var(--naranja)',i:'filtro',tit:'Lo Que Falta Exhibir',x:'<p><b>Sin Exhibir</b> muestra solo los muebles con la etiqueta naranja <b>Por Exhibir</b>. <b>Todos</b> regresa a la lista completa.</p><p>Si ya no falta ninguno, el botón desaparece solo.</p>'},
@@ -9566,7 +9568,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
   }
   /* Sobrantes SUMAN al balance; faltantes RESTAN (valor = diferencia × precio) */
   function calcular(){
-    var r={cont:0,falt:0,perd:0,sobPz:0,sobV:0,lista:[]};
+    var r={cont:0,falt:0,perd:0,sobPz:0,sobV:0,neto:0,lista:[]};
     if(!CAT)return r;
     Object.keys(CNT.c).forEach(function(sk){
       var it=CAT.items[sk];if(!it)return;
@@ -9767,7 +9769,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
 
   /* Eventos */
   q("inv-abrir").addEventListener("click",function(){
-    var o=q("inv");o.hidden=false;o.scrollTop=0;
+    var o=q("inv");if(!o.hasAttribute("data-ya")){o.setAttribute("data-ya","1");o.classList.add("contando")}o.hidden=false;o.scrollTop=0;
     q("inv-chk").checked=o.classList.contains("contando");
     q("inv-borrar").hidden=!q("inv-chk").checked;
     cargar().catch(function(){});
@@ -9805,6 +9807,130 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
   });
 })();
 </script>
+<!-- ===== Calculadora De Extracobertura (23/11) ===== -->
+<style>
+.calc{position:fixed;inset:0;z-index:60;background:var(--pagina);overflow-y:auto;-webkit-overflow-scrolling:touch;animation:aparece .2s ease-out;
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--nav-h,64px) + 24px)}
+.calc[hidden]{display:none}
+.calc-wrap{max-width:880px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 18px) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.calc-top{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.calc-campo{display:block;background:var(--blanco);border:1px solid var(--linea);border-radius:18px;padding:16px 16px 14px;box-shadow:var(--sombra);margin:0 0 14px;position:relative;overflow:hidden}
+.calc-campo::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,var(--rojo) 0 25%,var(--azul) 25% 50%,var(--naranja) 50% 75%,var(--marino) 75%)}
+.calc-campo label{display:block;font:600 13px var(--sans);color:var(--gris);margin:0 0 8px}
+.calc-in{display:flex;align-items:center;gap:6px;border:1.5px solid var(--linea);border-radius:14px;background:var(--fondo);padding:0 14px;transition:border-color .2s,box-shadow .2s}
+.calc-in:focus-within{border-color:var(--rojo);background:var(--blanco);box-shadow:0 0 0 4px rgba(213,44,51,.12)}
+.calc-in span{font:700 28px var(--sans);color:var(--gris)}
+.calc-in input{flex:1;min-width:0;border:0;background:transparent;color:var(--tinta);font:700 34px var(--sans);letter-spacing:-.02em;padding:10px 0;font-variant-numeric:tabular-nums}
+.calc-in input:focus{outline:none}
+.calc-in button{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:var(--linea);color:var(--tinta);font:600 18px var(--sans);cursor:pointer}
+.calc-rango{font-size:13px;color:var(--gris);margin:10px 2px 0;min-height:1.2em}
+.calc-res{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 14px}
+.calc-card{--c:var(--marino);position:relative;overflow:hidden;background:var(--blanco);border:1px solid var(--linea);border-radius:18px;padding:16px 14px 14px;box-shadow:var(--sombra)}
+.calc-card::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--c)}
+.calc-card.a1{--c:var(--azul)}.calc-card.a2{--c:var(--naranja)}
+.calc-card .et{font:600 13px var(--sans);color:var(--gris)}
+.calc-card .pr{font:700 clamp(30px,8vw,40px) var(--sans);letter-spacing:-.02em;line-height:1.05;margin:6px 0 8px;font-variant-numeric:tabular-nums}
+.calc-card .tp{display:inline-block;font:600 11.5px var(--sans);padding:3px 10px;border-radius:99px;background:var(--fondo);color:var(--txt-2);margin:0 0 8px}
+.calc-card .sk{display:inline-flex;align-items:center;gap:6px;font:600 13.5px var(--sans);font-variant-numeric:tabular-nums;background:var(--sku-bg);border:1px solid var(--linea);color:var(--tinta);padding:6px 10px;border-radius:9px;cursor:pointer;letter-spacing:.03em}
+.calc-card .sk svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.6}
+.calc-card .tt{display:block;font-size:12.5px;color:var(--gris);margin-top:8px}
+.calc-card .tt b{color:var(--tinta);font-weight:600}
+.calc-card.vacio .pr{color:var(--gris-cl)}
+.calc-aviso{font-size:14px;line-height:1.45;margin:0 0 14px;padding:10px 14px;border-radius:12px;background:var(--fondo);border-left:4px solid var(--rojo)}
+.calc-aviso.ok{border-left-color:var(--marino)}
+.calc-tabla{width:100%;border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
+.calc-tabla th{text-align:left}
+.calc-tabla td{padding:10px 8px;font-size:13.5px}
+.calc-tabla td.n,.calc-tabla th.n{text-align:right}
+.calc-tabla tr.act td{background:var(--tinte)}
+.calc-tabla tr.sep td{background:var(--fondo);font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--gris);padding:8px}
+.calc details{margin:4px 0 0}
+.calc summary{cursor:pointer;font:600 14px var(--sans);color:var(--marino);padding:10px 2px;list-style:none}
+.calc summary::-webkit-details-marker{display:none}
+.calc summary::before{content:"▸ ";}
+.calc details[open] summary::before{content:"▾ "}
+.ini-calc{--c:var(--azul)}
+.ini-calc::before{background:linear-gradient(90deg,var(--azul) 0 50%,var(--naranja) 50%)}
+@media(max-width:400px){.calc-res{gap:8px}.calc-card{padding:14px 11px 12px}}
+</style>
+<div class="calc" id="calc" role="dialog" aria-modal="true" aria-labelledby="calc-tit" hidden>
+ <div class="calc-wrap">
+  <div class="calc-top">
+    <button type="button" class="p-btn" id="calc-volver">← Inicio</button>
+    <button type="button" class="p-btn pri" id="calc-subir">Subir Lista De Precios (PDF)</button>
+    <input type="file" id="calc-file" class="oculto" accept=".pdf,application/pdf">
+  </div>
+  <h2 class="p-tit" id="calc-tit">Calculadora De Extracobertura</h2>
+  <p class="p-sub" id="calc-sub"></p>
+  <p class="calc-aviso" id="calc-msg" role="status" aria-live="polite" hidden></p>
+  <div class="calc-campo">
+    <label for="calc-q">Precio Del Producto (Con IVA)</label>
+    <div class="calc-in"><span aria-hidden="true">$</span><input id="calc-q" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" placeholder="0.00"><button type="button" id="calc-x" aria-label="Borrar Precio" hidden>×</button></div>
+    <p class="calc-rango" id="calc-rango"></p>
+  </div>
+  <div class="calc-res" id="calc-res"></div>
+  <details id="calc-det"><summary>Ver Tabla Completa</summary><div class="p-scroll"><table class="calc-tabla"><thead><tr><th>Precio Del Producto</th><th class="n">1 Año</th><th class="n">2 Años</th></tr></thead><tbody id="calc-filas"></tbody></table></div></details>
+ </div>
+</div>
+<script>
+/* ===== Calculadora De Extracobertura: La Lista (PDF Interno) Se Guarda Solo En Este Dispositivo ===== */
+var EKEY="ec-lista",EC=null;try{EC=JSON.parse(localStorage.getItem(EKEY)||"null");if(!EC||!EC.r||!EC.r.length)EC=null}catch(e){EC=null}
+function ecMon(n,dec){return "$"+Number(n).toLocaleString("es-MX",{minimumFractionDigits:dec?2:0,maximumFractionDigits:2})}
+function ecNum(t){var s=String(t||"").replace(/[^\d.,]/g,"");if(!s)return NaN;
+  if(/,\d{1,2}$/.test(s)&&s.indexOf(".")<0)s=s.replace(/\.(?=\d{3})/g,"").replace(",",".");else s=s.replace(/,/g,"");return parseFloat(s)}
+function calcEstado(){return EC?EC.r.length+" Rangos Cargados":"Sube La Lista En PDF"}
+function ecBuscar(p){if(!EC||!(p>0))return null;var r=EC.r;for(var i=0;i<r.length;i++){var sig=r[i+1];if(p>=r[i].min&&(sig?p<sig.min:p<=r[i].max+0.0099))return r[i]}return null}
+async function ecLeerPDF(file){
+  var P=await cargarPDF(),buf=await file.arrayBuffer(),doc=await P.getDocument({data:new Uint8Array(buf)}).promise,lineas=[];
+  for(var pn=1;pn<=doc.numPages;pn++){var pg=await doc.getPage(pn),tc=await pg.getTextContent(),its=tc.items.filter(function(it){return it.str&&it.str.trim()}),grp=[];
+    its.sort(function(a,b){return b.transform[5]-a.transform[5]});
+    its.forEach(function(it){var y=it.transform[5],g=grp[grp.length-1];if(g&&Math.abs(g.y-y)<=4)g.i.push(it);else grp.push({y:y,i:[it]})});
+    grp.forEach(function(g){lineas.push(g.i.sort(function(a,b){return a.transform[4]-b.transform[4]}).map(function(i){return i.str}).join(" "))})}
+  var modo="",M={},re=/(\d{9})\s*\$\s*([\d,]+(?:\.\d+)?)\s*\$\s*([\d,]+(?:\.\d+)?)\s*\$\s*([\d,]+(?:\.\d+)?)/g;
+  lineas.forEach(function(l){var u=l.normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase();
+    if(/REPARACION/.test(u))modo="Reparación";else if(/REEMPLAZO/.test(u))modo="Reemplazo";
+    var m,col=0;re.lastIndex=0;while((m=re.exec(l))){var mn=ecNum(m[2]),mx=ecNum(m[3]),pr=ecNum(m[4]);if(!(mn>0&&mx>mn&&pr>0)){continue}
+      var k=mn.toFixed(2),o=M[k]||(M[k]={min:mn,max:mx,t:modo,o:[]});o.o.push({s:m[1],p:pr,c:col++})}});
+  var r=Object.keys(M).map(function(k){var o=M[k];o.o.sort(function(a,b){return a.c-b.c||a.p-b.p});return o}).filter(function(o){return o.o.length>=2})
+    .map(function(o){var a=o.o[0],b=o.o[1];if(b.p<a.p){var t=a;a=b;b=t}return {min:o.min,max:o.max,t:o.t,a1:{s:a.s,p:a.p},a2:{s:b.s,p:b.p}}})
+    .sort(function(a,b){return a.min-b.min});
+  return r}
+function calcMsg(h,ok){var m=$id("calc-msg");m.hidden=!h;m.className="calc-aviso"+(ok?" ok":"");m.innerHTML=h||""}
+var SKC='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>';
+function calcPintar(){var q=$id("calc-q"),p=ecNum(q.value),res=$id("calc-res"),rg=$id("calc-rango");$id("calc-x").hidden=!q.value;
+  $id("calc-sub").textContent=EC?("Lista: "+EC.r.length+" Rangos · De "+ecMon(EC.r[0].min)+" A "+ecMon(EC.r[EC.r.length-1].max,1)+" · Subida "+(EC.f||"")+" · Solo En Este Dispositivo"):"Sube Una Vez El PDF De La Lista De Precios De Extracobertura; Se Guarda Solo En Este Dispositivo.";
+  $id("calc-subir").textContent=EC?"Actualizar Lista (PDF)":"Subir Lista De Precios (PDF)";$id("calc-subir").classList.toggle("pri",!EC);
+  $id("calc-det").hidden=!EC;
+  function card(cls,et,o,r){if(!o)return '<div class="calc-card '+cls+' vacio"><div class="et">'+et+'</div><div class="pr">—</div></div>';
+    return '<div class="calc-card '+cls+'"><div class="et">'+et+'</div><div class="pr">'+ecMon(o.p)+'</div><span class="tp">'+esc(r.t||"Extracobertura")+'</span><br><button type="button" class="sk" data-sku="'+o.s+'" aria-label="Copiar SKU '+o.s+'">'+o.s+SKC+'</button><span class="tt">Total Con Producto: <b>'+ecMon(p+o.p,1)+'</b></span></div>'}
+  var r=ecBuscar(p);
+  if(!EC){res.innerHTML=card("a1","1 Año")+card("a2","2 Años");rg.textContent="";}
+  else if(!(p>0)){res.innerHTML=card("a1","1 Año")+card("a2","2 Años");rg.textContent="Escribe El Precio Y Aparecen Las Dos Extracoberturas.";}
+  else if(!r){res.innerHTML=card("a1","1 Año")+card("a2","2 Años");
+    rg.textContent=p<EC.r[0].min?"Los Productos De Menos De "+ecMon(EC.r[0].min)+" No Llevan Extracobertura.":"Fuera De La Lista (Llega Hasta "+ecMon(EC.r[EC.r.length-1].max,1)+").";}
+  else{res.innerHTML=card("a1","1 Año",r.a1,r)+card("a2","2 Años",r.a2,r);rg.textContent="Rango: "+ecMon(r.min,1)+" – "+ecMon(r.max,1);}
+  var h="",t="";(EC?EC.r:[]).forEach(function(x){if(x.t!==t){t=x.t;h+='<tr class="sep"><td colspan="3">'+esc(t||"Extracobertura")+'</td></tr>'}
+    h+='<tr'+(x===r?' class="act"':'')+'><td>'+ecMon(x.min,1)+' – '+ecMon(x.max,1)+'</td><td class="n">'+ecMon(x.a1.p)+'</td><td class="n">'+ecMon(x.a2.p)+'</td></tr>'});
+  $id("calc-filas").innerHTML=h}
+function abrirCalc(){var c=$id("calc");try{$id("inv").hidden=true}catch(e){}c.hidden=false;c.scrollTop=0;calcMsg("");calcPintar();
+  if(EC&&matchMedia("(hover:hover) and (pointer:fine)").matches)setTimeout(function(){$id("calc-q").focus()},40)}
+$id("calc-volver").onclick=function(){$id("calc").hidden=true;irInicio()};
+$id("calc-subir").onclick=function(){var f=$id("calc-file");f.value="";f.click()};
+$id("calc-file").addEventListener("change",async function(e){var f=e.target.files&&e.target.files[0];if(!f)return;calcMsg("Leyendo La Lista…",true);
+  try{var r=await ecLeerPDF(f);if(r.length<5)throw new Error("pocos");
+    EC={r:r,f:new Date().toLocaleDateString("es-MX",{day:"2-digit",month:"2-digit",year:"2-digit"})};try{localStorage.setItem(EKEY,JSON.stringify(EC))}catch(x){}
+    calcMsg("Listo: Leí "+r.length+" Rangos De Precio ("+ecMon(r[0].min)+" A "+ecMon(r[r.length-1].max,1)+").",true);calcPintar();$id("calc-q").focus()}
+  catch(x){calcMsg("No Pude Leer La Lista. Sube El PDF «Lista De Precios EC» Tal Como Llega (Con SKU, Rango Y Precio Público).")}});
+$id("calc-q").addEventListener("input",calcPintar);
+$id("calc-q").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();this.blur()}});
+$id("calc-x").onclick=function(){var q=$id("calc-q");q.value="";calcPintar();q.focus()};
+$id("calc-res").addEventListener("click",function(e){var b=e.target.closest(".sk");if(!b)return;var s=b.getAttribute("data-sku");
+  try{navigator.clipboard.writeText(s).then(function(){calcMsg("SKU "+s+" Copiado.",true)},function(){calcMsg("SKU "+s,true)})}catch(x){calcMsg("SKU "+s,true)}});
+/* La tarjeta de la calculadora ocupa el lugar que dejó Realizar Pedido */
+tarjetaImg=function(){return '<button type="button" class="ini-card ini-calc" data-calc="1"><span class="ini-n">Calculadora De Extracobertura</span><span class="ini-c">'+(EC?'1 Año Y 2 Años · Por Precio':'Sube La Lista De Precios')+'</span><span class="ini-s">Escribe El Precio Del Producto Y Ve Ambas Extracoberturas</span></button>'};
+$id("inicio").addEventListener("click",function(e){var b=e.target.closest(".ini-calc");if(!b)return;e.stopImmediatePropagation();abrirCalc()},true);
+try{if(INICIO&&!PROMO&&!PREC&&!PLANO)pintar(false)}catch(e){}
+</script>
 <!-- ===== Navegación Rápida (23/11) ===== -->
 <nav class="nav106" id="nav106" aria-label="Navegación Principal">
   <button type="button" data-n="inicio"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></svg></span>Inicio</button>
@@ -9840,7 +9966,8 @@ var IC={
   plano:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9.5h18M3 15h18M9 4v16"/>',
   subir:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
   info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
-  sub:'<path d="M9 6l6 6-6 6"/>'};
+  sub:'<path d="M9 6l6 6-6 6"/>',
+  calc:'<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7h7M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h3.5"/>'};
 var COL=["var(--rojo)","var(--azul)","var(--naranja)"];
 function norm(t){return String(t==null?"":t).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim()}
 function esc2(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -9848,7 +9975,7 @@ function estado(fn){try{var x=document.createElement("div");x.innerHTML=fn();var
 function contar(f){var n=0;for(var i=0;i<D.length;i++)if(f(D[i]))n++;return n}
 
 /* ---------- Ir a cada lugar ---------- */
-function cerrarCapas(){try{var iv=G("inv");if(iv&&!iv.hidden)iv.hidden=true}catch(e){}}
+function cerrarCapas(){try{var iv=G("inv");if(iv&&!iv.hidden)iv.hidden=true;var c=G("calc");if(c&&!c.hidden)c.hidden=true}catch(e){}}
 function limpiarBusqueda(){try{if(typeof q!=="undefined"&&q){var b=G("b-limpiar");if(b&&!b.hidden)b.click()}}catch(e){}}
 function irArea(d,c){cerrarCapas();limpiarBusqueda();PROMO=false;PREC=false;IMG=false;PLANO=false;INICIO=false;depSel=d;subSel=(c==null?-1:c);
   if(d!==0){porEx=false;G("f-pex").setAttribute("aria-pressed",false);G("f-todos").setAttribute("aria-pressed",true)}
@@ -9859,10 +9986,11 @@ function irInicio2(){cerrarCapas();irInicio()}
 function lugares(){var L=[
   {id:"promo",g:"Del Día",t:"Finalización De Promociones",s:estado(tarjetaPromo),c:"var(--rojo)",ic:"tag",k:"finalizacion promociones promo fin del dia",go:function(){cerrarCapas();abrirPromo()}},
   {id:"prec",g:"Del Día",t:"Cambio De Precios",s:estado(tarjetaPrec),c:"var(--marino)",ic:"precio",k:"cambio precios etiquetas stoppers descuentos",go:function(){cerrarCapas();abrirPrec()}},
-  {id:"pedido",g:"Del Día",t:"Realizar Pedido",s:estado(tarjetaImg),c:"var(--azul)",ic:"bolsa",k:"pedido didi uber eats imagen surtir",go:function(){cerrarCapas();abrirImg()}}];
+  ];
   DEPTOS.forEach(function(dn,di){var n=contar(function(r){return CDEP[r[3]]===di});if(!n)return;
     L.push({id:"d"+di,g:"Áreas",t:dn,s:n+" Artículos",c:COL[di]||"var(--marino)",ic:"area",k:"area departamento",go:function(){irArea(di)}})});
   L.push({id:"todo",g:"Áreas",t:"Ver Todo",s:D.length+" Artículos",c:"var(--gris)",ic:"todo",k:"todo tienda completa",go:function(){irArea(-1)}});
+  L.push({id:"calc",g:"Herramientas",t:"Calculadora De Extracobertura",s:calcEstado(),c:"var(--azul)",ic:"calc",k:"calculadora extracobertura extra cobertura garantia precio costo",go:function(){abrirCalc()}});
   L.push({id:"inv",g:"Herramientas",t:"Inventario",s:"Stock, Precio Y Pérdidas",c:"var(--marino)",ic:"lista",k:"inventario conteo perdida faltantes",go:irInv});
   L.push({id:"plano",g:"Herramientas",t:"Planogramas",s:estado(tarjetaPlano),c:"var(--naranja)",ic:"plano",k:"planogramas pasillo charolas",go:function(){irPlano()}});
   L.push({id:"tot",g:"Herramientas",t:"Subir Artículos Totales",s:"PDF De Oracle BI (Día 10)",c:"var(--gris)",ic:"subir",k:"articulos totales pdf subir mensual",go:function(){irInicio2();var f=G("t-file");if(f){f.value="";f.click()}}});
@@ -9922,7 +10050,7 @@ G("hoja-x").addEventListener("click",function(){cerrarHoja()});
   c.addEventListener("touchend",function(e){if(y0==null)return;var dy=(e.changedTouches[0].clientY-y0);c.style.transform="";y0=null;if(dy>90)cerrarHoja()})})();
 
 /* ---------- Barra inferior ---------- */
-function enInicio(){return INICIO&&!PROMO&&!PREC&&!IMG&&!PLANO&&!(typeof q!=="undefined"&&q)&&G("inv").hidden}
+function enInicio(){return INICIO&&!PROMO&&!PREC&&!IMG&&!PLANO&&!(typeof q!=="undefined"&&q)&&G("inv").hidden&&(!G("calc")||G("calc").hidden)}
 function enfocarBusqueda(){if(PROMO||PREC||IMG||PLANO||!G("inv").hidden){
     var campo=PROMO?G("p-q"):PREC?G("c-q"):!G("inv").hidden?G("inv-q"):null;
     if(campo&&!campo.closest("[hidden]")){campo.scrollIntoView({block:"center"});campo.focus();return}
@@ -9933,16 +10061,18 @@ G("nav106").addEventListener("click",function(e){var b=e.target.closest("button[
   if(n==="buscar"){cerrarHoja(true);enfocarBusqueda();return}
   if(n==="escanear"){cerrarHoja(true);cerrarCapas();if(PROMO||PREC||IMG||PLANO){irInicio()}G("b-cam").click();return}
   if(n==="ir"){hoja.hidden?abrirHoja():cerrarHoja()}});
-function marcarNav(){var n=G("nav106");if(!n)return;var a=enInicio()?"inicio":(!hoja.hidden?"ir":(INICIO?"buscar":"ir"));
+function marcarNav(){var n=G("nav106");if(!n)return;var cap=!G("inv").hidden||(G("calc")&&!G("calc").hidden);
+  var a=(!hoja.hidden||cap)?"ir":enInicio()?"inicio":((typeof q!=="undefined"&&q)?"buscar":"ir");
   [].forEach.call(n.querySelectorAll("button[data-n]"),function(b){var k=b.getAttribute("data-n");if(k==="escanear")return;if(k===a)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")})}
 var _p=pintar;pintar=function(){var r=_p.apply(this,arguments);try{marcarNav()}catch(e){}return r};
 new MutationObserver(marcarNav).observe(G("inv"),{attributes:true,attributeFilter:["hidden"]});
 new MutationObserver(marcarNav).observe(hoja,{attributes:true,attributeFilter:["hidden"]});
+if(G("calc"))new MutationObserver(marcarNav).observe(G("calc"),{attributes:true,attributeFilter:["hidden"]});
 marcarNav();
 
 /* Recordar lo que se abre desde las tarjetas del inicio */
 G("inicio").addEventListener("click",function(e){var b=e.target.closest(".ini-card");if(!b)return;
-  var id=b.hasAttribute("data-promo")?"promo":b.hasAttribute("data-prec")?"prec":b.hasAttribute("data-img")?"pedido":b.hasAttribute("data-inv")?"inv":b.hasAttribute("data-plano")?"plano":(b.getAttribute("data-d")==="-1"?"todo":"d"+b.getAttribute("data-d"));recordar(id)});
+  var id=b.hasAttribute("data-promo")?"promo":b.hasAttribute("data-prec")?"prec":b.hasAttribute("data-calc")?"calc":b.hasAttribute("data-inv")?"inv":b.hasAttribute("data-plano")?"plano":(b.getAttribute("data-d")==="-1"?"todo":"d"+b.getAttribute("data-d"));recordar(id)});
 
 /* ---------- Atajos bajo el buscador principal ---------- */
 var at=document.createElement("div");at.className="atajos";at.id="atajos";at.hidden=true;
