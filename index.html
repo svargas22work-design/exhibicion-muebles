@@ -9849,7 +9849,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
 .calc summary::-webkit-details-marker{display:none}
 .calc summary::before{content:"▸ ";}
 .calc details[open] summary::before{content:"▾ "}
-.ini-calc{--c:var(--azul)}
+.ini-calc{--c:var(--azul);grid-column:1/-1}@media(max-width:600px){.ini-calc{grid-column:auto}}
 .ini-calc::before{background:linear-gradient(90deg,var(--azul) 0 50%,var(--naranja) 50%)}
 @media(max-width:400px){.calc-res{gap:8px}.calc-card{padding:14px 11px 12px}}
 </style>
