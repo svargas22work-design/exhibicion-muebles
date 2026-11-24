@@ -641,7 +641,7 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
 .inv{padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--nav-h) + 20px)}
 .info-btn{bottom:calc(env(safe-area-inset-bottom,0px) + var(--nav-h) + 16px)!important}
 @media(min-width:760px){.info-btn{bottom:calc(env(safe-area-inset-bottom,0px) + 24px)!important}}
-body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106,body:has(.tour-tapa) .nav106{display:none}
+body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106{display:none}
 
 /* Botón Arriba (aparece en listas largas) */
 .arriba106{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(env(safe-area-inset-bottom,0px) + var(--nav-h) + 16px);z-index:40;
@@ -877,7 +877,7 @@ body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106,body:has(.tour-
   </div>
  </div>
 </div>
-<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 24/11 · 01:30</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
+<div class="pie"><div class="pie-in"><div class="resp"><b>Responsable:</b> Santiago Vargas Almeida<small class="ver">Versión 24/11 · 11:30</small></div><div><span class="tema-et" id="tema-et">Apariencia</span><div class="tema" id="tema" role="radiogroup" aria-labelledby="tema-et" data-sel="auto"><i class="pildora" aria-hidden="true"></i><button type="button" role="radio" data-t="light" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Claro</button><button type="button" role="radio" data-t="dark" aria-checked="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Oscuro</button><button type="button" role="radio" data-t="auto" aria-checked="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>Sistema</button></div></div></div></div>
 <button type="button" class="info-btn" id="info-btn" aria-label="Cómo Usar La Página" title="Cómo Usar La Página">i</button>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -8170,15 +8170,16 @@ function pintar(cascada){
   DM.forEach(function(r){var z=r[2]===0; if(z)ult++; if(hechos[r[0]])rev++;});
   function anim(){if(!cascada)return ' ent2"';var d=Math.min(k++*18,900)+(primera?1300:0);return ' ent" style="animation-delay:'+d+'ms"'}
   var total=0,nn=0;
-  DEPTOS.forEach(function(dn,di){
+  (typeof ordenDep==="function"?ordenDep():DEPTOS.map(function(x,i){return i})).forEach(function(di){var dn=DEPTOS[di];
   if(enInicio)return;
   if(depSel>=0&&!q&&di!==depSel)return;
   var enDep=D.filter(function(r){return CDEP[r[3]]===di});if(!enDep.length)return;
   var udep=enDep.filter(function(r){return r[2]===0}).length,hDep="",cuenta=0;
-  CATS.forEach(function(cn,ci){
+  (typeof ordenCat==="function"?ordenCat():CATS.map(function(x,i){return i})).forEach(function(ci){var cn=CATS[ci];
    if(CDEP[ci]!==di)return;
    if(subSel>=0&&!q&&ci!==subSel)return;
    var its=D.map(function(r,i){return [r,i]}).filter(function(p){return p[0][3]===ci});
+   if(q&&typeof B106!=="undefined")its.sort(function(a,b){return B106.punt(b[0][0])-B106.punt(a[0][0])||a[1]-b[1]});
    if(!its.length)return;
    var nu=its.filter(function(p){return p[0][2]===0}).length,hc="",shown=0;
    its.forEach(function(p){var r=p[0],i=p[1];
@@ -9429,23 +9430,26 @@ var I={
 };
 function $(s){return document.querySelector(s)}
 function fila(sel){var e=document.querySelector("#filas "+sel);return e?e.closest("tr"):null}
-function aInicio(){if(!INICIO||PROMO||PREC||IMG||PLANO){PROMO=false;PREC=false;IMG=false;PLANO=false;INICIO=true;porEx=false;$("#f-pex").setAttribute("aria-pressed",false);$("#f-todos").setAttribute("aria-pressed",true);depSel=-1;subSel=-1;pintar(false);return true}return false}
-function aMuebles(){if(INICIO||PROMO||PREC||IMG||PLANO||depSel!==0||subSel!==-1){PROMO=false;PREC=false;IMG=false;PLANO=false;INICIO=false;depSel=0;subSel=-1;pintar(false);return true}return false}
+function aInicio(){try{$("#inv").hidden=true;var _c=$("#calc");if(_c)_c.hidden=true;var _h=$("#hoja");if(_h&&!_h.hidden)$("#hoja-x").click()}catch(_e){}if(!INICIO||PROMO||PREC||IMG||PLANO){PROMO=false;PREC=false;IMG=false;PLANO=false;INICIO=true;porEx=false;$("#f-pex").setAttribute("aria-pressed",false);$("#f-todos").setAttribute("aria-pressed",true);depSel=-1;subSel=-1;pintar(false);return true}return false}
+function aMuebles(){try{$("#inv").hidden=true;var _c=$("#calc");if(_c)_c.hidden=true}catch(_e){}if(INICIO||PROMO||PREC||IMG||PLANO||depSel!==0||subSel!==-1){PROMO=false;PREC=false;IMG=false;PLANO=false;INICIO=false;depSel=0;subSel=-1;pintar(false);return true}return false}
 var P=[
- {v:aInicio,t:function(){return $(".cabeza")},c:'var(--rojo)',i:'info',tit:'Bienvenido A Artículos',x:'<p>Aquí consultas el inventario de la <b>Tienda Querétaro 106</b>: piezas disponibles, foto y SKU de cada artículo.</p><p>Te voy a llevar por cada parte de la página.</p>'},
- {v:aInicio,t:function(){return $("#busca")},c:'var(--naranja)',i:'busca',tit:'Busca Un Artículo',x:'<p>Escribe el <b>SKU</b>, o <b>palabras clave</b> (no hace falta el nombre completo: «silla negra» o «cuad raya» también encuentran) y toca <b>Buscar</b>. Para volver a ver todo, toca <b>Limpiar</b>.</p>'},
- {v:aInicio,t:function(){return $(".ini-card[data-d]:not(.ini-todo)")&&$(".ini-grid")},c:'var(--azul)',i:'area',tit:'Elige Un Área',x:'<p>Toca <b>Muebles</b>, <b>Papelería</b> o <b>Tecnología</b>, o <b>Ver Todo</b> para ver la tienda completa.</p>'},
+ {v:aInicio,t:function(){return $(".cabeza")},c:'var(--rojo)',i:'info',tit:'Bienvenido A Tienda 106',x:'<p>Aquí consultas el inventario de la <b>Tienda Querétaro 106</b>: piezas disponibles, foto y SKU de cada artículo.</p><p>Te voy a llevar por cada parte de la página.</p>'},
+ {v:aInicio,t:function(){return $("#busca")},c:'var(--naranja)',i:'busca',tit:'Busca Un Artículo',x:'<p>Escribe el <b>SKU</b> o lo que buscas, como lo dirías: «plumas bic», «silla negra», «cuad raya». La página entiende abreviaturas, plurales y errores de dedo, y pone primero lo que más se parece (si buscas un SKU, ese sale hasta arriba).</p><p>Toca <b>Limpiar</b> para volver.</p>'},
+ {v:aInicio,t:function(){return $("#nav106")},arriba:true,c:'var(--rojo)',i:'chips',tit:'Barra De Abajo',x:'<p><b>Inicio</b> te regresa al principio, <b>Buscar</b> va directo al buscador e <b>Ir A…</b> abre todas las secciones para saltar a cualquiera desde donde estés.</p>'},
+ {v:aInicio,t:function(){return $(".ini-herr")},c:'var(--marino)',i:'revisa',tit:'Herramientas',x:'<p>Aquí están los <b>reportes del día</b> y las utilidades: Finalización De Promociones, Cambio De Precios, Calculadora De Extracobertura e Inventario.</p>'},
  {v:aInicio,t:function(){return $(".ini-promo")},c:'var(--rojo)',i:'promo',tit:'Promociones Del Día',x:'<p>Esta tarjeta abre la <b>Finalización De Promociones Del Día</b>: se sube el PDF del día y vas marcando cada artículo conforme lo terminas.</p>'},
  {v:aInicio,t:function(){return $(".ini-prec")},c:'var(--marino)',i:'etiqueta',tit:'Cambio De Precios',x:'<p>Aquí subes el PDF de <b>Cambio De Precios</b>. Cada artículo trae su foto, su <b>etiqueta</b> con el precio nuevo y un check para marcarlo.</p><p>En <b>muebles, ventiladores, carpetas y cajas de plástico o de archivo</b>, los descuentos enteros (10 %, 20 %, 30 %…) salen <span class="tour-et" style="background:var(--naranja);color:#fff">Resaltados</span>.</p>'},
- {v:aInicio,t:function(){return $(".ini-calc")},c:'var(--azul)',i:'tabla',tit:'Calculadora De Extracobertura',x:'<p>Escribe el <b>precio del producto</b> y te da el precio de las dos <b>Extracoberturas</b> (1 Año y 2 Años) con su <b>SKU</b>. Si cambia la lista, toca <b>Actualizar Lista (PDF)</b>.</p>'},
- {v:function(){if(!PLANO){abrirPlano();return true}return false},t:function(){return $("#l-tabs")},c:'var(--naranja)',i:'area',tit:'Planogramas',x:'<p>En <b>Planogramas</b> eliges el <b>Pasillo 2</b>, el <b>Pasillo 6</b> o el <b>Pasillo 8</b> y abres un planograma: cada charola muestra la <b>foto</b>, el <b>SKU</b> y cuántas <b>piezas</b> lleva, en el mismo orden que el planograma (de izquierda a derecha).</p><p><b>Ver Planograma Original</b> enseña la hoja tal cual.</p>'},
+ {v:aInicio,t:function(){return $(".ini-calc")},c:'var(--azul)',i:'tabla',tit:'Calculadora De Extracobertura',x:'<p>Escribe el <b>precio del producto</b> (las comas se ponen solas) y te da el precio de la <b>Extracobertura</b> de 1 Año y de 2 Años, si es Reemplazo o Reparación, y el total con el producto.</p>'},
+ {v:aInicio,t:function(){return $(".ini-inv")},c:'var(--marino)',i:'tabla',tit:'Inventario',x:'<p>Sube el Excel con <b>SKU, stock y precio</b> (el botón está hasta abajo) y escribe cuántas piezas encontraste. Calcula la <b>diferencia</b> y la <b>pérdida</b> en pesos; con <b>Hacer Resumen</b> lo descargas como imagen.</p>'},
+ {v:aInicio,t:function(){return $(".ini-tienda")},c:'var(--azul)',i:'area',tit:'La Tienda',x:'<p>Toca <b>Muebles</b>, <b>Papelería</b> o <b>Tecnología</b>, <b>Ver Todo</b> para la tienda completa, o <b>Planogramas</b>.</p>'},
+ {v:function(){if(!PLANO){abrirPlano();return true}return false},t:function(){return $("#l-tabs")},c:'var(--naranja)',i:'area',tit:'Planogramas',x:'<p>Elige el <b>Pasillo</b> y abre un planograma. Cada tarjeta muestra cuánto llevas marcado.</p><p>Dentro lo ves como <b>Planograma</b> (igual que la hoja, deslizando de lado a lado) o como <b>Lista</b> por charola; puedes buscar un SKU, marcar cada artículo y pasar al <b>Siguiente</b> planograma.</p>'},
  {v:aMuebles,t:function(){return $("#subs")},c:'var(--azul)',i:'chips',tit:'Muévete Entre Secciones',x:'<p>Ya dentro de un área, <b>← Inicio</b> te regresa al principio. Abajo están las subcategorías (Archiveros, Escritorios…) para ver solo una parte.</p>'},
  {v:aMuebles,t:function(){var e=$(".tools");return e&&e.offsetParent?e:null},c:'var(--naranja)',i:'filtro',tit:'Lo Que Falta Exhibir',x:'<p><b>Sin Exhibir</b> muestra solo los muebles con la etiqueta naranja <b>Por Exhibir</b>. <b>Todos</b> regresa a la lista completa.</p><p>Si ya no falta ninguno, el botón desaparece solo.</p>'},
  {v:aMuebles,t:function(){return fila("tr.fila td")},c:'var(--rojo)',i:'tabla',tit:'Lee Cada Fila',x:'<p>Cada fila muestra la <b>foto</b>, el <b>SKU</b>, la <b>descripción</b> y las piezas <b>disponibles</b>. Toca la foto para verla en grande.</p>'},
  {v:aMuebles,t:function(){return fila(".badge")||fila(".pexb")||fila(".rep")||fila(".disc")},c:'var(--marino)',i:'etiqueta',tit:'Etiquetas',x:'<p><span class="tour-et" style="background:var(--rojo);color:#fff">Última Pieza</span> ya no hay más en sistema: la de piso es la última.</p><p><span class="tour-et" style="background:var(--naranja);color:#fff">Por Exhibir</span> falta ponerlo en piso. <span class="tour-et" style="background:var(--marino);color:#fff">Exhibido 2 Veces</span> está repetido. <span class="tour-et" style="border:1.5px solid var(--gris-cl);color:var(--gris)">Descontinuado</span> ya no se surte.</p>'},
  {v:aMuebles,t:function(){return fila(".llave")},c:'var(--azul)',i:'llave',tit:'Llaves De Los Muebles',x:'<p>El <b>punto de color</b> junto a la foto es el color de la llave que abre ese mueble. Así sabes cuál tomar antes de ir.</p>'},
  {v:aMuebles,t:function(){var e=$(".modo");return e&&e.offsetParent?e:null},c:'var(--marino)',i:'revisa',tit:'Toma Uno Y Precios',x:'<p>Elige un modo para empezar una revisión: aparece la columna <b>Hecho</b> para marcar cada artículo y una barra con tu avance.</p><p>Se guarda en este dispositivo. Toca el modo otra vez para salir.</p>'},
- {v:aMuebles,t:function(){var e=$(".ex-bar");return e&&e.offsetParent?e:null},c:'var(--rojo)',i:'subir',tit:'Existencias',x:'<p>Aquí ves cuándo se actualizaron las existencias. Con <b>Subir PDF</b> (el informe de muebles) se cargan las nuevas; para que se vean en todos los celulares hay que <b>Entrar Con Google</b> con la cuenta autorizada.</p>'},
+ {v:aMuebles,t:function(){var e=$("#fin-main");return e&&e.offsetParent?e:null},c:'var(--rojo)',i:'subir',tit:'Existencias',x:'<p>Hasta abajo de la lista está <b>Subir PDF</b>: con el informe de muebles (el informe de muebles) se cargan las existencias nuevas; para que se vean en todos los celulares hay que <b>Entrar Con Google</b> con la cuenta autorizada.</p>'},
  {v:null,t:function(){return $("#tema")},c:'var(--marino)',i:'tema',tit:'Apariencia',x:'<p>Elige <b>Claro</b>, <b>Oscuro</b> o <b>Sistema</b>. Con <b>Sistema</b> (el predeterminado) la página sigue lo que tenga tu celular o computadora.</p>'},
  {v:null,t:function(){return $("#info-btn")},arriba:true,c:'var(--naranja)',i:'info',tit:'¿Lo Necesitas Otra Vez?',x:'<p>Toca este botón cuando quieras para repetir el recorrido.</p>'}
 ];
@@ -9463,7 +9467,7 @@ function llevar(t){var r=t.getBoundingClientRect();if(getComputedStyle(t).positi
   var vh=innerHeight,gh=globo.offsetHeight,arriba,meta;
   if(mq()){var libre=vh-gh;meta=Math.max(84,(libre-r.height)/2);if(r.height>libre-100)meta=84}
   else{var tot=r.height+gh+28;meta=tot<vh-100?Math.max(90,(vh-tot)/2):90}
-  var y=scrollY+r.top-meta;if(Math.abs(r.top-meta)>4)window.scrollTo({top:Math.max(0,y),behavior:quieto?"auto":"smooth"})}
+  var y=scrollY+r.top-meta;if(Math.abs(r.top-meta)>4)window.scrollTo({top:Math.max(0,y),behavior:(quieto||Math.abs(r.top-meta)>2500)?"auto":"smooth"})}
 function mostrar(){var p=P[n],cambia=p.v?p.v():false;
   setTimeout(function(){if(!on)return;var t=p.t();if(!t){n+=dir;if(n<0)n=0;if(n>=P.length){cerrar();return}mostrar();return}
     p._el=t;pintarGlobo();llevar(t);
@@ -9888,8 +9892,6 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
  <div class="calc-wrap">
   <div class="calc-top">
     <button type="button" class="p-btn" id="calc-volver">← Inicio</button>
-    <button type="button" class="p-btn" id="calc-subir">Actualizar Lista (PDF)</button>
-    <input type="file" id="calc-file" class="oculto" accept=".pdf,application/pdf">
   </div>
   <h2 class="p-tit" id="calc-tit">Calculadora De Extracobertura</h2>
   <p class="p-sub" id="calc-sub"></p>
@@ -9932,7 +9934,7 @@ function calcMsg(h,ok){var m=$id("calc-msg");m.hidden=!h;m.className="calc-aviso
 var SKC='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>';
 function calcPintar(){var q=$id("calc-q"),p=ecNum(q.value),res=$id("calc-res"),rg=$id("calc-rango");$id("calc-x").hidden=!q.value;
   $id("calc-sub").textContent=EC?("Lista: "+EC.r.length+" Rangos · De "+ecMon(EC.r[0].min)+" A "+ecMon(EC.r[EC.r.length-1].max,1)+" · "+(EC===EC_BASE?"Lista Autorizada · Precios Con IVA":"Actualizada "+(EC.f||"")+" · Precios Con IVA")):"";
-  $id("calc-subir").textContent="Actualizar Lista (PDF)";$id("calc-subir").classList.remove("pri");
+
   $id("calc-det").hidden=!EC;
   function card(cls,et,o,r){if(!o)return '<div class="calc-card '+cls+' vacio"><div class="et">'+et+'</div><div class="pr">—</div></div>';
     return '<div class="calc-card '+cls+'"><div class="et">'+et+'</div><div class="pr">'+ecMon(o.p)+'</div><span class="tp">'+esc(r.t||"Extracobertura")+'</span><span class="tt">Total Con Producto: <b>'+ecMon(p+o.p,1)+'</b></span></div>'}
@@ -9948,12 +9950,6 @@ function calcPintar(){var q=$id("calc-q"),p=ecNum(q.value),res=$id("calc-res"),r
 function abrirCalc(){var c=$id("calc");try{$id("inv").hidden=true}catch(e){}c.hidden=false;c.scrollTop=0;calcMsg("");calcPintar();
   if(EC&&matchMedia("(hover:hover) and (pointer:fine)").matches)setTimeout(function(){$id("calc-q").focus()},40)}
 $id("calc-volver").onclick=function(){$id("calc").hidden=true;irInicio()};
-$id("calc-subir").onclick=function(){var f=$id("calc-file");f.value="";f.click()};
-$id("calc-file").addEventListener("change",async function(e){var f=e.target.files&&e.target.files[0];if(!f)return;calcMsg("Leyendo La Lista…",true);
-  try{var r=await ecLeerPDF(f);if(r.length<5)throw new Error("pocos");
-    EC={r:r,f:new Date().toLocaleDateString("es-MX",{day:"2-digit",month:"2-digit",year:"2-digit"})};try{localStorage.setItem(EKEY,JSON.stringify(EC))}catch(x){}
-    calcMsg("Listo: Leí "+r.length+" Rangos De Precio ("+ecMon(r[0].min)+" A "+ecMon(r[r.length-1].max,1)+").",true);calcPintar();$id("calc-q").focus()}
-  catch(x){calcMsg("No Pude Leer La Lista. Sube El PDF «Lista De Precios EC» Tal Como Llega (Con SKU, Rango Y Precio Público).")}});
 $id("calc-q").addEventListener("input",calcPintar);
 $id("calc-q").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();this.blur()}});
 $id("calc-x").onclick=function(){var q=$id("calc-q");q.value="";calcPintar();q.focus()};
@@ -9992,7 +9988,7 @@ var AB={cta:"carta",ng:"negro",bn:"blanco",az:"azul",rj:"rojo",vd:"verde",rs:"ro
   keyboard:"teclado",chair:"silla",desk:"escritorio",locker:"lockers",impresion:"impresora",printer:"impresora",tinta:"tinta",toner:"toner",memoria:"usb",
   sillon:"sillon",negra:"negro",blanca:"blanco",roja:"rojo",amarilla:"amarillo"};
 /* Sinónimos Que Se Buscan Juntos (Solo Al Escribir) */
-var SIN={inalambrico:["bluetooth","tws"],bluetooth:["inalambrico"],cinta:["diurex","masking"],diurex:["cinta"],usb:["memoria"],cartucho:["tinta","toner"],librero:["estante","libreros"],estante:["librero","anaquel"],
+var SIN={cinta:["diurex","masking"],diurex:["cinta"],usb:["memoria"],cartucho:["tinta","toner"],librero:["estante","libreros"],estante:["librero","anaquel"],
   laptop:["computadora"],computadora:["laptop","pc"],cuaderno:["block"],mueble:["muebles"],gabinete:["lockers","locker"],ventilador:["ventiladores"]};
 var STOP={de:1,del:1,la:1,el:1,los:1,las:1,para:1,con:1,y:1,en:1,un:1,una:1,por:1,al:1,p:1,c:1,que:1,mi:1,busco:1,quiero:1};
 function raiz(w){if(/^\d/.test(w))return w;
@@ -10000,33 +9996,47 @@ function raiz(w){if(/^\d/.test(w))return w;
   if(w.length>4&&/[ao]$/.test(w))w=w.slice(0,-1);
   return w.replace(/z$/,"c")}
 function canon(w){return raiz(AB[w]||w)}
-function toks(t){var o=[],ws=nrm(t).replace(/(\d)([a-z])/g,"$1 $2").replace(/([a-z])(\d)/g,"$1 $2").split(/[^a-z0-9]+/);
-  for(var i=0;i<ws.length;i++){var w=ws[i];if(!w)continue;o.push(canon(w));if(AB[w]==null&&w.length>2)o.push(raiz(w))}return o}
+function toks(t,P){var o=[],ws=nrm(t).replace(/(\d)([a-z])/g,"$1 $2").replace(/([a-z])(\d)/g,"$1 $2").split(/[^a-z0-9]+/);
+  for(var i=0,wi=0;i<ws.length;i++){var w=ws[i];if(!w)continue;o.push(canon(w));if(P)P.push(wi);if(w.length>2&&raiz(w)!==canon(w)){o.push(raiz(w));if(P)P.push(wi)}wi++}return o}
 function lev1(a,b,max){if(Math.abs(a.length-b.length)>max)return false;var m=a.length,n=b.length,p=[],c,i,j;for(j=0;j<=n;j++)p[j]=j;
   for(i=1;i<=m;i++){c=[i];var mn=i;for(j=1;j<=n;j++){c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));if(c[j]<mn)mn=c[j]}if(mn>max)return false;p=c}return p[n]<=max}
 /* Qué Palabras Del Vocabulario Acepta Cada Palabra Buscada: Nivel 1 Exacto/Prefijo, Nivel 2 Abreviatura/Contiene/Error De Dedo */
-function variantes(w){var b=nrm(w),v=[canon(b)];(SIN[b]||SIN[AB[b]]||SIN[canon(b)]||[]).forEach(function(x){v.push(canon(x))});return v}
+function variantes(w){var b=nrm(w),v=[raiz(b)];if(canon(b)!==v[0])v.push(canon(b));(SIN[b]||SIN[AB[b]]||SIN[canon(b)]||[]).forEach(function(x){v.push(canon(x))});return v}
 function acepta(vs,t,nivel){for(var k=0;k<vs.length;k++){var w=vs[k];
     if(/^\d+$/.test(w)){if(t===w)return true;continue}
     if(t===w||t.indexOf(w)===0)return true;
-    if(t.length>=4&&w.length>t.length&&w.indexOf(t)===0)return true;
     if(nivel>1){if(t.length>=3&&w.length>t.length&&w.indexOf(t)===0)return true;
       if(w.length>=4&&t.indexOf(w)>0)return true;
-      if(w.length>=4&&t.length>=w.length&&lev1(w,t.slice(0,w.length+1),w.length>=8?2:1))return true}}
+      if(w.length>=4&&lev1(w,t.slice(0,w.length+1),w.length>=8?2:1))return true}}
   return false}
 function palabras(q){var ws=nrm(q).replace(/(\d)([a-z])/g,"$1 $2").split(/[^a-z0-9]+/).filter(function(w){return w&&!STOP[w]});
   return ws.length?ws:nrm(q).split(/[^a-z0-9]+/).filter(Boolean)}
 /* Índice De La Lista Principal */
 var IX=null,IXn=-1,IXd=null;
-function indice(){if(IX&&IXn===D.length&&IXd===D)return IX;IX={voc:{},rows:[]};IXn=D.length;IXd=D;
-  for(var i=0;i<D.length;i++){var r=D[i],ts=toks(r[1]+" "+((typeof CATS!=="undefined"&&CATS[r[3]])||"")+" "+((typeof DEPTOS!=="undefined"&&typeof CDEP!=="undefined"&&DEPTOS[CDEP[r[3]]])||""));
-    var u={};ts.forEach(function(t){if(u[t])return;u[t]=1;(IX.voc[t]=IX.voc[t]||[]).push(i)})}
+function indice(){if(IX&&IXn===D.length&&IXd===D)return IX;IX={voc:{},rows:[],cat:{},pos:[]};IXn=D.length;IXd=D;
+  for(var i=0;i<D.length;i++){var r=D[i],PP=[],td=toks(r[1],PP),c=r[3];IX.pos[i]=PP;
+    if(IX.cat[c]==null)IX.cat[c]=toks(((typeof CATS!=="undefined"&&CATS[c])||"")+" "+((typeof DEPTOS!=="undefined"&&typeof CDEP!=="undefined"&&DEPTOS[CDEP[c]])||""));
+    IX.rows[i]=td;var u={};td.concat(IX.cat[c]).forEach(function(t){if(u[t])return;u[t]=1;(IX.voc[t]=IX.voc[t]||[]).push(i)})}
   return IX}
+/* Qué Tan Bien Coincide Una Palabra Con Un Token: 0 = No */
+function nota(vs,t){var b=0;for(var k=0;k<vs.length;k++){var w=vs[k],n=0,pri=k===0?1:.8;
+    if(/^\d+$/.test(w)){if(t===w)n=30}
+    else if(t===w)n=30;else if(t.indexOf(w)===0)n=22;else if(t.length>=3&&w.indexOf(t)===0)n=16;else if(w.length>=4&&t.indexOf(w)>0)n=8;
+    else if(w.length>=4&&t.length>=w.length&&lev1(w,t.slice(0,w.length+1),w.length>=8?2:1))n=6;
+    n*=pri;if(n>b)b=n}return b}
+function puntuar(i,ws){var r=D[i],ix=indice(),td=ix.rows[i]||[],tc=ix.cat[r[3]]||[],sc=0,sk=r[0].replace(/^0+/,"");
+  ws.forEach(function(w,wi){var b=0;
+    if(/^\d+$/.test(w)){var w0=w.replace(/^0+/,"")||"0";if(sk===w0)b=1000;else if(sk.indexOf(w0)===0)b=300;else if(sk.indexOf(w0)>-1)b=120}
+    var vs=variantes(w);
+    var ps=ix.pos[i]||[];for(var j=0;j<td.length;j++){var n=nota(vs,td[j]);if(n){var wp=ps[j]==null?j:ps[j];n+=(wp<2?18:wp<4?6:0);if(n>b)b=n}}
+    for(j=0;j<tc.length;j++){var n2=nota(vs,tc[j])*.6;if(n2>b)b=n2}
+    sc+=b});
+  return sc-Math.min(td.length,30)*.4}
 var CQ_="",CS=null,MODO="";
 function filasDe(vs,nivel){var ix=indice(),set={};
-  if(/^\d{3,}$/.test(vs[0])){var s0=vs[0].replace(/^0+/,"");for(var a=0;a<D.length;a++)if(D[a][0].replace(/^0+/,"").indexOf(s0)>-1)set[a]=1}for(var t in ix.voc){if(acepta(vs,t,nivel)){var l=ix.voc[t];for(var j=0;j<l.length;j++)set[l[j]]=1}}return set}
+  if(/^\d+$/.test(vs[0])){var s0=vs[0].replace(/^0+/,"")||"0";for(var a=0;a<D.length;a++)if(D[a][0].replace(/^0+/,"").indexOf(s0)>-1)set[a]=1}for(var t in ix.voc){if(acepta(vs,t,nivel)){var l=ix.voc[t];for(var j=0;j<l.length;j++)set[l[j]]=1}}return set}
 function resolver(q){var ws=palabras(q),num=[],txt=[];if(!ws.length)return null;
-  ws.forEach(function(w){if(/^\d{5,}$/.test(w))num.push(w);else txt.push(w)});
+  ws.forEach(function(w){if(/^\d{6,}$/.test(w))num.push(w);else txt.push(w)});
   var base=null;
   if(num.length){base={};num.forEach(function(n){var s=n.replace(/^0+/,"");for(var i=0;i<D.length;i++)if(D[i][0].replace(/^0+/,"").indexOf(s)>-1)base[i]=1})}
   if(!txt.length){MODO="";return base||{}}
@@ -10039,11 +10049,205 @@ function resolver(q){var ws=palabras(q),num=[],txt=[];if(!ws.length)return null;
   r={};if(best>0&&(txt.length===1||best>=Math.ceil(txt.length/2)))for(var i in cnt)if(cnt[i]===best&&(!base||base[i]))r[i]=1;
   MODO=Object.keys(r).length?"parcial":"";return r}
 var SKUSET=null;
-function ok(r){if(!q)return true;if(q!==CQ_||IXd!==D||IXn!==D.length){CQ_=q;var s=resolver(q),m={};if(s)for(var i in s)m[D[i][0]]=1;SKUSET=m}return !!SKUSET[r[0]]}
+function asegurar(){if(q!==CQ_||IXd!==D||IXn!==D.length){CQ_=q;var s=resolver(q),m={},ws=palabras(q);if(s)for(var i in s)m[D[i][0]]=puntuar(+i,ws);SKUSET=m}}
+function ok(r){if(!q)return true;asegurar();return SKUSET[r[0]]!=null}
+function punt(sku){if(!q)return 0;asegurar();return SKUSET[sku]||0}
 /* Para Listas Cortas (Promociones, Precios, Inventario): ¿El Texto Tiene Todas Las Palabras? */
 function texto(q,t,sku){var ws=palabras(q);if(!ws.length)return true;var ts=toks(t),sk=String(sku||"").replace(/^0+/,"");
   return ws.every(function(w){if(/^\d+$/.test(w)&&sk&&sk.indexOf(w.replace(/^0+/,""))>-1)return true;var vs=variantes(w);return ts.some(function(x){return acepta(vs,x,2)})})}
-return {ok:ok,texto:texto,modo:function(){return MODO},resolver:resolver,toks:toks}})();
+return {ok:ok,punt:punt,texto:texto,modo:function(){return MODO},resolver:resolver,toks:toks}})();
+/* Orden De Áreas Y Subcategorías Según El Mejor Resultado */
+var _ORD={k:null,d:null,c:null};
+function _ordenes(){var k=q+"|"+D.length;if(_ORD.k===k)return _ORD;var bc={},bd={};
+  D.forEach(function(r){if(!B106.ok(r))return;var p=B106.punt(r[0]);if(bc[r[3]]==null||p>bc[r[3]])bc[r[3]]=p;var d=CDEP[r[3]];if(bd[d]==null||p>bd[d])bd[d]=p});
+  _ORD={k:k,c:CATS.map(function(c,i){return i}).sort(function(a,b){return (bc[b]==null?-1e9:bc[b])-(bc[a]==null?-1e9:bc[a])||a-b}),
+        d:DEPTOS.map(function(c,i){return i}).sort(function(a,b){return (bd[b]==null?-1e9:bd[b])-(bd[a]==null?-1e9:bd[a])||a-b})};return _ORD}
+function ordenDep(){return q?_ordenes().d:DEPTOS.map(function(c,i){return i})}
+function ordenCat(){return q?_ordenes().c:CATS.map(function(c,i){return i})}
+</script>
+<!-- ===== Mejoras 24/11: Subir Archivos Al Final, Inventario, Calculadora, Planogramas ===== -->
+<style>
+/* Botones Para Subir Archivos: Hasta El Final De Cada Sección */
+.subir-fin{display:flex!important;flex-direction:column;align-items:stretch;gap:10px;margin:22px 0 8px;padding:16px;border:1.5px dashed var(--linea);border-radius:18px;background:var(--blanco)}
+.subir-fin .sf-t{display:flex;align-items:center;gap:10px;font:600 14px var(--sans);color:var(--tinta);margin:0}
+.subir-fin .sf-t small{display:block;font:400 12.5px var(--sans);color:var(--gris);margin-top:2px}
+.subir-fin .sf-ic{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:var(--fondo);color:var(--gris)}
+.subir-fin .sf-ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.subir-fin .sf-b{display:flex;flex-wrap:wrap;gap:8px}
+.subir-fin .sf-b>button{flex:1 1 200px;min-height:46px}
+.subir-fin .ex-msg,.subir-fin .p-msg{margin:0}
+body.no-mueb:not(.dep-todo) .subir-fin.ex-bar,body.en-inicio .subir-fin.ex-bar{display:none!important}
+body.en-promo .subir-fin.ex-bar,body.en-img .subir-fin.ex-bar,body.en-plano .subir-fin.ex-bar{display:none!important}
+/* Inventario: Siempre Se Anota Lo Encontrado */
+.inv-chk{display:none!important}
+/* Muebles: Solo Lleva Color Lo Que Está «Por Exhibir» (El Naranja De Descuentos Enteros Es Solo Para Cambio De Precios) */
+tr.ent td{background:transparent}
+tr.ent td:first-child{box-shadow:none}
+tr.ent .et{border-color:var(--linea);border-style:dashed}
+tr.ent .et-p{background:transparent;border-color:var(--linea);color:inherit}
+#c-filas tr.ent td{background:rgba(254,111,1,.10)}
+#c-filas tr.ent td:first-child{box-shadow:inset 4px 0 0 var(--naranja)}
+#c-filas tr.ent .et{border-color:var(--naranja);border-style:solid}
+#c-filas tr.ent .et-p{background:var(--naranja);border-color:var(--naranja);color:#fff}
+.pex-add{color:var(--gris)!important;border-color:var(--linea)!important;background:transparent!important}
+.pex-add:hover{color:var(--naranja-texto)!important;border-color:var(--naranja)!important}
+/* Planogramas */
+.pl-tabs{flex-wrap:wrap}
+.pl-tabs button small{font-weight:500;opacity:.7;margin-left:4px}
+.pl-lista{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important}
+.pl-card{gap:10px!important;padding:16px!important;cursor:pointer}
+.pl-c1{display:flex;align-items:center;gap:12px}
+.pl-c1 .pl-ic{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--naranja);color:#fff}
+.pl-c1 .pl-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pl-c1 b{display:block;font:700 16px/1.2 var(--sans);color:var(--tinta)}
+.pl-c1 small{display:block;font:400 12.5px var(--sans);color:var(--gris);margin-top:3px}
+.pl-card .pl-go{margin-left:auto;color:var(--gris-cl);font-size:22px;line-height:1}
+.pl-bar{height:8px;border-radius:99px;background:var(--fondo);overflow:hidden}
+.pl-bar i{display:block;height:100%;border-radius:inherit;background:var(--naranja);transition:width .3s}
+.pl-bar.ok i{background:#1E9E5A}
+.pl-av{display:flex;justify-content:space-between;font:600 12.5px var(--sans);color:var(--gris)}
+.pl-av .ok{color:#1E9E5A}
+.pl-head{position:sticky;top:0;z-index:6;margin:0 0 14px;padding:12px 14px;background:var(--pagina);border:1px solid var(--linea);border-radius:16px;box-shadow:var(--sombra)}
+.pl-head .pl-av{font-size:13.5px;color:var(--tinta);margin-bottom:8px}
+.pl-head .pl-av span:last-child{color:var(--gris)}
+.pl-ctrl{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.pl-seg{display:inline-flex;padding:3px;border-radius:99px;background:var(--fondo);border:1px solid var(--linea)}
+.pl-seg button{border:0;background:none;font:600 13px var(--sans);color:var(--gris);padding:8px 14px;border-radius:99px;cursor:pointer;min-height:36px}
+.pl-seg button[aria-pressed="true"]{background:var(--blanco);color:var(--tinta);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.pl-bus{flex:1 1 180px;min-width:0;font:400 15px var(--sans);padding:9px 14px;border:1.5px solid var(--linea);border-radius:99px;background:var(--fondo);color:var(--tinta);min-height:40px;box-sizing:border-box}
+.pl-bus:focus{outline:none;border-color:var(--naranja);background:var(--blanco)}
+.pl-nav{display:flex;gap:8px;margin:16px 0 4px}
+.pl-nav button{flex:1;min-height:52px;text-align:left;padding:8px 14px;border:1px solid var(--linea);border-radius:14px;background:var(--blanco);color:var(--tinta);font:600 14px var(--sans);cursor:pointer}
+.pl-nav button small{display:block;font:500 11.5px var(--sans);color:var(--gris)}
+.pl-nav button.sig{text-align:right}
+.pl-nav button[disabled]{visibility:hidden}
+.pg-it.pg-hit .pg-fr{outline:3px solid var(--naranja);outline-offset:-3px}
+.pg-it.pg-no{opacity:.25}
+.pg-sl-b{bottom:calc(var(--nav-h,64px) + env(safe-area-inset-bottom,0px))!important}
+@media(min-width:760px){.pg-sl-b{bottom:90px!important}}
+.pg-hoja>.pg-sl:not(.pg-sl-b){display:none}
+.pg-ck{width:24px;height:24px}
+/* Vista De Lista */
+.pll-ch{margin:0 0 14px;border:1px solid var(--linea);border-radius:16px;overflow:hidden;background:var(--blanco)}
+.pll-cab{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--fondo);font:700 13.5px var(--sans);color:var(--tinta)}
+.pll-cab .n{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--marino);color:#fff;font-size:12px}
+.pll-cab small{margin-left:auto;font-weight:500;color:var(--gris)}
+.pll-it{display:grid;grid-template-columns:52px 1fr auto auto;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--linea);cursor:pointer}
+.pll-it img,.pll-it .ph{width:52px;height:52px;object-fit:contain;border-radius:10px;background:#fff;border:1px solid var(--linea)}
+.pll-it .ph{background:repeating-linear-gradient(90deg,#f1f1f1 0 6px,#fff 6px 12px)}
+.pll-it .tx{min-width:0}
+.pll-it .tx b{display:inline-block;font:600 12.5px var(--mono);background:var(--sku-bg);border:1px solid var(--linea);padding:2px 7px;border-radius:7px;color:var(--tinta)}
+.pll-it .tx span{display:block;font-size:13.5px;line-height:1.3;color:var(--tinta);margin-top:4px}
+.pll-it .qq{font:700 13px var(--sans);background:var(--rojo);color:#fff;border-radius:99px;padding:3px 10px;white-space:nowrap}
+.pll-it .pg-ck{position:static;width:26px;height:26px}
+.pll-it.hecho .tx,.pll-it.hecho img,.pll-it.hecho .qq{opacity:.4}
+.pll-it.hecho .tx span{text-decoration:line-through}
+.pll-it.pg-no{display:none}
+</style>
+<script>
+/* ===== Mejoras 24/11 ===== */
+(function(){
+var G=function(i){return document.getElementById(i)};
+var ICS='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>';
+function caja(id,cls,tit,sub){var d=document.createElement("div");d.id=id;d.className="subir-fin "+(cls||"");
+  d.innerHTML='<p class="sf-t"><span class="sf-ic">'+ICS+'</span><span>'+tit+'<small>'+sub+'</small></span></p><div class="sf-b"></div>';return d}
+function mover(d,ids){var b=d.querySelector(".sf-b");ids.forEach(function(i){var e=G(i);if(!e)return;if(/msg/.test(i))d.appendChild(e);else b.appendChild(e)})}
+/* Muebles / Ver Todo: Subir PDF Y Entrar Con Google */
+var sc=document.querySelector(".caja .scroll")||document.querySelector(".scroll");
+if(sc){var fm=caja("fin-main","ex-bar no-inicio","Actualizar Existencias","Sube El Informe Más Reciente (PDF O Excel)");sc.parentNode.insertBefore(fm,sc.nextSibling);mover(fm,["ex-subir","ex-llave","ex-file","ex-msg"]);
+  var ttl=fm.querySelector(".sf-t span:last-child");
+  new MutationObserver(function(){var todo=document.body.classList.contains("dep-todo");ttl.innerHTML=todo?'Artículos Totales<small>Sube El PDF De Oracle BI (Día 10 De Cada Mes)</small>':'Actualizar Existencias<small>Sube El Informe De Muebles Más Reciente (PDF O Excel)</small>'}).observe(document.body,{attributes:true,attributeFilter:["class"]})}
+/* Finalización Y Cambio De Precios */
+[["promo","p","Reporte De Finalización","Sube El PDF Del Día"],["precios","c","Reporte De Cambio De Precios","Sube El PDF Del Día"]].forEach(function(x){var s=G(x[0]);if(!s)return;
+  var d=caja("fin-"+x[1],"",x[2],x[3]);s.appendChild(d);mover(d,[x[1]+"-subir",x[1]+"-file"])});
+/* Inventario */
+var iw=document.querySelector("#inv .inv-wrap");if(iw){var di=caja("fin-inv","","Archivo De Inventario","Sube El Excel Con SKU, Stock Y Precio");iw.appendChild(di);mover(di,["inv-subir","inv-file"])}
+var o=G("inv");if(o){o.classList.add("contando");new MutationObserver(function(){if(!o.hidden&&!o.classList.contains("contando"))o.classList.add("contando")}).observe(o,{attributes:true,attributeFilter:["hidden","class"]});
+  var ck=G("inv-chk");if(ck&&!ck.checked){ck.checked=true;ck.dispatchEvent(new Event("change",{bubbles:true}))}}
+/* Calculadora: Sin «Actualizar Lista» Y Con Comas Automáticas */
+
+var ci=G("calc-q");
+function fmt(){var v=ci.value,pos=ci.selectionStart==null?v.length:ci.selectionStart,antes=v.slice(0,pos).replace(/[^\d.]/g,"").length;
+  var s=v.replace(/[^\d.]/g,""),p=s.indexOf(".");if(p>-1)s=s.slice(0,p+1)+s.slice(p+1).replace(/\./g,"").slice(0,2);
+  var ent=p>-1?s.slice(0,p):s,dec=p>-1?s.slice(p):"";ent=ent.replace(/^0+(?=\d)/,"");
+  var out=(ent?ent.replace(/\B(?=(\d{3})+(?!\d))/g,","):(dec?"0":""))+dec;if(out===v)return;ci.value=out;
+  var k=0,i=0;while(i<out.length&&k<antes){if(/[\d.]/.test(out[i]))k++;i++}try{ci.setSelectionRange(i,i)}catch(e){}}
+if(ci){ci.addEventListener("input",function(){fmt();try{calcPintar()}catch(e){}});ci.setAttribute("inputmode","decimal")}
+})();
+
+/* ===== Planogramas Más Amigables ===== */
+var PLVISTA=(function(){try{return localStorage.getItem("plano-vista")||"plano"}catch(e){return "plano"}})(),PLBUS="";
+pintarPlano=function(){
+  var cont=$id("l-cont"),h="",pl=PLSEL>=0?PLANOS[PLSEL]:null,IP='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9.5h18M3 15h18M9 4v16"/></svg>';
+  $id("l-atras").hidden=!pl;$id("l-ojo").hidden=!pl;ojoPoner("l");$id("l-orig").hidden=!pl||!pl.img;$id("l-tabs").hidden=!!pl;
+  var oi=$id("l-img");if(!pl){oi.hidden=true;oi.removeAttribute("src")}
+  $id("l-orig").textContent=oi.hidden?"Ver Planograma Original":"Ocultar Original";
+  [].forEach.call($id("l-tabs").querySelectorAll("button"),function(b){var p=+b.getAttribute("data-pas"),n=PLANOS.filter(function(x){return x.p===p}).length;
+    b.setAttribute("aria-pressed",p===PLPAS);b.innerHTML="Pasillo "+p+"<small>"+n+"</small>"});
+  function av(p){var c=plCuenta(p),m=plMarcados(p);return {k:c.k,s:c.s,m:m,pct:c.k?Math.round(m/c.k*100):0}}
+  if(!pl){
+    $id("l-tit").textContent="Planogramas";
+    var lst=PLANOS.map(function(p,i){return [p,i]}).filter(function(x){return x[0].p===PLPAS});
+    $id("l-sub").textContent="Elige Un Pasillo Y Toca Un Planograma Para Abrirlo.";
+    if(!lst.length)h='<p class="pl-vacio">Aún No Hay Planogramas En El Pasillo '+PLPAS+'.</p>';
+    else{h='<div class="pl-lista">';lst.forEach(function(x){var a=av(x[0]),okk=a.k&&a.m>=a.k;
+      h+='<button type="button" class="pl-card" data-pl="'+x[1]+'"><span class="pl-c1"><span class="pl-ic">'+IP+'</span><span><b>'+esc(x[0].t)+'</b><small>'+x[0].ch.length+' Charolas · '+a.k+' SKU'+(x[0].dn?' · Doble Nivel':'')+'</small></span><span class="pl-go" aria-hidden="true">›</span></span>'
+        +'<span class="pl-bar'+(okk?' ok':'')+'"><i style="width:'+a.pct+'%"></i></span><span class="pl-av"><span'+(okk?' class="ok"':'')+'>'+(okk?'✓ Completo':a.m+' De '+a.k+' Marcados')+'</span><span>'+a.pct+' %</span></span></button>'});
+      h+='</div>'}
+    cont.innerHTML=h;return}
+  var a=av(pl),okk=a.k&&a.m>=a.k,mismos=PLANOS.map(function(p,i){return i}).filter(function(i){return PLANOS[i].p===pl.p}),pos=mismos.indexOf(PLSEL);
+  $id("l-tit").textContent=pl.t;
+  $id("l-sub").textContent="Pasillo "+pl.p+(pl.f?" · Del "+pl.f:"")+" · "+pl.ch.length+" Charolas"+(a.s?" · "+a.s+" Piezas":"");
+  h='<div class="pl-head"><div class="pl-av"><span><b id="pl-m">'+a.m+'</b> De '+a.k+' SKU Marcados</span><span id="pl-p">'+(okk?'✓ Completo':a.pct+' %')+'</span></div><div class="pl-bar'+(okk?' ok':'')+'" id="pl-bar"><i style="width:'+a.pct+'%"></i></div>'
+   +'<div class="pl-ctrl"><div class="pl-seg" role="group" aria-label="Vista"><button type="button" data-v="plano" aria-pressed="'+(PLVISTA==="plano")+'">Planograma</button><button type="button" data-v="lista" aria-pressed="'+(PLVISTA==="lista")+'">Lista</button></div>'
+   +'<input class="pl-bus" id="pl-bus" type="search" placeholder="Buscar SKU O Artículo Aquí" autocomplete="off" value="'+esc(PLBUS)+'"></div></div>';
+  var filas=[];
+  pl.ch.forEach(function(ch,ci){var n=(pl.c0||1)+ci;
+    if(pl.dn&&!(pl.u&&pl.u[n])){var m=Math.ceil(ch.length/2);filas.push({n:n,l:"",ch:ch.slice(0,m)});filas.push({n:n,l:"b",ch:ch.slice(m)})}
+    else filas.push({n:n,l:"",ch:ch})});
+  function foto(sku){return FOTOS[sku]?"img/"+sku+".jpg":PLFOTO[sku]}
+  if(PLVISTA==="lista"){
+    var ult=null;filas.forEach(function(fi){var ch=fi.ch.filter(function(x){return !(OJO.l&&PLH[plKey(pl,x[0])])});
+      if(fi.n!==ult){if(ult!==null)h+='</div>';ult=fi.n;var tot=pl.ch[fi.n-(pl.c0||1)];
+        h+=(pl.prov&&pl.prov[fi.n]?'<div class="pg-prov" style="position:static;margin:4px 0 10px">'+esc(pl.prov[fi.n])+'</div>':'')+'<div class="pll-ch"><div class="pll-cab"><span class="n">'+fi.n+'</span>Charola '+fi.n+'<small>'+(tot?tot.length:0)+' SKU</small></div>'}
+      ch.forEach(function(x){var sku=x[0],hk=!!PLH[plKey(pl,sku)],r=IDX[sku],src=foto(sku);
+        h+='<label class="pll-it pg-it'+(hk?' hecho':'')+'" data-s="'+sku+'">'+(src?'<img data-g="1" alt="Foto '+sku+'" loading="lazy" src="'+src+'">':'<span class="ph"></span>')
+          +'<span class="tx"><b>'+sku+'</b>'+(fi.l?' <small style="color:var(--gris)">Nivel 2</small>':'')+'<span>'+(r?r[1]:"Sin Descripción En El Catálogo")+'</span></span>'
+          +(x[1]?'<span class="qq">×'+x[1]+'</span>':'<span></span>')+'<input class="chk pg-ck" type="checkbox" data-k="'+esc(plKey(pl,sku))+'" aria-label="Marcar '+sku+'"'+(hk?' checked':'')+'></label>'})});
+    if(ult!==null)h+='</div>'}
+  else{
+    var CW=128,NV=4,ANCHO=(pl.dn?NV:Math.max.apply(null,pl.ch.map(function(ch){return ch.length})))*CW+46;
+    h+='<div class="pg-hoja"><div class="pg-cab"><span class="pg-tt">'+esc(pl.t)+'</span>'+(pl.f?'<span class="pg-fe">'+esc(pl.f)+'</span>':'')+'</div>'
+      +'<div class="pg-vista" id="l-vista"><div class="pg-gond" style="width:'+ANCHO+'px">';
+    filas.forEach(function(fi){var ch=fi.ch;
+      if(pl.prov&&pl.prov[fi.n]&&!fi.l)h+='<div class="pg-prov">'+esc(pl.prov[fi.n])+'</div>';
+      h+='<div class="pg-fila"><span class="pg-num'+(fi.l?' pg-num2':'')+'" aria-label="Charola '+fi.n+(pl.dn?(fi.l?' Nivel 2':' Nivel 1'):'')+'">'+(fi.l?'↳':fi.n)+'</span>';
+      ch.forEach(function(x){var sku=x[0],hk=!!PLH[plKey(pl,sku)];if(OJO.l&&hk)return;var src=foto(sku),r=IDX[sku];
+        h+='<div class="pg-it'+(hk?' hecho':'')+'" data-s="'+sku+'" style="width:'+CW+'px" title="'+esc(r?r[1]:sku)+'"><div class="pg-st"><input class="chk pg-ck" type="checkbox" data-k="'+esc(plKey(pl,sku))+'" aria-label="Marcar '+sku+'"'+(hk?' checked':'')+'><div class="pg-fr">'
+          +(src?'<img data-g="1" alt="Foto '+sku+'" loading="lazy" decoding="async" src="'+src+'">':'<i></i>')+'</div><span class="pg-et ch">'+sku+'</span>'+(x[1]?'<span class="pg-q" title="Piezas">'+x[1]+'</span>':'')+'</div></div>'});
+      h+='</div><div class="pg-rep" style="width:'+(ch.length*CW+10)+'px"></div>'});
+    h+='</div></div><input type="range" class="pg-sl pg-sl-b" min="0" max="1000" value="0" aria-label="Deslizar El Planograma De Lado A Lado"></div>'}
+  var pv=pos>0?PLANOS[mismos[pos-1]]:null,sg=pos<mismos.length-1?PLANOS[mismos[pos+1]]:null;
+  h+='<div class="pl-nav"><button type="button" class="ant" data-ir="'+(pv?mismos[pos-1]:"")+'"'+(pv?'':' disabled')+'><small>← Anterior</small>'+(pv?esc(pv.t):'')+'</button><button type="button" class="sig" data-ir="'+(sg?mismos[pos+1]:"")+'"'+(sg?'':' disabled')+'><small>Siguiente →</small>'+(sg?esc(sg.t):'')+'</button></div>';
+  cont.innerHTML=h;plFiltra(false);
+  var v=$id("l-vista"),sl=cont.querySelector(".pg-sl-b");
+  if(v&&sl){var mov=false;function mx(){return Math.max(1,v.scrollWidth-v.clientWidth)}
+    sl.addEventListener("input",function(){mov=true;v.scrollLeft=this.value/1000*mx();mov=false});
+    v.addEventListener("scroll",function(){if(mov)return;sl.value=Math.round(v.scrollLeft/mx()*1000)},{passive:true})}};
+function plFiltra(ir){var cont=$id("l-cont"),t=PLBUS.trim(),pri=null;
+  [].forEach.call(cont.querySelectorAll(".pg-it"),function(it){var sku=it.getAttribute("data-s"),r=IDX[sku],si=!t||B106.texto(t,(r?r[1]:""),sku);
+    it.classList.toggle("pg-no",!!t&&!si);it.classList.toggle("pg-hit",!!t&&si);if(t&&si&&!pri)pri=it});
+  if(ir&&pri){pri.scrollIntoView({block:"center",inline:"center",behavior:quieto?"auto":"smooth"})}}
+function plProg(){var pl=PLANOS[PLSEL];if(!pl)return;var c=plCuenta(pl),m=plMarcados(pl),p=c.k?Math.round(m/c.k*100):0,okk=c.k&&m>=c.k;
+  var a=$id("pl-m"),b=$id("pl-p"),br=$id("pl-bar");if(a)a.textContent=m;if(b)b.textContent=okk?"✓ Completo":p+" %";if(br){br.classList.toggle("ok",!!okk);br.firstChild.style.width=p+"%"}
+  $id("l-sub").textContent="Pasillo "+pl.p+(pl.f?" · Del "+pl.f:"")+" · "+pl.ch.length+" Charolas"+(c.s?" · "+c.s+" Piezas":"")}
+$id("l-cont").addEventListener("change",function(e){if(e.target.classList&&e.target.classList.contains("pg-ck"))setTimeout(plProg,0)});
+$id("l-cont").addEventListener("input",function(e){if(e.target.id==="pl-bus"){PLBUS=e.target.value;plFiltra(true)}});
+$id("l-cont").addEventListener("click",function(e){var b=e.target.closest(".pl-seg button[data-v]");if(b){PLVISTA=b.getAttribute("data-v");try{localStorage.setItem("plano-vista",PLVISTA)}catch(x){}pintarPlano();return}
+  var n=e.target.closest(".pl-nav button[data-ir]");if(n&&n.getAttribute("data-ir")!==""){PLSEL=+n.getAttribute("data-ir");PLBUS="";pintar(true);window.scrollTo(0,0)}});
+$id("l-atras").addEventListener("click",function(){PLBUS=""});
+$id("l-cont").addEventListener("click",function(e){if(e.target.getAttribute&&e.target.getAttribute("data-g")&&e.target.closest(".pll-it"))e.preventDefault()},true);
+try{if(PLANO)pintarPlano()}catch(e){}
 </script>
 <!-- ===== Navegación Rápida (23/11) ===== -->
 <nav class="nav106" id="nav106" aria-label="Navegación Principal">
