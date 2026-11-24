@@ -819,6 +819,7 @@ body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106{display:none}
       <button type="button" class="p-btn" id="l-atras" hidden>← Planogramas</button>
       <button type="button" class="p-btn" id="l-orig" hidden>Ver Planograma Original</button>
       <button type="button" class="p-btn ojo" id="l-ojo" hidden aria-pressed="false" title="Cambia Entre Mostrar Todos Y Mostrar Pendientes"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="ojo-a"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g><g class="ojo-c"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></svg><span class="ojo-t">Mostrar Todos</span></button>
+      <button type="button" class="p-btn" id="l-des">Deseleccionar Todos</button>
     </div>
     <h2 class="p-tit" id="l-tit">Planogramas</h2>
     <p class="p-sub" id="l-sub"></p>
@@ -10168,6 +10169,8 @@ tr.ent .et-p{background:transparent;border-color:var(--linea);color:inherit}
 .pl-toast{position:fixed;left:50%;bottom:calc(var(--nav-h,64px) + env(safe-area-inset-bottom,0px) + 16px);transform:translate(-50%,20px);z-index:75;opacity:0;pointer-events:none;
   background:#1E1E1E;color:#fff;font:600 14px var(--sans);padding:10px 18px;border-radius:99px;box-shadow:0 8px 24px -8px rgba(0,0,0,.5);transition:opacity .2s,transform .2s;white-space:nowrap}
 .pl-toast.ver{opacity:1;transform:translate(-50%,0)}
+#l-ojo[hidden]~#l-des{display:none}
+#l-des.peli{border-color:var(--rojo);color:var(--rojo-texto);font-weight:700}
 @media(min-width:760px){.pl-toast{bottom:100px}}
 /* Vista De Lista */
 .pll-ch{margin:0 0 14px;border:1px solid var(--linea);border-radius:16px;overflow:hidden;background:var(--blanco)}
@@ -10329,6 +10332,16 @@ $id("l-cont").addEventListener("change",function(e){var t=e.target;if(!(t.classL
   c.addEventListener("scroll",fin,true);
   c.addEventListener("click",function(e){if(hecho&&!(e.target.classList&&e.target.classList.contains("pg-ck"))){e.preventDefault();e.stopPropagation()}hecho=false},true);
   c.addEventListener("contextmenu",function(e){if(e.target.closest(".pg-it[data-k]"))e.preventDefault()})})();
+/* Deseleccionar Todos (con confirmación de doble toque) */
+(function(){var b=$id("l-des"),tm=null;if(!b)return;
+  function rest(){clearTimeout(tm);b.classList.remove("peli");b.textContent="Deseleccionar Todos"}
+  b.addEventListener("click",function(){var pl=PLANOS[PLSEL];if(!pl)return;
+    if(!b.classList.contains("peli")){var n=plMarcados(pl);
+      if(!n){b.textContent="No Hay Nada Marcado";clearTimeout(tm);tm=setTimeout(rest,1500);return}
+      b.classList.add("peli");b.textContent="¿Seguro? Toca De Nuevo ("+n+")";clearTimeout(tm);tm=setTimeout(rest,3000);return}
+    rest();pl.ch.forEach(function(c){c.forEach(function(a){delete PLH[plKey(pl,a[0])]})});plGuarda();
+    var v=$id("l-vista"),x=v?v.scrollLeft:0,y=window.scrollY;pintarPlano();var v2=$id("l-vista");if(v2)v2.scrollLeft=x;window.scrollTo(0,y);plProg()});
+  $id("l-atras").addEventListener("click",rest)})();
 $id("l-cont").addEventListener("input",function(e){if(e.target.id==="pl-bus"){PLBUS=e.target.value;plFiltra(true)}});
 $id("l-cont").addEventListener("click",function(e){var b=e.target.closest(".pl-seg button[data-v]");if(b){PLVISTA=b.getAttribute("data-v");try{localStorage.setItem("plano-vista",PLVISTA)}catch(x){}pintarPlano();return}
   var n=e.target.closest(".pl-nav button[data-ir]");if(n&&n.getAttribute("data-ir")!==""){PLSEL=+n.getAttribute("data-ir");PLBUS="";pintar(true);window.scrollTo(0,0)}});
