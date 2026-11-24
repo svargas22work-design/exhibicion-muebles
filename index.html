@@ -9387,8 +9387,7 @@ $id("l-cont").addEventListener("change",function(e){var t=e.target;if(!t.classLi
   var k=t.getAttribute("data-k"),sku=k.split("|")[1],pl=PLANOS[PLSEL];if(!pl)return;
   if(t.checked)PLH[k]=1;else delete PLH[k];plGuarda();
   [].forEach.call($id("l-cont").querySelectorAll('.pg-it[data-s="'+sku+'"]'),function(it){it.classList.toggle("hecho",t.checked);var c=it.querySelector(".pg-ck");if(c)c.checked=t.checked});
-  var c2=plCuenta(pl);$id("l-sub").textContent="Pasillo "+pl.p+(pl.f?" · Del "+pl.f:"")+" · "+c2.k+" SKU"+(c2.s?" · "+c2.s+" Piezas":"")+" · "+plMarcados(pl)+" Marcados · Desliza De Lado A Lado";
-  if(OJO.l&&t.checked)ojoQuita(pintarPlano)});
+  if(OJO.l&&t.checked)ojoQuita(function(){var v=$id("l-vista"),x=v?v.scrollLeft:0,y=window.scrollY;pintarPlano();var v2=$id("l-vista");if(v2)v2.scrollLeft=x;window.scrollTo(0,y)})});
 $id("l-orig").onclick=function(){var pl=PLANOS[PLSEL],oi=$id("l-img");if(!pl)return;
   if(oi.hidden){oi.src=pl.img;oi.hidden=false;this.textContent="Ocultar Planograma Original"}else{oi.hidden=true;this.textContent="Ver Planograma Original"}};
 $id("l-tabs").addEventListener("click",function(e){var b=e.target.closest("button[data-pas]");if(!b)return;PLPAS=+b.getAttribute("data-pas");pintar(false)});
