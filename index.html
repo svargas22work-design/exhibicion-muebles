@@ -9754,12 +9754,16 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
   }
 
   async function subirExcel(file){
+    if(Object.keys(CNT.c).length&&!confirm("Ya Hay Un Conteo Guardado. Al Subir Otra Hoja Se Reemplaza Todo (La Hoja Y El Conteo). ¿Continuar?"))return;
     aviso("Leyendo Excel…");
     try{
       var X=await cargarXLSX(),buf=await file.arrayBuffer(),r=leerInventario(X,buf);
       if(!r.n){aviso("No Encontré Las Columnas «SKU», «Stock» Y «Precio» En El Excel. Revisa Que Los Encabezados Estén En La Hoja.","err");return}
-      CAT={fecha:new Date().toISOString(),archivo:file.name,items:r.items};
+      /* Una hoja nueva REEMPLAZA a la anterior: también se limpia el conteo (Top, Mid y Piso) */
+      var iso=new Date().toISOString();
+      CAT={fecha:iso,archivo:file.name,items:r.items};
       guardar(K_CAT,CAT);
+      CNT={t:iso,c:{},d:{}};guardarCnt();
       pintar();
       if(fbAuth.currentUser){
         aviso(r.n+" Artículos Cargados. Publicando Para Todos…","ok");
