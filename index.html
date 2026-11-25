@@ -586,8 +586,9 @@ body.cargada .subs,body.cargada .tools,body.cargada .inicio,body.cargada .busca,
 .inv.contando .inv-tabla .inv-c{display:table-cell}
 .inv-tabla td.inv-foto{width:1%;padding:6px 8px}
 .inv-tabla .inv-th{display:block;width:36px;height:36px;object-fit:contain;background:#fff;border:1px solid var(--linea);border-radius:8px;cursor:zoom-in}
-.inv-tabla .inv-in{width:96px;max-width:100%;font:600 16px var(--sans);padding:8px 10px;border:1.5px solid var(--linea);border-radius:10px;background:var(--fondo);color:var(--tinta);text-align:center;font-variant-numeric:tabular-nums}
+.inv-tabla .inv-in{width:64px;max-width:100%;font:600 16px var(--sans);padding:8px 6px;border:1.5px solid var(--linea);border-radius:10px;background:var(--fondo);color:var(--tinta);text-align:center;font-variant-numeric:tabular-nums}
 .inv-tabla .inv-in:focus{outline:none;border-color:var(--rojo);background:var(--blanco);box-shadow:0 0 0 4px rgba(213,44,51,.12)}
+.inv-tabla td.sum{font-weight:700;font-variant-numeric:tabular-nums}
 .inv-neg{color:var(--rojo-texto);font-weight:700}
 .inv-pos{color:var(--marino);font-weight:600}
 .inv-perd{color:var(--rojo-texto);font-weight:700}
@@ -862,7 +863,6 @@ body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106{display:none}
   <h2 class="p-tit" id="inv-tit">Inventario</h2>
   <p class="p-sub" id="inv-sub">Sube El Excel Con SKU, Stock Y Precio.</p>
   <p class="ex-msg" id="inv-msg" role="status" aria-live="polite" hidden></p>
-  <div class="inv-rep" id="inv-rep" hidden></div>
   <div class="inv-res">
     <div class="inv-card"><div class="et">Artículos Contados</div><div class="cif" id="inv-cont">0</div></div>
     <div class="inv-card perd"><div class="et">Pérdida (Faltantes)</div><div class="cif" id="inv-perd">$0.00</div></div>
@@ -872,7 +872,7 @@ body:has(.zoom) .nav106,body:has(#escaner:not([hidden])) .nav106{display:none}
   <div class="p-bus"><input id="inv-q" type="search" enterkeyhint="search" placeholder="SKU O Palabras Clave" aria-label="Buscar SKU O Artículo" autocomplete="off"></div>
   <div class="p-scroll">
    <table class="p-tabla inv-tabla">
-    <thead><tr><th>Foto</th><th>SKU</th><th>Artículo</th><th class="n">Stock</th><th class="n">Precio</th><th class="n inv-c">Encontrada</th><th class="n inv-c">Diferencia</th><th class="n inv-c">Valor</th></tr></thead>
+    <thead><tr><th>Foto</th><th>SKU</th><th>Artículo</th><th class="n">Stock</th><th class="n">Precio</th><th class="n inv-c">Top</th><th class="n inv-c">Mid</th><th class="n inv-c">Piso</th><th class="n inv-c">Suma</th><th class="n inv-c">Diferencia</th><th class="n inv-c">Valor</th></tr></thead>
     <tbody id="inv-filas"></tbody>
    </table>
   </div>
@@ -9440,7 +9440,7 @@ var P=[
  {v:aInicio,t:function(){return $(".ini-promo")},c:'var(--rojo)',i:'promo',tit:'Promociones Del Día',x:'<p>Sube el PDF de <b>Finalización De Promociones</b> y marca cada artículo al terminarlo.</p>'},
  {v:aInicio,t:function(){return $(".ini-prec")},c:'var(--marino)',i:'etiqueta',tit:'Cambio De Precios',x:'<p>Sube el PDF de <b>Cambio De Precios</b> y marca cada etiqueta cambiada. Los descuentos enteros salen <span class="tour-et" style="background:var(--naranja);color:#fff">Resaltados</span>.</p>'},
  {v:aInicio,t:function(){return $(".ini-calc")},c:'var(--azul)',i:'tabla',tit:'Calculadora De Extracobertura',x:'<p>Escribe el precio del producto y ve el precio de la <b>Extracobertura</b> de 1 y 2 años.</p>'},
- {v:aInicio,t:function(){return $(".ini-inv")},c:'var(--marino)',i:'tabla',tit:'Inventario',x:'<p>Sube el Excel del inventario y anota lo que encuentras. Calcula <b>diferencias</b> y <b>pérdidas</b>.</p>'},
+ {v:aInicio,t:function(){return $(".ini-inv")},c:'var(--marino)',i:'tabla',tit:'Inventario',x:'<p>Sube el Excel del inventario y anota lo que encuentras en <b>Top</b>, <b>Mid</b> y <b>Piso</b>; la suma y las <b>pérdidas</b> se calculan solas. «Hacer Resumen» descarga un solo Excel.</p>'},
  {v:aInicio,t:function(){return $(".ini-tienda")},c:'var(--azul)',i:'area',tit:'La Tienda',x:'<p>Artículos por área y <b>Planogramas</b>.</p>'},
  {v:function(){if(!PLANO){abrirPlano();return true}return false},t:function(){return $("#l-tabs")},c:'var(--naranja)',i:'area',tit:'Planogramas',x:'<p>Elige el pasillo y abre un planograma. Marca con ✓ lo acomodado; <b>mantén presionado</b> un producto para marcarlo como <b>No Disponible</b>.</p>'},
  {v:aMuebles,t:function(){return $("#subs")},c:'var(--azul)',i:'chips',tit:'Muévete Entre Secciones',x:'<p>Filtra por subcategoría.</p>'},
@@ -9509,7 +9509,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
 /* ===== Inventario: sube un Excel (SKU, stock y precio) y anota lo que encuentras ===== */
 (function(){
   var K_CAT="inv-cat-local",K_CNT="inv-cnt-local",ID_CNT="inventario-conteo",ID_CAT="inventario";
-  var CAT=null,CNT={t:"",c:{}},LISTO=false,TMR=null;
+  var CAT=null,CNT={t:"",c:{},d:{}},LISTO=false,TMR=null;
   var MON=new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN"});
   var DESC={};D.forEach(function(r){DESC[r[0]]=r[1]});
   function q(i){return document.getElementById(i)}
@@ -9552,7 +9552,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
     return {items:items,n:n};
   }
 
-  /* Cifras y tabla */
+  /* Cifras y tabla: el conteo de cada SKU se anota en Top, Mid y Piso; «Encontrada» es la suma */
   function celdas(sk){
     var it=CAT.items[sk],cv=CNT.c[sk],d=cv==null?null:cv-it.s,v=d==null?0:d*it.p,dif,per;
     if(d==null){dif='<span class="inv-sin">—</span>';per='<span class="inv-sin">—</span>'}
@@ -9562,11 +9562,17 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
     }
     return [dif,per];
   }
+  function sumaHtml(sk){var cv=CNT.c[sk];return cv==null?'<span class="inv-sin">—</span>':String(cv)}
+  function entrada(sk,k,et){
+    var pt=(CNT.d&&CNT.d[sk])||{},v=pt[k];
+    return '<td class="n inv-c"><input class="inv-in" data-k="'+k+'" type="number" inputmode="numeric" min="0" step="1" aria-label="'+et+' De '+sk+'" value="'+(v==null?"":v)+'"></td>';
+  }
   function fila(sk){
-    var it=CAT.items[sk],cv=CNT.c[sk],ce=celdas(sk),ds=it.d||DESC[sk]||"";
+    var it=CAT.items[sk],ce=celdas(sk),ds=it.d||DESC[sk]||"";
     return '<tr class="fila" data-sku="'+sk+'" data-s="'+sk+'"><td class="inv-foto">'+(FOTOS[sk]?'<img class="inv-th" data-g="1" alt="Foto '+sk+'" loading="lazy" decoding="async" src="img/'+sk+'.jpg">':'')+'</td><td><span class="sku">'+sk+'</span></td><td class="d inv-d"><span class="t">'+esc(ds)+'</span></td>'+
       '<td class="n">'+it.s+'</td><td class="n">'+MON.format(it.p)+'</td>'+
-      '<td class="n inv-c"><input class="inv-in" type="number" inputmode="numeric" min="0" step="1" aria-label="Cantidad Encontrada De '+sk+'" value="'+(cv==null?"":cv)+'"></td>'+
+      entrada(sk,"t","Top")+entrada(sk,"m","Mid")+entrada(sk,"p","Piso")+
+      '<td class="n inv-c sum">'+sumaHtml(sk)+'</td>'+
       '<td class="n inv-c dif">'+ce[0]+'</td><td class="n inv-c per">'+ce[1]+'</td></tr>';
   }
   /* Sobrantes SUMAN al balance; faltantes RESTAN (valor = diferencia × precio) */
@@ -9590,145 +9596,139 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
     q("inv-sob").textContent=MON.format(r.sobV);
     q("inv-neto").textContent=(r.neto<0?"−":"")+MON.format(Math.abs(r.neto));
   }
-  var REP=null;
-  function sg(x){return (x<0?"−":"")+MON.format(Math.abs(x))}
-  function tarjeta(etq,val,cls){return '<div class="inv-card '+cls+'"><div class="et">'+etq+'</div><div class="cif">'+val+'</div></div>'}
-  function reporteDatos(){
-    var r=calcular(),n=Object.keys(CAT.items).length,iso=new Date().toISOString();
-    return {archivo:CAT.archivo,ahora:fechaTxt(iso),dia:iso.slice(0,10),n:n,r:r,
-      fal:r.lista.filter(function(x){return x.d<0}).sort(function(a,b){return a.v-b.v}).slice(0,10),
-      sob:r.lista.filter(function(x){return x.d>0}).sort(function(a,b){return b.v-a.v}).slice(0,5)};
+  function hoy(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
+  var EXJS=null;
+  function cargarExcelJS(){
+    if(window.ExcelJS)return Promise.resolve(window.ExcelJS);
+    if(!EXJS)EXJS=new Promise(function(ok,no){var sc=document.createElement("script");sc.src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js";sc.onload=function(){window.ExcelJS?ok(window.ExcelJS):no(new Error("ex"))};sc.onerror=function(){EXJS=null;no(new Error("ex"))};document.head.appendChild(sc)});
+    return EXJS;
   }
-  function tablaHtml(rows,titulo){
-    if(!rows.length)return '';
-    var h='<h4>'+titulo+'</h4><table><thead><tr><th>SKU</th><th>Artículo</th><th class="n">Diferencia</th><th class="n">Valor</th></tr></thead><tbody>';
-    rows.forEach(function(x){
-      var dif=(x.d>0?"+":"")+x.d;
-      h+='<tr><td>'+x.sk+'</td><td>'+esc(x.ds)+'</td><td class="n">'+dif+'</td><td class="n">'+sg(x.v)+'</td></tr>';
+/*BUILDER-START*/
+  /* Libro de Excel con el diseño Odemás: misma estructura (Nombre, SKU, Sistema, Top/Mid/Piso, Suma), con el resumen hasta arriba */
+  function armarLibro(EX,D){
+    var wb=new EX.Workbook();wb.creator="odemás · Tienda 106";wb.created=new Date();
+    var ws=wb.addWorksheet("Inventario",{views:[{state:"frozen",ySplit:12,showGridLines:false}],pageSetup:{orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:0,paperSize:9}});
+    var C={rojo:"FFD52C33",rojoT:"FFC4232B",azul:"FF1868C8",naranja:"FFFE6F01",marino:"FF2A4E7A",tinta:"FF1E1E1E",gris:"FF6B6B6B",linea:"FFE6E6E8",fondo:"FFF6F6F7",blanco:"FFFFFFFF"};
+    var F="Calibri",MON='"$"#,##0.00;[Red]-"$"#,##0.00',ENT='#,##0';
+    [46,13,15,9,9,9,10,13,14,16].forEach(function(w,i){ws.getColumn(i+1).width=w});
+    function fill(c,col){c.fill={type:"pattern",pattern:"solid",fgColor:{argb:col}}}
+    var borde={style:"thin",color:{argb:C.linea}};
+    function caja(c){c.border={top:borde,bottom:borde,left:borde,right:borde}}
+    /* Banda de colores */
+    ws.getRow(1).height=8;
+    [[1,2,C.rojo],[3,5,C.azul],[6,8,C.naranja],[9,10,C.marino]].forEach(function(b){for(var i=b[0];i<=b[1];i++)fill(ws.getCell(1,i),b[2])});
+    ws.mergeCells("A2:J2");var t=ws.getCell("A2");t.value="odemás · Resumen De Inventario";t.font={name:F,size:22,bold:true,color:{argb:C.marino}};t.alignment={vertical:"middle"};ws.getRow(2).height=34;
+    ws.mergeCells("A3:J3");var s=ws.getCell("A3");s.value="Tienda Querétaro 106 · Archivo: "+D.archivo+" · "+D.ahora;s.font={name:F,size:11,color:{argb:C.gris}};
+    /* Resumen: Igual, Pérdida bruta, Sobrantes y Pérdida neta (ajustada con los sobrantes) */
+    var h=ws.getRow(5);
+    ["Concepto","SKU","Piezas","Importe"].forEach(function(x,i){var col=i<3?i+1:4,c=ws.getCell(5,col);c.value=x;c.font={name:F,size:11,bold:true,color:{argb:C.blanco}};fill(c,C.marino);c.alignment={vertical:"middle",horizontal:i===0?"left":"center",indent:i===0?1:0}});
+    ws.mergeCells("D5:F5");h.height=22;
+    var R=D.res,N=R.bruta.v-R.sob.v;
+    var filasRes=[
+      ["Igual (Sin Diferencia)",R.igual.n,R.igual.pz,R.igual.v,C.marino],
+      ["Pérdida Bruta (Faltantes)",R.bruta.n,R.bruta.pz,R.bruta.v,C.rojo],
+      ["Sobrantes",R.sob.n,R.sob.pz,R.sob.v,C.azul],
+      [N>0?"Pérdida Neta (Ajustada Con Sobrantes)":"Sobrante Neto (Ajustado Con Faltantes)",R.bruta.n+R.sob.n,Math.abs(R.bruta.pz-R.sob.pz),Math.abs(N),C.naranja]
+    ];
+    filasRes.forEach(function(f,i){
+      var r=6+i,row=ws.getRow(r);row.height=22;
+      var a=ws.getCell(r,1);a.value=f[0];a.font={name:F,size:11,bold:true,color:{argb:C.tinta}};a.alignment={vertical:"middle",indent:1};
+      a.border={top:borde,bottom:borde,right:borde,left:{style:"thick",color:{argb:f[4]}}};
+      var b=ws.getCell(r,2);b.value=f[1];b.numFmt=ENT;
+      var c=ws.getCell(r,3);c.value=f[2];c.numFmt='#,##0;-#,##0';
+      ws.mergeCells(r,4,r,6);var d=ws.getCell(r,4);d.value=f[3];d.numFmt='"$"#,##0.00';
+      [b,c,d].forEach(function(x){x.font={name:F,size:12,bold:true,color:{argb:i===1||(i===3&&N>0)?C.rojoT:(i===3?C.marino:C.tinta)}};x.alignment={vertical:"middle",horizontal:"center"};caja(x)});
+      ws.getCell(r,5).border=ws.getCell(r,6).border=d.border;
     });
-    return h+'</tbody></table>';
-  }
-  function textoReporte(D){
-    var R=D.r,t="Resumen De Inventario · "+D.ahora+"\n"+"Archivo: "+D.archivo+"\n"+
-      "Artículos Contados: "+R.cont+" de "+D.n+" ("+(D.n-R.cont)+" Sin Contar)\n"+
-      "Pérdida (Faltantes): "+MON.format(R.perd)+" · Piezas: "+R.falt+"\n"+
-      "Sobrantes (Se Suman): "+MON.format(R.sobV)+" · Piezas: "+R.sobPz+"\n"+
-      "Balance Neto: "+sg(R.neto)+"\n";
-    var lista=function(rows,titulo){
-      if(!rows.length)return "";
-      return "\n"+titulo+":\n"+rows.map(function(x){return "  "+x.sk+" "+x.ds+": "+(x.d>0?"+":"")+x.d+" pzas · "+sg(x.v)}).join("\n")+"\n";
-    };
-    return t+lista(D.fal,"Mayores Faltantes")+lista(D.sob,"Mayores Sobrantes");
-  }
-  function hacerResumen(){
-    var box=q("inv-rep");
-    var barra='<div class="inv-rep-bar"><i></i><i></i><i></i><i></i></div>';
-    if(!CAT){box.innerHTML=barra+'<h3>Resumen De Inventario</h3><p class="p-sub">Primero Sube El Excel De Inventario.</p>';box.hidden=false;REP=null;return}
-    REP=reporteDatos();
-    var R=REP.r;
-    var h=barra+'<h3>Resumen De Inventario</h3><p class="p-sub">'+esc(REP.archivo)+' · '+esc(REP.ahora)+'</p>'+
-      '<div class="inv-res-rep">'+
-        tarjeta("Artículos Contados",R.cont+" de "+REP.n,"cont")+
-        tarjeta("Pérdida (Faltantes)",MON.format(R.perd),"perd")+
-        tarjeta("Sobrantes (Se Suman)",MON.format(R.sobV),"pos")+
-        tarjeta("Balance Neto",sg(R.neto),"neto")+
-      '</div>'+
-      '<p class="p-sub">Piezas Faltantes: '+R.falt+' · Piezas Sobrantes: '+R.sobPz+' · Sin Contar: '+(REP.n-R.cont)+'</p>';
-    h+=R.cont?tablaHtml(REP.fal,"Mayores Faltantes")+tablaHtml(REP.sob,"Mayores Sobrantes"):'<p class="p-sub">Todavía No Hay Artículos Contados.</p>';
-    h+='<div class="acc"><button type="button" class="p-btn pri" id="inv-rep-png">Descargar PNG</button><button type="button" class="p-btn" id="inv-rep-copiar">Copiar Resumen</button><button type="button" class="p-btn" id="inv-rep-cerrar">Cerrar Resumen</button></div>';
-    box.innerHTML=h;box.hidden=false;
-    if(box.scrollIntoView)box.scrollIntoView({behavior:"smooth",block:"start"});
-  }
-  /* PNG con los mismos colores y tipografía de Odemás */
-  async function descargarPNG(){
-    if(!REP)return;
-    try{await document.fonts.load('700 40px Poppins');await document.fonts.load('600 16px Poppins');await document.fonts.load('400 18px Poppins')}catch(e){}
-    var C={rojo:"#D52C33",rojoT:"#C4232B",azul:"#1868C8",naranja:"#FE6F01",marino:"#2A4E7A",tinta:"#1E1E1E",gris:"#6B6B6B",linea:"#E6E6E8",fondo:"#F6F6F7",blanco:"#FFFFFF"};
-    var W=1000,P=48,R=REP.r;
-    function altoTabla(rows){return rows.length?82+34*rows.length:66}
-    var alto=286+altoTabla(REP.fal)+altoTabla(REP.sob)+90;
-    var cv=document.createElement("canvas");cv.width=W*2;cv.height=alto*2;
-    var x=cv.getContext("2d");x.scale(2,2);
-    x.fillStyle=C.blanco;x.fillRect(0,0,W,alto);
-    var bandas=[C.rojo,C.azul,C.naranja,C.marino];
-    bandas.forEach(function(c,i){x.fillStyle=c;x.fillRect(i*W/4,0,W/4,8)});
-    function rr(a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath()}
-    function txt(s,a,b,font,color,align){x.font=font;x.fillStyle=color;x.textAlign=align||"left";x.textBaseline="alphabetic";x.fillText(s,a,b)}
-    function corta(s,max,font){x.font=font;if(x.measureText(s).width<=max)return s;while(s.length>1&&x.measureText(s+"…").width>max)s=s.slice(0,-1);return s+"…"}
-    var y=8+ 58;
-    txt("Resumen De Inventario",P,y,"700 36px Poppins",C.tinta);
-    y+=30;
-    txt(REP.archivo+" · "+REP.ahora,P,y,"400 17px Poppins",C.gris);
-    // Tarjetas
-    var cards=[["Artículos Contados",R.cont+" de "+REP.n,C.azul,C.tinta],["Pérdida (Faltantes)",MON.format(R.perd),C.rojo,C.rojoT],["Sobrantes (Se Suman)",MON.format(R.sobV),C.marino,C.marino],["Balance Neto",sg(R.neto),C.naranja,R.neto<0?C.rojoT:C.marino]];
-    var cw=(W-2*P-3*16)/4,cy=y+22,ch=104;
-    cards.forEach(function(c,i){
-      var cx=P+i*(cw+16);
-      x.fillStyle=C.blanco;rr(cx,cy,cw,ch,14);x.fill();
-      x.strokeStyle=C.linea;x.lineWidth=1;rr(cx+.5,cy+.5,cw-1,ch-1,14);x.stroke();
-      x.fillStyle=c[2];x.fillRect(cx+16,cy,cw-32,4);
-      txt(c[0],cx+16,cy+34,"400 14px Poppins",C.gris);
-      txt(corta(c[1],cw-32,"700 22px Poppins"),cx+16,cy+70,"700 22px Poppins",c[3]);
-    });
-    y=cy+ch+30;
-    txt("Piezas Faltantes: "+R.falt+" · Piezas Sobrantes: "+R.sobPz+" · Sin Contar: "+(REP.n-R.cont),P,y,"400 16px Poppins",C.gris);
-    y+=34;
-    function tabla(rows,titulo){
-      txt(titulo,P,y,"700 20px Poppins",C.tinta);
-      y+=16;
-      if(!rows.length){txt("Sin Registros",P,y+24,"400 15px Poppins",C.gris);y+=50;return}
-      var xs={sku:P+16,art:P+130,dif:W-P-200,val:W-P-16};
-      x.fillStyle=C.marino;rr(P,y,W-2*P,38,10);x.fill();
-      x.fillStyle=C.marino;x.fillRect(P,y+20,W-2*P,18);
-      txt("SKU",xs.sku,y+25,"600 14px Poppins",C.blanco);
-      txt("Artículo",xs.art,y+25,"600 14px Poppins",C.blanco);
-      txt("Diferencia",xs.dif,y+25,"600 14px Poppins",C.blanco,"right");
-      txt("Valor",xs.val,y+25,"600 14px Poppins",C.blanco,"right");
-      y+=38;
-      rows.forEach(function(f,i){
-        if(i%2===1){x.fillStyle=C.fondo;x.fillRect(P,y,W-2*P,34)}
-        var cy2=y+22;
-        txt(f.sk,xs.sku,cy2,"400 15px Poppins",C.tinta);
-        txt(corta(f.ds,xs.dif-xs.art-150,"400 15px Poppins"),xs.art,cy2,"400 15px Poppins",C.tinta);
-        txt((f.d>0?"+":"")+f.d,xs.dif,cy2,"600 15px Poppins",f.d<0?C.rojoT:C.marino,"right");
-        txt(sg(f.v),xs.val,cy2,"600 15px Poppins",f.v<0?C.rojoT:C.marino,"right");
-        y+=34;
-      });
-      y+=28;
+    ws.mergeCells("G6:J9");var nota=ws.getCell("G6");
+    nota.value="Contados: "+D.res.cont+" de "+D.filas.length+" SKU\nSin contar: "+(D.filas.length-D.res.cont);
+    nota.font={name:F,size:11,color:{argb:C.gris}};nota.alignment={vertical:"middle",horizontal:"center",wrapText:true};
+    /* Encabezados de la tabla (dos filas) */
+    var enc=[["A","Nombre"],["B","SKU"],["C","Cantidad Que Marca El Sistema"],["G","Suma"],["H","Diferencia"],["I","Precio"],["J","Valor"]];
+    enc.forEach(function(e){ws.mergeCells(e[0]+"11:"+e[0]+"12");ws.getCell(e[0]+"11").value=e[1]});
+    ws.mergeCells("D11:F11");ws.getCell("D11").value="Cantidad Encontrada";
+    ws.getCell("D12").value="Top";ws.getCell("E12").value="Mid";ws.getCell("F12").value="Piso";
+    for(var r=11;r<=12;r++)for(var k=1;k<=10;k++){
+      var c=ws.getCell(r,k);fill(c,(r===12&&k>=4&&k<=6)?C.azul:C.marino);
+      c.font={name:F,size:11,bold:true,color:{argb:C.blanco}};
+      c.alignment={vertical:"middle",horizontal:k===1?"left":"center",wrapText:true,indent:k===1?1:0};
+      c.border={top:borde,bottom:borde,left:borde,right:borde};
     }
-    tabla(REP.fal,"Mayores Faltantes");
-    tabla(REP.sob,"Mayores Sobrantes");
-    txt("odemás · Tienda 106",P,alto-34,"600 16px Poppins",C.tinta);
-    bandas.forEach(function(c,i){x.fillStyle=c;x.fillRect(i*W/4,alto-8,W/4,8)});
-    cv.toBlob(function(blob){
-      if(!blob){aviso("No Se Pudo Generar La Imagen.","err");return}
-      var a=document.createElement("a");a.href=URL.createObjectURL(blob);
-      a.download="resumen-inventario-"+REP.dia+".png";
+    ws.getRow(11).height=22;ws.getRow(12).height=20;
+    /* Datos */
+    D.filas.forEach(function(f,i){
+      var r=13+i,row=ws.getRow(r);row.height=20;
+      var vals=[f.nombre,f.sk,f.sis,f.t,f.m,f.p,null,null,f.precio,null];
+      for(var k=1;k<=10;k++){
+        var c=ws.getCell(r,k);
+        if(vals[k-1]!=null)c.value=vals[k-1];
+        c.font={name:F,size:11,color:{argb:C.tinta}};
+        c.alignment={vertical:"middle",horizontal:k===1?"left":"center",indent:k===1?1:0,wrapText:k===1};
+        if(i%2===1)fill(c,C.fondo);
+        caja(c);
+      }
+      ws.getCell(r,2).numFmt="@";ws.getCell(r,3).numFmt=ENT;
+      [4,5,6].forEach(function(k){ws.getCell(r,k).numFmt=ENT});
+      ws.getCell(r,9).numFmt=MON;
+      if(f.suma!=null){
+        var g=ws.getCell(r,7),hh=ws.getCell(r,8),j=ws.getCell(r,10);
+        g.value={formula:"SUM(D"+r+":F"+r+")",result:f.suma};g.numFmt=ENT;g.font={name:F,size:11,bold:true,color:{argb:C.tinta}};
+        hh.value={formula:"G"+r+"-C"+r,result:f.dif};hh.numFmt='+#,##0;-#,##0;0';
+        j.value={formula:"H"+r+"*I"+r,result:f.val};j.numFmt='"+$"#,##0.00;-"$"#,##0.00;"$"0.00';
+        var col=f.dif<0?C.rojoT:(f.dif>0?C.marino:C.tinta);
+        hh.font={name:F,size:11,bold:true,color:{argb:col}};j.font={name:F,size:11,bold:true,color:{argb:col}};
+      }
+    });
+    ws.autoFilter={from:{row:12,column:1},to:{row:12+Math.max(D.filas.length,1),column:10}};
+    /* Banda inferior */
+    var u=14+D.filas.length;ws.getRow(u).height=8;
+    [[1,2,C.rojo],[3,5,C.azul],[6,8,C.naranja],[9,10,C.marino]].forEach(function(b){for(var i=b[0];i<=b[1];i++)fill(ws.getCell(u,i),b[2])});
+    return wb;
+  }
+/*BUILDER-END*/
+
+  /* Datos del Excel: todos los SKU del archivo subido, en su orden; resumen de lo contado */
+  function datosExcel(){
+    var res={cont:0,igual:{n:0,pz:0,v:0},bruta:{n:0,pz:0,v:0},sob:{n:0,pz:0,v:0}};
+    var filas=Object.keys(CAT.items).map(function(sk){
+      var it=CAT.items[sk],pt=(CNT.d&&CNT.d[sk])||{},cv=CNT.c[sk],f={sk:sk,nombre:it.d||DESC[sk]||"",sis:it.s,precio:it.p,t:null,m:null,p:null,suma:null,dif:null,val:null};
+      if(cv==null)return f;
+      var hay=pt.t!=null||pt.m!=null||pt.p!=null;
+      f.t=hay?(pt.t==null?null:pt.t):null;f.m=hay?(pt.m==null?null:pt.m):null;f.p=hay?(pt.p==null?null:pt.p):cv;
+      f.suma=cv;f.dif=cv-it.s;f.val=f.dif*it.p;
+      res.cont++;
+      if(f.dif===0){res.igual.n++;res.igual.pz+=cv;res.igual.v+=cv*it.p}
+      else if(f.dif<0){res.bruta.n++;res.bruta.pz+=-f.dif;res.bruta.v+=-f.val}
+      else{res.sob.n++;res.sob.pz+=f.dif;res.sob.v+=f.val}
+      return f;
+    });
+    return {archivo:CAT.archivo,ahora:fechaTxt(new Date().toISOString()),filas:filas,res:res};
+  }
+  async function hacerResumen(){
+    if(!CAT){aviso("Primero Sube El Excel De Inventario.","err");return}
+    if(!Object.keys(CNT.c).length){aviso("Todavía No Hay Artículos Contados.","err");return}
+    aviso("Generando Excel…");
+    try{
+      var EX=await cargarExcelJS(),wb=armarLibro(EX,datosExcel()),buf=await wb.xlsx.writeBuffer();
+      var blob=new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+      var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="resumen-inventario-"+hoy()+".xlsx";
       document.body.appendChild(a);a.click();
-      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
-    },"image/png");
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);
+      aviso("Excel Descargado.","ok");
+    }catch(err){
+      aviso(err&&err.message==="ex"?"No Se Pudo Cargar El Generador De Excel. Revisa Tu Conexión A Internet.":"No Se Pudo Generar El Excel.","err");
+    }
   }
   q("inv-resumen").addEventListener("click",hacerResumen);
-  q("inv-rep").addEventListener("click",function(e){
-    var t=e.target;
-    if(t.id==="inv-rep-cerrar"){q("inv-rep").hidden=true;return}
-    if(t.id==="inv-rep-png"){descargarPNG();return}
-    if(t.id==="inv-rep-copiar"){
-      if(!REP)return;
-      var txt=textoReporte(REP);
-      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(function(){aviso("Resumen Copiado.","ok")},function(){aviso("No Se Pudo Copiar. Usa Descargar PNG.","err")});
-      else aviso("Este Navegador No Permite Copiar Desde La Página.","err");
-    }
-  });
   function pintar(){
     var h="",txt=q("inv-q").value.trim().toLowerCase(),tb=q("inv-filas");
-    if(!CAT){tb.innerHTML='<tr class="vacia"><td colspan="8">Sube El Excel De Inventario Para Empezar.</td></tr>';q("inv-sub").textContent="Sube El Excel Con SKU, Stock Y Precio.";resumen();return}
+    if(!CAT){tb.innerHTML='<tr class="vacia"><td colspan="11">Sube El Excel De Inventario Para Empezar.</td></tr>';q("inv-sub").textContent="Sube El Excel Con SKU, Stock Y Precio.";resumen();return}
     Object.keys(CAT.items).forEach(function(sk){
       var it=CAT.items[sk],ds=it.d||DESC[sk]||"";
       if(txt&&!B106.texto(txt,ds,sk))return;
       h+=fila(sk);
     });
-    tb.innerHTML=h||'<tr class="vacia"><td colspan="8">Sin Coincidencias.</td></tr>';
+    tb.innerHTML=h||'<tr class="vacia"><td colspan="11">Sin Coincidencias.</td></tr>';
     q("inv-sub").textContent="Archivo: "+CAT.archivo+" · "+Object.keys(CAT.items).length+" Artículos · Subido "+fechaTxt(CAT.fecha)+
       (fbAuth.currentUser?"":". Solo En Este Dispositivo: Entra Con Google Para Publicarlo.");
     resumen();
@@ -9749,6 +9749,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
     var nube=await fbGet(ID_CAT),nc=await fbGet(ID_CNT);
     if(nube&&nube.items&&(!CAT||String(nube.fecha)>String(CAT.fecha))){CAT=nube;guardar(K_CAT,CAT)}
     if(nc&&nc.c&&(!CNT.t||String(nc.t)>String(CNT.t))){CNT=nc;guardar(K_CNT,CNT)}
+    if(!CNT.d)CNT.d={};
     pintar();
   }
 
@@ -9789,15 +9790,19 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
   });
   q("inv-borrar").addEventListener("click",function(){
     if(!confirm("¿Borrar Todo El Conteo?"))return;
-    CNT={t:new Date().toISOString(),c:{}};guardarCnt();pintar();
+    CNT={t:new Date().toISOString(),c:{},d:{}};guardarCnt();pintar();
   });
   q("inv-q").addEventListener("input",pintar);
   q("inv-filas").addEventListener("input",function(e){
     var t=e.target;if(!t.classList||!t.classList.contains("inv-in")||!CAT)return;
     var tr=t.closest("tr"),sk=tr.getAttribute("data-sku");
-    if(t.value===""){delete CNT.c[sk]}else{CNT.c[sk]=Math.max(0,Math.round(Number(t.value)))}
+    if(!CNT.d)CNT.d={};
+    var pt={},hay=false,tot=0;
+    tr.querySelectorAll(".inv-in").forEach(function(x){if(x.value!==""){var n=Math.max(0,Math.round(Number(x.value)));if(isFinite(n)){pt[x.getAttribute("data-k")]=n;tot+=n;hay=true}}});
+    if(hay){CNT.c[sk]=tot;CNT.d[sk]=pt}else{delete CNT.c[sk];delete CNT.d[sk]}
     CNT.t=new Date().toISOString();
     var ce=celdas(sk);
+    tr.querySelector(".sum").innerHTML=sumaHtml(sk);
     tr.querySelector(".dif").innerHTML=ce[0];tr.querySelector(".per").innerHTML=ce[1];
     resumen();guardarCnt();
   });
