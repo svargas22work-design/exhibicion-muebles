@@ -9610,7 +9610,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
 /*BUILDER-START*/
   /* Libro de Excel con el diseño Odemás: misma estructura (Nombre, SKU, Sistema, Top/Mid/Piso, Suma), con el resumen hasta arriba */
   function armarLibro(EX,D){
-    var wb=new EX.Workbook();wb.creator="odemás · Tienda 106";wb.created=new Date();
+    var wb=new EX.Workbook();wb.creator="Tienda 106";wb.created=new Date();
     var ws=wb.addWorksheet("Inventario",{views:[{state:"frozen",ySplit:12,showGridLines:false}],pageSetup:{orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:0,paperSize:9}});
     var C={rojo:"FFD52C33",rojoT:"FFC4232B",azul:"FF1868C8",naranja:"FFFE6F01",marino:"FF2A4E7A",tinta:"FF1E1E1E",gris:"FF6B6B6B",linea:"FFE6E6E8",fondo:"FFF6F6F7",blanco:"FFFFFFFF"};
     var F="Calibri",MON='"$"#,##0.00;[Red]-"$"#,##0.00',ENT='#,##0';
@@ -9621,7 +9621,7 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
     /* Banda de colores */
     ws.getRow(1).height=8;
     [[1,2,C.rojo],[3,5,C.azul],[6,8,C.naranja],[9,11,C.marino]].forEach(function(b){for(var i=b[0];i<=b[1];i++)fill(ws.getCell(1,i),b[2])});
-    ws.mergeCells("A2:K2");var t=ws.getCell("A2");t.value="odemás · Resumen De Inventario";t.font={name:F,size:22,bold:true,color:{argb:C.marino}};t.alignment={vertical:"middle"};ws.getRow(2).height=34;
+    ws.mergeCells("A2:K2");var t=ws.getCell("A2");t.value="Resumen De Inventario";t.font={name:F,size:22,bold:true,color:{argb:C.marino}};t.alignment={vertical:"middle"};ws.getRow(2).height=34;
     ws.mergeCells("A3:K3");var s=ws.getCell("A3");s.value="Tienda Querétaro 106 · Archivo: "+D.archivo+" · "+D.ahora;s.font={name:F,size:11,color:{argb:C.gris}};
     /* Resumen: Igual, Pérdida bruta, Sobrantes y Pérdida neta (ajustada con los sobrantes) */
     var h=ws.getRow(5);
@@ -9684,8 +9684,31 @@ if("serviceWorker" in navigator&&location.protocol==="https:")addEventListener("
       }
     });
     ws.autoFilter={from:{row:12,column:1},to:{row:12+Math.max(D.filas.length,1),column:11}};
+    /* Totales: de todo el archivo y de lo contado */
+    var nF=D.filas.length,ult=12+nF,T={n:nF,sis:0,nc:0,sisc:0,t:0,m:0,p:0,suma:0,dif:0,val:0};
+    D.filas.forEach(function(f){T.sis+=f.sis;if(f.suma!=null){T.nc++;T.sisc+=f.sis;T.t+=f.t||0;T.m+=f.m||0;T.p+=f.p||0;T.suma+=f.suma;T.dif+=f.dif;T.val+=f.val}});
+    function filaTot(r,et,cel){
+      ws.getRow(r).height=24;
+      for(var k=1;k<=11;k++){
+        var c=ws.getCell(r,k);fill(c,"FFE9EEF5");
+        c.font={name:F,size:11,bold:true,color:{argb:C.marino}};
+        c.alignment={vertical:"middle",horizontal:k===1?"left":"center",indent:k===1?1:0};
+        c.border={top:{style:"medium",color:{argb:C.marino}},bottom:borde,left:borde,right:borde};
+      }
+      ws.getCell(r,1).value=et;
+      cel.forEach(function(x){var c=ws.getCell(r,x[0]);c.value={formula:x[1],result:x[2]};c.numFmt=x[3]||ENT;if(x[4]!=null)c.font={name:F,size:11,bold:true,color:{argb:x[4]}}});
+    }
+    var rA=13+nF,rC=14+nF,rg=function(L){return L+"13:"+L+ult};
+    filaTot(rA,"Total Del Archivo",[[2,"COUNTA("+rg("B")+")",T.n,'#,##0" SKU"'],[3,"SUM("+rg("C")+")",T.sis]]);
+    filaTot(rC,"Total Contado",[
+      [2,"COUNT("+rg("G")+")",T.nc,'#,##0" SKU"'],
+      [3,"SUMIF("+rg("G")+',"<>",'+rg("C")+")",T.sisc],
+      [4,"SUM("+rg("D")+")",T.t],[5,"SUM("+rg("E")+")",T.m],[6,"SUM("+rg("F")+")",T.p],[7,"SUM("+rg("G")+")",T.suma],
+      [8,"SUM("+rg("H")+")",T.dif,'+#,##0;-#,##0;0',T.dif<0?C.rojoT:C.marino],
+      [10,"SUM("+rg("J")+")",T.val,'"+$"#,##0.00;-"$"#,##0.00;"$"0.00',T.val<0?C.rojoT:C.marino]
+    ]);
     /* Banda inferior */
-    var u=14+D.filas.length;ws.getRow(u).height=8;
+    var u=16+nF;ws.getRow(u).height=8;
     [[1,2,C.rojo],[3,5,C.azul],[6,8,C.naranja],[9,11,C.marino]].forEach(function(b){for(var i=b[0];i<=b[1];i++)fill(ws.getCell(u,i),b[2])});
     return wb;
   }
